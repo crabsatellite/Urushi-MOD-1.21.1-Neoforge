@@ -1,17 +1,5 @@
 package com.iwaliner.urushi.block;
 
-import com.iwaliner.urushi.BlockEntityRegister;
-import com.iwaliner.urushi.ItemAndBlockRegister;
-import com.iwaliner.urushi.blockentity.AbstractFryerBlockEntity;
-import com.iwaliner.urushi.blockentity.AutoCraftingTableBlockEntity;
-import com.iwaliner.urushi.blockentity.ElementCraftingTableBlockEntity;
-import com.iwaliner.urushi.blockentity.FryerBlockEntity;
-import com.iwaliner.urushi.recipe.AbstractElementCraftingRecipe;
-import com.iwaliner.urushi.util.ElementType;
-import com.iwaliner.urushi.util.ElementUtils;
-import com.iwaliner.urushi.util.UrushiUtils;
-import com.iwaliner.urushi.util.interfaces.ElementBlock;
-import com.iwaliner.urushi.util.interfaces.Tiered;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -19,10 +7,12 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.Mth;
 import net.minecraft.world.*;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.CraftingMenu;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
@@ -41,11 +31,32 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import com.iwaliner.urushi.BlockEntityRegister;
+import com.iwaliner.urushi.ItemAndBlockRegister;
+import com.iwaliner.urushi.blockentity.AbstractFryerBlockEntity;
+import com.iwaliner.urushi.blockentity.AutoCraftingTableBlockEntity;
+import com.iwaliner.urushi.blockentity.ElementCraftingTableBlockEntity;
+import com.iwaliner.urushi.blockentity.FryerBlockEntity;
+import com.iwaliner.urushi.recipe.AbstractElementCraftingRecipe;
+import com.iwaliner.urushi.util.ElementType;
+import com.iwaliner.urushi.util.ElementUtils;
+import com.iwaliner.urushi.util.UrushiUtils;
+import com.iwaliner.urushi.util.interfaces.ElementBlock;
+import com.iwaliner.urushi.util.interfaces.Tiered;
+import com.mojang.serialization.MapCodec;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 public class AutoCraftingTableBlock extends BaseEntityBlock {
+    public static final MapCodec<AutoCraftingTableBlock> CODEC = simpleCodec(AutoCraftingTableBlock::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
     public static final DirectionProperty FACING = DirectionalBlock.FACING;
 
     public AutoCraftingTableBlock( Properties p_49795_) {
@@ -81,7 +92,7 @@ public class AutoCraftingTableBlock extends BaseEntityBlock {
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level p_152160_, BlockState p_152161_, BlockEntityType<T> p_152162_) {
         return p_152160_.isClientSide ? null : createTickerHelper(p_152162_, BlockEntityRegister.AutoCraftingTable.get(), AutoCraftingTableBlockEntity::tick);
     }
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult result) {
         if (level.isClientSide) {
             return InteractionResult.SUCCESS;
         } else {
@@ -113,7 +124,7 @@ public class AutoCraftingTableBlock extends BaseEntityBlock {
         }
     }
     @Override
-    public void appendHoverText(ItemStack stack, @org.jetbrains.annotations.Nullable BlockGetter getter, List<Component> list, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, Item.TooltipContext getter, List<Component> list, TooltipFlag flag) {
         if(stack.getItem().equals(ItemAndBlockRegister.advanced_auto_crafting_table.get())){
             UrushiUtils.setInfo(list, "advanced_auto_crafting_table");
         }

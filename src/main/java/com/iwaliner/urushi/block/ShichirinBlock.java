@@ -1,29 +1,24 @@
 package com.iwaliner.urushi.block;
 
 
-import com.iwaliner.urushi.BlockEntityRegister;
-import com.iwaliner.urushi.ConfigUrushi;
-import com.iwaliner.urushi.ItemAndBlockRegister;
-import com.iwaliner.urushi.TagUrushi;
-import com.iwaliner.urushi.blockentity.ShichirinBlockEntity;
-import com.iwaliner.urushi.item.AmberIgniterItem;
-import com.iwaliner.urushi.util.ElementType;
-import com.iwaliner.urushi.util.ElementUtils;
-import com.iwaliner.urushi.util.UrushiUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.FlintAndSteelItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -47,12 +42,29 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import com.iwaliner.urushi.BlockEntityRegister;
+import com.iwaliner.urushi.ConfigUrushi;
+import com.iwaliner.urushi.ItemAndBlockRegister;
+import com.iwaliner.urushi.TagUrushi;
+import com.iwaliner.urushi.blockentity.ShichirinBlockEntity;
+import com.iwaliner.urushi.item.AmberIgniterItem;
+import com.iwaliner.urushi.util.ElementType;
+import com.iwaliner.urushi.util.ElementUtils;
+import com.iwaliner.urushi.util.UrushiUtils;
+import com.mojang.serialization.MapCodec;
 
-import javax.annotation.Nullable;
 import java.util.List;
-import net.minecraft.util.RandomSource;
+import javax.annotation.Nullable;
 
 public class ShichirinBlock extends BaseEntityBlock  {
+    public static final MapCodec<ShichirinBlock> CODEC = simpleCodec(ShichirinBlock::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final IntegerProperty SHICHIRIN =IntegerProperty.create("shichirin", 0, 4);
 
@@ -92,29 +104,27 @@ public class ShichirinBlock extends BaseEntityBlock  {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
+    protected InteractionResult useWithoutItem(BlockState state, Level world, BlockPos pos, Player player, BlockHitResult result) {
         if(world.getBlockEntity(pos)instanceof ShichirinBlockEntity) {
             if(!player.isSuppressingBounce()){
                 ShichirinBlockEntity  tileEntity= (ShichirinBlockEntity) world.getBlockEntity(pos);
                 if(tileEntity==null){
                     return InteractionResult.FAIL;
                 }
-                ItemStack heldStack=player.getItemInHand(hand);
+                ItemStack heldStack=player.getMainHandItem();
                 ItemStack insertStack=heldStack.copy();
-                if(player.getItemInHand(hand).getItem() instanceof AmberIgniterItem &&state.getValue(SHICHIRIN)==1){
+                if(player.getMainHandItem().getItem() instanceof AmberIgniterItem &&state.getValue(SHICHIRIN)==1){
                     ItemStack magatama= ElementUtils.getMagatamaInInventory(player, ElementType.FireElement);
                     if(magatama!=ItemStack.EMPTY&&ElementUtils.willBeInDomain(magatama,-10)){
                         world.playSound((Player) null, pos, SoundEvents.FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1.0F, world.random.nextFloat() * 0.4F + 0.8F);
                         tileEntity.addFire(100);
                         world.setBlockAndUpdate(pos,state.setValue(SHICHIRIN,2));
                         ElementUtils.increaseStoredReiryokuAmount(magatama,-10);
-                        player.getItemInHand(hand).hurtAndBreak(1, player, (x) -> {
-                            x.broadcastBreakEvent(hand);
-                        });
+                        player.getMainHandItem().hurtAndBreak(1, player, EquipmentSlot.MAINHAND);
                         return InteractionResult.SUCCESS;
                     }
                 }
-                else if(player.getItemInHand(hand).isEmpty()&&tileEntity.getItem(0).isEmpty()&&tileEntity.getItem(1).isEmpty()){
+                else if(player.getMainHandItem().isEmpty()&&tileEntity.getItem(0).isEmpty()&&tileEntity.getItem(1).isEmpty()){
 
                     return InteractionResult.FAIL;
                 }
@@ -137,9 +147,7 @@ public class ShichirinBlock extends BaseEntityBlock  {
                     if(magatama!=ItemStack.EMPTY&&ElementUtils.willBeInDomain(magatama,-1)) {
                         tileEntity.addFire(30);
                         ElementUtils.increaseStoredReiryokuAmount(magatama,-1);
-                        player.getItemInHand(hand).hurtAndBreak(1, player, (x) -> {
-                            x.broadcastBreakEvent(hand);
-                        });
+                        player.getMainHandItem().hurtAndBreak(1, player, EquipmentSlot.MAINHAND);
                         world.playSound((Player) null, pos, SoundEvents.ENDER_DRAGON_FLAP, SoundSource.BLOCKS, 0.5F, 1F);
                         return InteractionResult.SUCCESS;
                     }
@@ -154,7 +162,7 @@ public class ShichirinBlock extends BaseEntityBlock  {
                     ItemStack pickedStack = tileEntity.pickItem().copy();
                     if (heldStack.isEmpty()) {
                         tileEntity.markUpdated();
-                        player.setItemInHand(hand, pickedStack);
+                        player.setItemInHand(InteractionHand.MAIN_HAND, pickedStack);
                         world.playSound((Player) null, pos, SoundEvents.WOOD_PLACE, SoundSource.BLOCKS, 3F, 1F);
                         return InteractionResult.SUCCESS;
                     } else if (!player.getInventory().add(pickedStack)) {
@@ -184,7 +192,7 @@ public class ShichirinBlock extends BaseEntityBlock  {
 
 
     @Override
-    public void appendHoverText(ItemStack p_49816_, @org.jetbrains.annotations.Nullable BlockGetter p_49817_, List<Component> list, TooltipFlag p_49819_) {
+    public void appendHoverText(ItemStack p_49816_, Item.TooltipContext p_49817_, List<Component> list, TooltipFlag p_49819_) {
         UrushiUtils.setInfo(list,"shichirin1");
         UrushiUtils.setInfo(list,"shichirin2");
         UrushiUtils.setInfo(list,"shichirin3");
@@ -209,10 +217,11 @@ public class ShichirinBlock extends BaseEntityBlock  {
         }
     }
     public void setPlacedBy(Level p_48694_, BlockPos p_48695_, BlockState p_48696_, LivingEntity p_48697_, ItemStack p_48698_) {
-        if (p_48698_.hasCustomHoverName()) {
+        if (p_48698_.has(DataComponents.CUSTOM_NAME)) {
             BlockEntity blockentity = p_48694_.getBlockEntity(p_48695_);
             if (blockentity instanceof ShichirinBlockEntity) {
-                ((ShichirinBlockEntity)blockentity).setCustomName(p_48698_.getHoverName());
+
+                // Original: ((ShichirinBlockEntity)blockentity).setCustomName(p_48698_.getHoverName());
             }
         }
 

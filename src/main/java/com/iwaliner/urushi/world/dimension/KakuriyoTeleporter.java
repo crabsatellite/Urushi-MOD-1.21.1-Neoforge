@@ -1,19 +1,10 @@
 package com.iwaliner.urushi.world.dimension;
 
-import com.iwaliner.urushi.DimensionRegister;
-import com.iwaliner.urushi.ItemAndBlockRegister;
-import com.iwaliner.urushi.ModCoreUrushi;
-import com.iwaliner.urushi.TagUrushi;
-import com.iwaliner.urushi.block.KakuriyoPortalBlock;
-import com.iwaliner.urushi.block.KasugaLanternBlock;
-import com.iwaliner.urushi.block.ParapetBlock;
-import com.iwaliner.urushi.block.SimpleShapedBlock;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentUtils;
 import net.minecraft.network.protocol.game.ClientboundSetTitleTextPacket;
@@ -28,31 +19,35 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.properties.SlabType;
-
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.level.portal.PortalInfo;
+import net.minecraft.world.level.portal.DimensionTransition;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.util.ITeleporter;
+import com.iwaliner.urushi.DimensionRegister;
+import com.iwaliner.urushi.ItemAndBlockRegister;
+import com.iwaliner.urushi.ModCoreUrushi;
+import com.iwaliner.urushi.TagUrushi;
+import com.iwaliner.urushi.block.KakuriyoPortalBlock;
+import com.iwaliner.urushi.block.KasugaLanternBlock;
+import com.iwaliner.urushi.block.ParapetBlock;
+import com.iwaliner.urushi.block.SimpleShapedBlock;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-public class KakuriyoTeleporter implements ITeleporter {
+public class KakuriyoTeleporter {
 
     public KakuriyoTeleporter() {
 
     }
 
-    @Override
     public boolean playTeleportSound(ServerPlayer player, ServerLevel sourceWorld, ServerLevel destWorld) {
         return false;
     }
 
     @Nullable
-    @Override
-    public PortalInfo getPortalInfo(Entity entity, ServerLevel level, Function<ServerLevel, PortalInfo> defaultPortalInfo) {
+    public DimensionTransition getDimensionTransition(Entity entity, ServerLevel level, Function<ServerLevel, DimensionTransition> defaultDimensionTransition) {
         BlockPos pos=entity.blockPosition();
         BlockPos center=pos.offset(0,0,1);
 
@@ -93,7 +88,7 @@ public class KakuriyoTeleporter implements ITeleporter {
 
         }
 
-        return new PortalInfo(entity.position(), Vec3.ZERO, -180f, entity.getXRot());
+        return new DimensionTransition(entity.level() instanceof net.minecraft.server.level.ServerLevel sl ? sl : null, entity.position(), Vec3.ZERO, -180f, entity.getXRot(), DimensionTransition.DO_NOTHING);
     }
 
     public static void createPortalInKakuriyo(Level level,BlockPos pos) {

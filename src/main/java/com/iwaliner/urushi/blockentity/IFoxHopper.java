@@ -11,9 +11,15 @@ public interface IFoxHopper extends Hopper {
     VoxelShape ABOVE = Block.box(0.0D, 16.0D, 0.0D, 16.0D, 64.1D, 16.0D);
     VoxelShape SUCK = Shapes.or(INSIDE, ABOVE);
 
-    default VoxelShape getSuckShape() {
-        return SUCK;
+    //     default VoxelShape getSuckShape() {
+    //         return SUCK;
+    //     }
+    //
+
+
+
+    @Override
+    default boolean isGridAligned() {
+        return false;
     }
-
-
 }

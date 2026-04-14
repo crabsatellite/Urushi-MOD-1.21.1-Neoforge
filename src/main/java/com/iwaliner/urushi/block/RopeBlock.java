@@ -27,11 +27,20 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import com.mojang.serialization.MapCodec;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
 
 public class RopeBlock extends FallingBlock implements SimpleWaterloggedBlock {
+    public static final MapCodec<RopeBlock> CODEC = simpleCodec(RopeBlock::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
     protected static final VoxelShape SHAPE_Y = Block.box(7.0, 0.0, 7.0, 9.0, 16.0, 9.0);
     protected static final VoxelShape SHAPE_X = Block.box(0.0, 7.0, 7.0, 16.0, 9.0, 9.0);
     protected static final VoxelShape SHAPE_Z = Block.box(7.0, 7.0, 0.0, 9.0, 9.0, 16.0);

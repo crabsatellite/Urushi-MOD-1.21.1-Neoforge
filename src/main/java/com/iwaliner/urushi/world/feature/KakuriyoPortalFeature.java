@@ -1,11 +1,5 @@
 package com.iwaliner.urushi.world.feature;
 
-import com.iwaliner.urushi.ConfigUrushi;
-import com.iwaliner.urushi.ItemAndBlockRegister;
-import com.iwaliner.urushi.TagUrushi;
-import com.iwaliner.urushi.block.JapaneseTimberBambooBlock;
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.BlockTags;
@@ -20,6 +14,12 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
+import com.iwaliner.urushi.ConfigUrushi;
+import com.iwaliner.urushi.ItemAndBlockRegister;
+import com.iwaliner.urushi.TagUrushi;
+import com.iwaliner.urushi.block.JapaneseTimberBambooBlock;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import java.util.Random;
 

@@ -1,9 +1,9 @@
 package com.iwaliner.urushi.mixin;
 
-import com.iwaliner.urushi.block.SlideDoorBlock;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.IronBarsBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import com.iwaliner.urushi.block.SlideDoorBlock;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

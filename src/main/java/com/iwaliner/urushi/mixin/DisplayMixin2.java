@@ -2,7 +2,6 @@ package com.iwaliner.urushi.mixin;
 
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.Display;
-
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;

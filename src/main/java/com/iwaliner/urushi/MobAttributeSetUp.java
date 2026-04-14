@@ -1,15 +1,17 @@
 package com.iwaliner.urushi;
 
-import com.iwaliner.urushi.entiity.GhostEntity;
-import com.iwaliner.urushi.network.AdditionalHeartProvider;
+
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
+import com.iwaliner.urushi.ModCoreUrushi;
+import com.iwaliner.urushi.entiity.GhostEntity;
+import com.iwaliner.urushi.network.AdditionalHeartProvider;
 
-@Mod.EventBusSubscriber(modid = ModCoreUrushi.ModID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = ModCoreUrushi.ModID, bus = EventBusSubscriber.Bus.MOD)
 public class MobAttributeSetUp {
     /**モブの挙動・性質を設定*/
     @SubscribeEvent

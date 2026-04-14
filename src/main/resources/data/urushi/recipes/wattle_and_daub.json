@@ -7,10 +7,10 @@
   ],
   "key": {
     "#": {
-     "item": "minecraft:dirt"
+      "item": "minecraft:dirt"
     },
     "X": {
-    "tag": "forge:bamboo"
+      "tag": "c:bamboo"
     }
   },
   "result": {

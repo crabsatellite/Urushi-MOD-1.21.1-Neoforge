@@ -1,9 +1,5 @@
 package com.iwaliner.urushi.blockentity.renderer;
 
-import com.iwaliner.urushi.ModCoreUrushi;
-import com.iwaliner.urushi.blockentity.SanboBlockEntity;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -22,10 +18,14 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.CampfireBlock;
-import net.minecraft.world.level.block.entity.EnchantmentTableBlockEntity;
+import net.minecraft.world.level.block.entity.EnchantingTableBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import com.iwaliner.urushi.ModCoreUrushi;
+import com.iwaliner.urushi.blockentity.SanboBlockEntity;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
 
 @OnlyIn(Dist.CLIENT)
 public class SanboRenderer implements BlockEntityRenderer<SanboBlockEntity> {
@@ -69,7 +69,7 @@ public class SanboRenderer implements BlockEntityRenderer<SanboBlockEntity> {
         ResourceLocation texture=new ResourceLocation(ModCoreUrushi.ModID,"textures/block/plaster_namako.png");
         renderBeam(poseStack,bufferSource,texture,f1,aspectRatio,blockEntity.getLevel().getGameTime(),i3,hight,color, innerCoreLayerSize, outerTranslucentLayerSize);
     */
-    
+
 
     }
 

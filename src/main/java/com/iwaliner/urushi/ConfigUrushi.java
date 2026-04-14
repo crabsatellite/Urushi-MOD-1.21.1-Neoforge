@@ -1,30 +1,30 @@
 package com.iwaliner.urushi;
 
 import net.minecraft.world.item.Items;
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public final class ConfigUrushi {
-    public static final ForgeConfigSpec.Builder builder=new ForgeConfigSpec.Builder();
-    public static final ForgeConfigSpec spec;
-    public static final ForgeConfigSpec.ConfigValue<Integer> maxHightBamboo;
-    public static final ForgeConfigSpec.ConfigValue<Boolean> TurnOnSpeedUp;
-    public static final ForgeConfigSpec.ConfigValue<Integer> reiryokuCapacityOfMagatama;
-    public static final ForgeConfigSpec.ConfigValue<Integer> fallingLeafParticleAmount;
-    public static final ForgeConfigSpec.ConfigValue<Integer> fallingSakuraParticleAmount;
-    public static final ForgeConfigSpec.ConfigValue<Boolean> WindBellSound;
-    public static final ForgeConfigSpec.ConfigValue<Integer> shichirinIconAmount;
-    public static final ForgeConfigSpec.ConfigValue<Integer> shichirincookingDifficlutly;
-    public static final ForgeConfigSpec.ConfigValue<Boolean> instantlySlidingDoor;
-    public static final ForgeConfigSpec.ConfigValue<Integer> generateKakuriyoPortalProbability;
-    public static final ForgeConfigSpec.ConfigValue<Boolean> disableBlockElementDisplaying;
-    public static final ForgeConfigSpec.ConfigValue<Boolean> disableSaltAndSandGeneration;
-    //public static final ForgeConfigSpec.ConfigValue<Boolean> disableCropDropsFromGrass;
-    public static final ForgeConfigSpec.ConfigValue<Boolean> noticeNewerVersion;
-    public static final ForgeConfigSpec.ConfigValue<Boolean> indicateFurigana;
+    public static final ModConfigSpec.Builder builder=new ModConfigSpec.Builder();
+    public static final ModConfigSpec spec;
+    public static final ModConfigSpec.ConfigValue<Integer> maxHightBamboo;
+    public static final ModConfigSpec.ConfigValue<Boolean> TurnOnSpeedUp;
+    public static final ModConfigSpec.ConfigValue<Integer> reiryokuCapacityOfMagatama;
+    public static final ModConfigSpec.ConfigValue<Integer> fallingLeafParticleAmount;
+    public static final ModConfigSpec.ConfigValue<Integer> fallingSakuraParticleAmount;
+    public static final ModConfigSpec.ConfigValue<Boolean> WindBellSound;
+    public static final ModConfigSpec.ConfigValue<Integer> shichirinIconAmount;
+    public static final ModConfigSpec.ConfigValue<Integer> shichirincookingDifficlutly;
+    public static final ModConfigSpec.ConfigValue<Boolean> instantlySlidingDoor;
+    public static final ModConfigSpec.ConfigValue<Integer> generateKakuriyoPortalProbability;
+    public static final ModConfigSpec.ConfigValue<Boolean> disableBlockElementDisplaying;
+    public static final ModConfigSpec.ConfigValue<Boolean> disableSaltAndSandGeneration;
+    //public static final ModConfigSpec.ConfigValue<Boolean> disableCropDropsFromGrass;
+    public static final ModConfigSpec.ConfigValue<Boolean> noticeNewerVersion;
+    public static final ModConfigSpec.ConfigValue<Boolean> indicateFurigana;
 
     static {
         builder.push("block settings");

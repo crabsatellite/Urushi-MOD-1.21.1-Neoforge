@@ -10,13 +10,7 @@
     "fog_color": 12747591,
     "water_color": 4159204,
     "water_fog_color": 329011,
-    "grass_color": 8692750,
-    "music": {
-      "sound": "minecraft:music.cat",
-      "min_delay": 12000,
-      "max_delay": 24000,
-      "replace_current_music": false
-    }
+    "grass_color": 8692750
   },
   "carvers": {
     "air": [

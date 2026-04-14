@@ -1,13 +1,6 @@
 package com.iwaliner.urushi.block;
 
 
-import com.iwaliner.urushi.BlockEntityRegister;
-import com.iwaliner.urushi.ItemAndBlockRegister;
-import com.iwaliner.urushi.blockentity.AbstractFryerBlockEntity;
-import com.iwaliner.urushi.blockentity.RiceCauldronBlockEntity;
-import com.iwaliner.urushi.blockentity.SanboBlockEntity;
-import com.iwaliner.urushi.util.UrushiUtils;
-import com.iwaliner.urushi.util.interfaces.Tiered;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -15,10 +8,12 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
@@ -40,12 +35,27 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import com.iwaliner.urushi.BlockEntityRegister;
+import com.iwaliner.urushi.ItemAndBlockRegister;
+import com.iwaliner.urushi.blockentity.AbstractFryerBlockEntity;
+import com.iwaliner.urushi.blockentity.RiceCauldronBlockEntity;
+import com.iwaliner.urushi.blockentity.SanboBlockEntity;
+import com.iwaliner.urushi.util.UrushiUtils;
+import com.iwaliner.urushi.util.interfaces.Tiered;
+import com.mojang.serialization.MapCodec;
 
-import javax.annotation.Nullable;
 import java.util.List;
-import net.minecraft.util.RandomSource;
+import javax.annotation.Nullable;
 
 public class SanboBlock extends BaseEntityBlock {
+    public static final MapCodec<SanboBlock> CODEC = simpleCodec(SanboBlock::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
 
@@ -84,11 +94,11 @@ public class SanboBlock extends BaseEntityBlock {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
+    protected InteractionResult useWithoutItem(BlockState state, Level world, BlockPos pos, Player player, BlockHitResult result) {
         if(world.getBlockEntity(pos)instanceof SanboBlockEntity) {
             if(!player.isSuppressingBounce()){
             SanboBlockEntity  tileEntity= (SanboBlockEntity) world.getBlockEntity(pos);
-            ItemStack heldStack=player.getItemInHand(hand);
+            ItemStack heldStack=player.getMainHandItem();
             ItemStack insertStack=heldStack.copy();
             insertStack.setCount(1);
             if(tileEntity.canPlaceItem(0,insertStack)){
@@ -101,7 +111,7 @@ public class SanboBlock extends BaseEntityBlock {
                 ItemStack pickedStack = tileEntity.pickItem().copy();
                 if (heldStack.isEmpty()) {
                     tileEntity.markUpdated();
-                    player.setItemInHand(hand, pickedStack);
+                    player.setItemInHand(InteractionHand.MAIN_HAND, pickedStack);
                     world.playSound((Player) null, pos, SoundEvents.WOOD_PLACE, SoundSource.BLOCKS, 1F, 1F);
                     return InteractionResult.SUCCESS;
                 } else if (!player.getInventory().add(pickedStack)) {
@@ -137,7 +147,7 @@ public class SanboBlock extends BaseEntityBlock {
 
 
     @Override
-    public void appendHoverText(ItemStack p_49816_, @org.jetbrains.annotations.Nullable BlockGetter p_49817_, List<Component> list, TooltipFlag p_49819_) {
+    public void appendHoverText(ItemStack p_49816_, Item.TooltipContext p_49817_, List<Component> list, TooltipFlag p_49819_) {
         UrushiUtils.setInfo(list,"sanbo");
    }
     @Nullable

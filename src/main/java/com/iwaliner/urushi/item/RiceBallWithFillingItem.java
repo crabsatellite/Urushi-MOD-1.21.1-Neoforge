@@ -1,10 +1,8 @@
 package com.iwaliner.urushi.item;
 
-import com.iwaliner.urushi.ItemAndBlockRegister;
-import com.iwaliner.urushi.ModCoreUrushi;
-import com.iwaliner.urushi.util.UrushiUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
@@ -27,9 +25,14 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.BundleContents;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import com.iwaliner.urushi.ItemAndBlockRegister;
+import com.iwaliner.urushi.ModCoreUrushi;
+import com.iwaliner.urushi.util.UrushiUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -43,10 +46,10 @@ public class RiceBallWithFillingItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> list, TooltipFlag tooltipFlag) {
-       if(stack.getTag() != null &&stack.getTag().contains("effect")){
+    public void appendHoverText(ItemStack stack, Item.TooltipContext level, List<Component> list, TooltipFlag tooltipFlag) {
+       if(stack.has(DataComponents.CUSTOM_DATA) &&stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().contains("effect")){
            UrushiUtils.setInfo(list,"rice_ball_with_filling");
-           if(stack.getTag().getString("effect").equals("random")){
+           if(stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getString("effect").equals("random")){
                UrushiUtils.setInfoWithColor(list,"rice_ball_with_filling_random", ChatFormatting.YELLOW);
            }
        }else{
@@ -56,13 +59,13 @@ public class RiceBallWithFillingItem extends Item {
 
     public @NotNull ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
         ItemStack itemstack = super.finishUsingItem(stack, level, entity);
-        CompoundTag compoundtag = itemstack.getTag();
+        CompoundTag compoundtag = itemstack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
         if (compoundtag != null && compoundtag.contains("effect")) {
             String id=compoundtag.getString("effect");
             if(id.equals("levitation")){
                 entity.addEffect(new MobEffectInstance(MobEffects.LEVITATION,20*5,0));
             }else if(id.equals("ignite")){
-                entity.setSecondsOnFire(5);
+                entity.igniteForSeconds(5);
             }else if(id.equals("strength")){
                 entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST,20*10,0));
             }else if(id.equals("glow")){
@@ -104,10 +107,10 @@ public class RiceBallWithFillingItem extends Item {
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int i1, boolean b1) {
         super.inventoryTick(stack, level, entity, i1, b1);
         if(stack.is(ItemAndBlockRegister.rice_ball.get())){
-            CompoundTag tag=stack.getTag();
+            CompoundTag tag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
             if(tag!=null&&tag.contains("effect")&&tag.getString("effect").equals("random")){
               ItemStack stack2= UrushiUtils.getRandomRiceBall(stack.getCount(),level.getRandom());
-              stack.setTag(stack2.getTag());
+              stack.applyComponents(stack2.getComponents());
             }
         }
     }
@@ -129,7 +132,7 @@ public class RiceBallWithFillingItem extends Item {
         return false;
     }
     public Optional<TooltipComponent> getTooltipImage(ItemStack stack) {
-        if (!stack.hasTag()) {
+        if (!stack.has(DataComponents.CUSTOM_DATA)) {
             NonNullList<ItemStack> nonnulllist = NonNullList.create();
             nonnulllist.add(new ItemStack(Items.BLAZE_POWDER));
             nonnulllist.add(new ItemStack(ItemAndBlockRegister.ghost_core.get()));
@@ -143,7 +146,7 @@ public class RiceBallWithFillingItem extends Item {
             nonnulllist.add(new ItemStack(Items.COPPER_INGOT));
             nonnulllist.add(new ItemStack(Items.SPIDER_EYE));
             nonnulllist.add(new ItemStack(Items.SNOWBALL));
-            return Optional.of(new BundleTooltip(nonnulllist, nonnulllist.size()));
+            return Optional.of(new BundleTooltip(new BundleContents(nonnulllist)));
         }
         return Optional.empty();
     }

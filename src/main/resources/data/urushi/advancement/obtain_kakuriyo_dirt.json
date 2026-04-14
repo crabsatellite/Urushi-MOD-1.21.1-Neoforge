@@ -1,0 +1,32 @@
+{
+  "parent": "urushi:root",
+  "display": {
+    "icon": {
+      "id": "urushi:kakuriyo_portal_core"
+    },
+    "title": {
+      "translate": "advancements.urushi.kakuriyo_dirt.title"
+    },
+    "description": {
+      "translate": "advancements.urushi.kakuriyo_dirt.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "kakuriyo_dirt": {
+      "trigger": "minecraft:changed_dimension",
+      "conditions": {
+        "from": "minecraft:overworld",
+        "to": "urushi:kakuriyo"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "kakuriyo_dirt"
+    ]
+  ]
+}

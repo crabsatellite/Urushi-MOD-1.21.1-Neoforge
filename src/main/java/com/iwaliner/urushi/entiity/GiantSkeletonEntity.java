@@ -13,7 +13,6 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
@@ -78,10 +77,6 @@ public class GiantSkeletonEntity extends Monster implements RangedAttackMob {
         super.stopSeenByPlayer(p_31488_);
         this.bossEvent.removePlayer(p_31488_);
     }
-    public MobType getMobType() {
-        return MobType.UNDEFINED;
-    }
-
 
     public void checkDespawn() {
         if (this.level().getDifficulty() == Difficulty.PEACEFUL && this.shouldDespawnInPeaceful()) {

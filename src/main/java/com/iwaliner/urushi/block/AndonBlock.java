@@ -7,6 +7,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -24,13 +25,20 @@ import net.minecraft.world.level.block.state.properties.PistonType;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-
+import com.mojang.serialization.MapCodec;
 
 import java.util.List;
 import java.util.Map;
-import net.minecraft.util.RandomSource;
 
 public class AndonBlock extends Block {
+    public static final MapCodec<AndonBlock> CODEC = simpleCodec(AndonBlock::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
     protected static final VoxelShape SHAPE = Block.box(4.0D, 0.0D, 4.0D, 12.0D, 16.0D, 12.0D);
 
     public AndonBlock(Properties p_i48440_1_) {

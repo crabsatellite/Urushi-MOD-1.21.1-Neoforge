@@ -1,7 +1,5 @@
 package com.iwaliner.urushi.blockentity.screen;
 
-import com.iwaliner.urushi.blockentity.menu.KettleMenu;
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
@@ -10,8 +8,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.Slot;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import com.iwaliner.urushi.blockentity.menu.KettleMenu;
+import com.mojang.blaze3d.systems.RenderSystem;
 
 @OnlyIn(Dist.CLIENT)
 public class KettleScreen extends AbstractContainerScreen<KettleMenu>
@@ -22,7 +22,7 @@ public class KettleScreen extends AbstractContainerScreen<KettleMenu>
 
     public KettleScreen(KettleMenu p_i51104_1_, Inventory p_i51104_3_, Component p_i51104_4_) {
         super( p_i51104_1_, p_i51104_3_, p_i51104_4_);
-        this.texture = new ResourceLocation("urushi:textures/gui/silkworm_farm.png");
+        this.texture = ResourceLocation.parse("urushi:textures/gui/silkworm_farm.png");
     }
 
     public void init() {
@@ -38,8 +38,7 @@ public class KettleScreen extends AbstractContainerScreen<KettleMenu>
 
 
     public void render(GuiGraphics p_282573_, int p_97859_, int p_97860_, float p_97861_) {
-        this.renderBackground(p_282573_);
-        this.renderBg(p_282573_, p_97861_, p_97859_, p_97860_);
+        this.renderBackground(p_282573_, p_97859_, p_97860_, p_97861_);
         super.render(p_282573_, p_97859_, p_97860_, p_97861_);
         this.renderTooltip(p_282573_, p_97859_, p_97860_);
     }

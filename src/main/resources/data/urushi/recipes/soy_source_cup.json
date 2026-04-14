@@ -2,19 +2,19 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "tag": "forge:crops/soybean"
+      "tag": "c:crops/soybean"
     },
     {
       "item": "minecraft:wheat"
     },
     {
-      "tag": "forge:salt"
+      "tag": "c:salt"
     },
     {
-     "item": "urushi:water_bamboo_cup"
+      "item": "urushi:water_bamboo_cup"
     },
     {
-     "item": "urushi:bamboo_cup"
+      "item": "urushi:bamboo_cup"
     }
   ],
   "result": {

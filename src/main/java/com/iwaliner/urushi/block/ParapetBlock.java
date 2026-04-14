@@ -1,7 +1,6 @@
 package com.iwaliner.urushi.block;
 
 
-import com.iwaliner.urushi.util.UrushiUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -21,10 +20,20 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import com.iwaliner.urushi.util.UrushiUtils;
+import com.mojang.serialization.MapCodec;
 
 import java.util.List;
 
 public class ParapetBlock extends HorizonalRotateBlock implements SimpleWaterloggedBlock {
+    public static final MapCodec<ParapetBlock> CODEC = simpleCodec(ParapetBlock::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     public static final BooleanProperty ON_SLAB=BooleanProperty.create("on_slab");
 

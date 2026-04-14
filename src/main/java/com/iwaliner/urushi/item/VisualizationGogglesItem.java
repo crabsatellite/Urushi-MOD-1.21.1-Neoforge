@@ -1,16 +1,10 @@
 package com.iwaliner.urushi.item;
 
-import com.iwaliner.urushi.block.EmitterBlock;
-import com.iwaliner.urushi.block.MirrorBlock;
-import com.iwaliner.urushi.blockentity.EmitterBlockEntity;
-import com.iwaliner.urushi.blockentity.MirrorBlockEntity;
-import com.iwaliner.urushi.util.ComplexDirection;
-import com.iwaliner.urushi.util.UrushiUtils;
-import com.iwaliner.urushi.util.interfaces.Tiered;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.BlockSource;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
 import net.minecraft.core.Position;
+import net.minecraft.core.dispenser.BlockSource;
 import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
 import net.minecraft.core.dispenser.DispenseItemBehavior;
 import net.minecraft.core.particles.ParticleTypes;
@@ -26,6 +20,8 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DispenserBlock;
@@ -34,13 +30,20 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.common.extensions.IForgeItem;
+import net.neoforged.neoforge.common.extensions.IItemExtension;
+import com.iwaliner.urushi.block.EmitterBlock;
+import com.iwaliner.urushi.block.MirrorBlock;
+import com.iwaliner.urushi.blockentity.EmitterBlockEntity;
+import com.iwaliner.urushi.blockentity.MirrorBlockEntity;
+import com.iwaliner.urushi.util.ComplexDirection;
+import com.iwaliner.urushi.util.UrushiUtils;
+import com.iwaliner.urushi.util.interfaces.Tiered;
 
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Objects;
+import javax.annotation.Nullable;
 
-public class VisualizationGogglesItem extends Item implements Equipable, IForgeItem {
+public class VisualizationGogglesItem extends Item implements Equipable, IItemExtension {
     private final String string;
     public static final DispenseItemBehavior DISPENSE_ITEM_BEHAVIOR = new DefaultDispenseItemBehavior() {
         protected ItemStack execute(BlockSource p_40408_, ItemStack p_40409_) {
@@ -65,7 +68,7 @@ public class VisualizationGogglesItem extends Item implements Equipable, IForgeI
             }
 
             itemstack.setCount(0);
-            return InteractionResultHolder.sidedSuccess(itemstack, p_41137_.isClientSide());
+            return InteractionResultHolder.success(itemstack);
         } else {
             return InteractionResultHolder.fail(itemstack);
         }
@@ -77,7 +80,7 @@ public class VisualizationGogglesItem extends Item implements Equipable, IForgeI
     }
 
     @Nullable
-    public SoundEvent getEquipSound() {
+    public Holder<SoundEvent> getEquipSound() {
         return SoundEvents.ARMOR_EQUIP_LEATHER;
     }
 
@@ -93,7 +96,7 @@ public class VisualizationGogglesItem extends Item implements Equipable, IForgeI
     }
 
     @Override
-    public void appendHoverText(ItemStack p_41421_, @org.jetbrains.annotations.Nullable Level p_41422_, List<Component> list, TooltipFlag p_41424_) {
+    public void appendHoverText(ItemStack p_41421_, Item.TooltipContext p_41422_, List<Component> list, TooltipFlag p_41424_) {
         UrushiUtils.setInfo(list, string);
     }
 

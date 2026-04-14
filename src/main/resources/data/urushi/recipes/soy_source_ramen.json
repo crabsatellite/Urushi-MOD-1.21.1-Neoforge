@@ -4,18 +4,17 @@
     {
       "item": "minecraft:cooked_porkchop"
     },
-    
     {
       "item": "minecraft:egg"
     },
     {
- 		 "tag": "forge:soysauce/soysauce"
+      "tag": "c:soysauce/soysauce"
     },
     {
-       "item": "urushi:alkaline_noodles"
+      "item": "urushi:alkaline_noodles"
     },
-     {
-       "item": "urushi:water_bamboo_cup"
+    {
+      "item": "urushi:water_bamboo_cup"
     }
   ],
   "result": {

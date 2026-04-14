@@ -1,7 +1,6 @@
 package com.iwaliner.urushi.block;
 
 
-import com.iwaliner.urushi.util.UrushiUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -14,14 +13,25 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import com.iwaliner.urushi.util.UrushiUtils;
+import com.mojang.serialization.MapCodec;
 
 import java.util.List;
 
 public class Roof45Block extends HorizonalRotateBlock {
+    public static final MapCodec<Roof45Block> CODEC = simpleCodec(Roof45Block::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
    // private static final VoxelShape ROOT = Block.box(0D, 0.0D, 0D, 16D, 8D, 16D);
    private static final VoxelShape EXTEND = Block.box(0D, -8D, 0D, 16D, 16D, 16D);
 

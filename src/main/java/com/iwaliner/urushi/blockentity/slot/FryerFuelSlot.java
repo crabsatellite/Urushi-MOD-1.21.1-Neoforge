@@ -1,12 +1,12 @@
 package com.iwaliner.urushi.blockentity.slot;
 
-import com.iwaliner.urushi.ItemAndBlockRegister;
-import com.iwaliner.urushi.blockentity.menu.AbstractFryerMenu;
 import net.minecraft.world.Container;
 import net.minecraft.world.inventory.AbstractFurnaceMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import com.iwaliner.urushi.ItemAndBlockRegister;
+import com.iwaliner.urushi.blockentity.menu.AbstractFryerMenu;
 
 public class FryerFuelSlot extends Slot {
     private final AbstractFryerMenu menu;

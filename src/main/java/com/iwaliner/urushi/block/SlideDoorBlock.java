@@ -2,14 +2,6 @@ package com.iwaliner.urushi.block;
 
 
 
-import com.iwaliner.urushi.ConfigUrushi;
-import com.iwaliner.urushi.ItemAndBlockRegister;
-import com.iwaliner.urushi.ModCoreUrushi;
-import com.iwaliner.urushi.mixin.BlockDisplayMixin;
-import com.iwaliner.urushi.mixin.DisplayMixin;
-import com.iwaliner.urushi.util.UrushiUtils;
-import com.mojang.math.OctahedralGroup;
-import net.minecraft.commands.CommandFunction;
 import net.minecraft.commands.CommandSource;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.BlockPos;
@@ -25,6 +17,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Display;
@@ -53,18 +46,32 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import com.iwaliner.urushi.ConfigUrushi;
+import com.iwaliner.urushi.ItemAndBlockRegister;
+import com.iwaliner.urushi.ModCoreUrushi;
+import com.iwaliner.urushi.mixin.BlockDisplayMixin;
+import com.iwaliner.urushi.mixin.DisplayMixin;
+import com.iwaliner.urushi.util.UrushiUtils;
+import com.mojang.math.OctahedralGroup;
+import com.mojang.serialization.MapCodec;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
 
 import java.util.List;
 import java.util.Objects;
 
-import net.minecraft.util.RandomSource;
-import org.joml.Vector3f;
-
 public class SlideDoorBlock extends AbstractHighBlock {
+    public static final MapCodec<SlideDoorBlock> CODEC = simpleCodec(SlideDoorBlock::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
     public static final IntegerProperty OPEN = IntegerProperty.create("open",0,13);
     public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
@@ -176,7 +183,7 @@ public class SlideDoorBlock extends AbstractHighBlock {
 
 
     @Override
-    public boolean isPathfindable(BlockState state, BlockGetter p_60476_, BlockPos p_60477_, PathComputationType type) {
+    public boolean isPathfindable(BlockState state, PathComputationType type) {
         switch(type) {
             case LAND:
                 return isOpen(state);
@@ -246,16 +253,16 @@ public class SlideDoorBlock extends AbstractHighBlock {
 
 
     @Override
-    public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
+    protected InteractionResult useWithoutItem(BlockState state, Level world, BlockPos pos, Player player, BlockHitResult result) {
         if (ConfigUrushi.instantlySlidingDoor.get()) {
             if (state.getValue(OPEN) == 0 ) {
                 world.setBlock(pos, state.setValue(OPEN, 13).setValue(IS_OPENING, state.getValue(OPEN) == 0), 10);
                 world.playSound(player, pos, SoundEvents.BARREL_OPEN, SoundSource.BLOCKS, 1.0F, 1.0F);
-                return InteractionResult.sidedSuccess(world.isClientSide);
+                return InteractionResult.SUCCESS;
             }else if (state.getValue(OPEN) == 13) {
                 world.setBlock(pos, state.setValue(OPEN, 0).setValue(IS_OPENING, state.getValue(OPEN) == 0), 10);
                 world.playSound(player, pos, SoundEvents.BARREL_OPEN, SoundSource.BLOCKS, 1.0F, 1.0F);
-                return InteractionResult.sidedSuccess(world.isClientSide);
+                return InteractionResult.SUCCESS;
             }else{
                 return InteractionResult.FAIL;
             }
@@ -342,7 +349,7 @@ public class SlideDoorBlock extends AbstractHighBlock {
                 world.scheduleTick(new BlockPos(pos2), this, 2);
 
 
-                return InteractionResult.sidedSuccess(world.isClientSide);
+                return InteractionResult.SUCCESS;
             } else {
                 return InteractionResult.FAIL;
             }

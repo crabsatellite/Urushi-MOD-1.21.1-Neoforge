@@ -1,7 +1,6 @@
 {
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
-   
     {
       "item": "urushi:kanten_powder"
     },
@@ -12,7 +11,7 @@
       "item": "urushi:glowing_sakura_leaves"
     },
     {
-     "tag": "forge:crops/adzuki"
+      "tag": "c:crops/adzuki"
     }
   ],
   "result": {

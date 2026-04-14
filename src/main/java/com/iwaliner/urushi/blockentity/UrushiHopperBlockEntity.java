@@ -1,11 +1,8 @@
 package com.iwaliner.urushi.blockentity;
 
-import com.iwaliner.urushi.BlockEntityRegister;
-
-import com.iwaliner.urushi.block.UrushiHopperBlock;
-import com.iwaliner.urushi.blockentity.menu.UrushiHopperMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -33,17 +30,19 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.Shapes;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemHandlerHelper;
-import net.minecraftforge.items.VanillaInventoryCodeHooks;
-import org.apache.commons.lang3.tuple.Pair;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.ItemHandlerHelper;
+import com.iwaliner.urushi.BlockEntityRegister;
+import com.iwaliner.urushi.block.UrushiHopperBlock;
+import com.iwaliner.urushi.blockentity.menu.UrushiHopperMenu;
 
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BooleanSupplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import javax.annotation.Nullable;
 
 public class UrushiHopperBlockEntity extends RandomizableContainerBlockEntity implements Hopper {
     public static final int MOVE_ITEM_SPEED = 32;
@@ -56,20 +55,20 @@ public class UrushiHopperBlockEntity extends RandomizableContainerBlockEntity im
         super(BlockEntityRegister.UrushiHopper.get(), p_155550_, p_155551_);
     }
 
-    public void load(CompoundTag p_155588_) {
-        super.load(p_155588_);
+    public void loadAdditional(CompoundTag p_155588_, HolderLookup.Provider registries) {
+        super.loadAdditional(p_155588_, registries);
         this.items = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
         if (!this.tryLoadLootTable(p_155588_)) {
-            ContainerHelper.loadAllItems(p_155588_, this.items);
+            ContainerHelper.loadAllItems(p_155588_, this.items, registries);
         }
 
         this.cooldownTime = p_155588_.getInt("TransferCooldown");
     }
 
-    protected void saveAdditional(CompoundTag p_187502_) {
-        super.saveAdditional(p_187502_);
+    protected void saveAdditional(CompoundTag p_187502_, HolderLookup.Provider registries) {
+        super.saveAdditional(p_187502_, registries);
         if (!this.trySaveLootTable(p_187502_)) {
-            ContainerHelper.saveAllItems(p_187502_, this.items);
+            ContainerHelper.saveAllItems(p_187502_, this.items, registries);
         }
 
         p_187502_.putInt("TransferCooldown", this.cooldownTime);
@@ -155,12 +154,12 @@ public class UrushiHopperBlockEntity extends RandomizableContainerBlockEntity im
 
         return true;
     }
-    private static Optional<Pair<IItemHandler, Object>> getItemHandler(Level level, Hopper hopper, Direction hopperFacing)
+    private static IItemHandler getItemHandler(Level level, Hopper hopper, Direction hopperFacing)
     {
         double x = hopper.getLevelX() + (double) hopperFacing.getStepX();
         double y = hopper.getLevelY() + (double) hopperFacing.getStepY();
         double z = hopper.getLevelZ() + (double) hopperFacing.getStepZ();
-        return VanillaInventoryCodeHooks.getItemHandler(level, x, y, z, hopperFacing.getOpposite());
+        return level.getCapability(net.neoforged.neoforge.capabilities.Capabilities.ItemHandler.BLOCK, BlockPos.containing(x, y, z), hopperFacing.getOpposite());
     }
     private static boolean isFull(IItemHandler itemHandler)
     {
@@ -209,7 +208,7 @@ public class UrushiHopperBlockEntity extends RandomizableContainerBlockEntity im
                 stack = ItemStack.EMPTY;
                 insertedItem = true;
             }
-            else if (ItemHandlerHelper.canItemStacksStack(itemstack, stack))
+            else if (ItemStack.isSameItemSameComponents(itemstack, stack))
             {
                 int originalSize = stack.getCount();
                 stack = destInventory.insertItem(slot, stack, false);
@@ -243,17 +242,11 @@ public class UrushiHopperBlockEntity extends RandomizableContainerBlockEntity im
     public static boolean insertHook(UrushiHopperBlockEntity hopper) {
         Direction hopperFacing = hopper.getBlockState().getValue(UrushiHopperBlock.FACING);
 
-        Optional<Pair<IItemHandler, Object>> destinationResult =
-            getItemHandler(hopper.getLevel(), hopper, hopperFacing);
-
-        if (destinationResult.isEmpty()) {
+        IItemHandler itemHandler = getItemHandler(hopper.getLevel(), hopper, hopperFacing);
+        if (itemHandler == null) {
             return false;
         }
-
-        Pair<IItemHandler, Object> pair = destinationResult.get();
-        IItemHandler itemHandler = pair.getKey();
-        Object destination = pair.getValue();
-
+        Object destination = null;
         if (isFull(itemHandler)) {
             return false;
         }
@@ -322,7 +315,7 @@ public class UrushiHopperBlockEntity extends RandomizableContainerBlockEntity im
         if(level == null){
             return false;
         }
-        Boolean ret = net.minecraftforge.items.VanillaInventoryCodeHooks.extractHook(level, p_155554_);
+        Boolean ret = net.neoforged.neoforge.items.VanillaInventoryCodeHooks.extractHook(level, p_155554_);
         if (ret != null) return ret;
         Container container = getSourceContainer(level, p_155554_);
         if (container != null) {
@@ -449,7 +442,7 @@ public class UrushiHopperBlockEntity extends RandomizableContainerBlockEntity im
     }
 
     public static List<ItemEntity> getItemsAtAndAbove(Level p_155590_, Hopper p_155591_) {
-        return p_155591_.getSuckShape().toAabbs().stream().flatMap((p_155558_) -> {
+        return java.util.List.of(p_155591_.getSuckAabb()).stream().flatMap((p_155558_) -> {
             return p_155590_.getEntitiesOfClass(ItemEntity.class, p_155558_.move(p_155591_.getLevelX() - 0.5D,
                 p_155591_.getLevelY() - 0.5D, p_155591_.getLevelZ() - 0.5D), EntitySelector.ENTITY_STILL_ALIVE).stream();
         }).collect(Collectors.toList());
@@ -492,7 +485,7 @@ public class UrushiHopperBlockEntity extends RandomizableContainerBlockEntity im
     }
 
     static boolean canMergeItems(ItemStack p_59345_, ItemStack p_59346_) {
-        return p_59345_.getCount() <= p_59345_.getMaxStackSize() && ItemStack.isSameItemSameTags(p_59345_, p_59346_);
+        return p_59345_.getCount() <= p_59345_.getMaxStackSize() && ItemStack.isSameItemSameComponents(p_59345_, p_59346_);
     }
 
     public double getLevelX() {
@@ -528,7 +521,7 @@ public class UrushiHopperBlockEntity extends RandomizableContainerBlockEntity im
     }
 
     public static void entityInside(Level p_155568_, BlockPos p_155569_, BlockState p_155570_, Entity p_155571_, UrushiHopperBlockEntity p_155572_) {
-        if (p_155571_ instanceof ItemEntity && Shapes.joinIsNotEmpty(Shapes.create(p_155571_.getBoundingBox().move((double)(-p_155569_.getX()), (double)(-p_155569_.getY()), (double)(-p_155569_.getZ()))), p_155572_.getSuckShape(), BooleanOp.AND)) {
+        if (p_155571_ instanceof ItemEntity && Shapes.joinIsNotEmpty(Shapes.create(p_155571_.getBoundingBox().move((double)(-p_155569_.getX()), (double)(-p_155569_.getY()), (double)(-p_155569_.getZ()))), Shapes.create(p_155572_.getSuckAabb()), BooleanOp.AND)) {
             tryMoveItems(p_155568_, p_155569_, p_155570_, p_155572_, () -> addItem(p_155572_, (ItemEntity)p_155571_));
         }
 
@@ -542,6 +535,11 @@ public class UrushiHopperBlockEntity extends RandomizableContainerBlockEntity im
 
     public long getLastUpdateTime() {
         return this.tickedGameTime;
+    }
+
+    @Override
+    public boolean isGridAligned() {
+        return false;
     }
 }
 

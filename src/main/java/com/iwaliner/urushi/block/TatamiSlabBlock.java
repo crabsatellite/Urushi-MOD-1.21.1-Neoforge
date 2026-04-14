@@ -22,10 +22,19 @@ import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import com.mojang.serialization.MapCodec;
 
 import javax.annotation.Nullable;
 
 public class TatamiSlabBlock extends HorizonalRotateSlabBlock {
+    public static final MapCodec<TatamiSlabBlock> CODEC = simpleCodec(TatamiSlabBlock::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
     public static final BooleanProperty FLIP = BooleanProperty.create("flip");
     public TatamiSlabBlock(Properties p_i48377_1_) {
         super(p_i48377_1_);

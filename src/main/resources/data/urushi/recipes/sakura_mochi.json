@@ -1,7 +1,6 @@
 {
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
-   
     {
       "item": "urushi:rice_cake"
     },
@@ -9,7 +8,7 @@
       "item": "urushi:sakura_leaves"
     },
     {
-      "tag": "forge:crops/adzuki"
+      "tag": "c:crops/adzuki"
     }
   ],
   "result": {

@@ -1,10 +1,5 @@
 package com.iwaliner.urushi.blockentity.renderer;
 
-import com.iwaliner.urushi.block.MarkerBlock;
-import com.iwaliner.urushi.blockentity.FillerBlockEntity;
-import com.iwaliner.urushi.blockentity.MarkerBlockEntity;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -14,8 +9,13 @@ import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import com.iwaliner.urushi.block.MarkerBlock;
+import com.iwaliner.urushi.blockentity.FillerBlockEntity;
+import com.iwaliner.urushi.blockentity.MarkerBlockEntity;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 
 @OnlyIn(Dist.CLIENT)
 public class MarkerRenderer implements BlockEntityRenderer<MarkerBlockEntity> {

@@ -1,13 +1,13 @@
 package com.iwaliner.urushi.entiity.renderer;
 
-import com.iwaliner.urushi.entiity.GhostEntity;
-import com.iwaliner.urushi.entiity.model.GhostModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
 import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
 import net.minecraft.resources.ResourceLocation;
+import com.iwaliner.urushi.entiity.GhostEntity;
+import com.iwaliner.urushi.entiity.model.GhostModel;
 
 
 public abstract class AbstractGhostRenderer<T extends GhostEntity, M extends GhostModel<T>> extends HumanoidMobRenderer<T,M> {

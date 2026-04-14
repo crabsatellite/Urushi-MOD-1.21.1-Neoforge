@@ -2,13 +2,13 @@ package com.iwaliner.urushi.block;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.Lists;
-import com.iwaliner.urushi.ItemAndBlockRegister;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -25,13 +25,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.Vec3;
+import com.iwaliner.urushi.ItemAndBlockRegister;
+import com.mojang.serialization.MapCodec;
 
-import net.minecraft.util.RandomSource;
-
-public class HotSpringWaterBlock extends LiquidBlock {
-
-    public HotSpringWaterBlock(java.util.function.Supplier<? extends FlowingFluid> p_54694_, BlockBehaviour.Properties p_54695_) {
-        super(p_54694_,p_54695_);
+public class HotSpringWaterBlock extends LiquidBlock {    public HotSpringWaterBlock(java.util.function.Supplier<? extends FlowingFluid> p_54694_, BlockBehaviour.Properties p_54695_) {
+        super(p_54694_.get(), p_54695_);
     }
 
     @Override

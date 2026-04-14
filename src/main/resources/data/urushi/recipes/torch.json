@@ -6,10 +6,10 @@
   ],
   "key": {
     "o": {
-    "tag": "forge:rods/wooden"
+      "tag": "c:rods/wooden"
     },
     "s": {
-    "item": "urushi:bamboo_charcoal"
+      "item": "urushi:bamboo_charcoal"
     }
   },
   "result": {

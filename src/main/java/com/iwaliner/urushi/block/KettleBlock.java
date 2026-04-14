@@ -1,10 +1,9 @@
 package com.iwaliner.urushi.block;
 
-import com.iwaliner.urushi.BlockEntityRegister;
-import com.iwaliner.urushi.blockentity.KettleBlockEntity;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -16,6 +15,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -36,11 +36,22 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import com.iwaliner.urushi.BlockEntityRegister;
+import com.iwaliner.urushi.blockentity.KettleBlockEntity;
+import com.mojang.serialization.MapCodec;
 
-import javax.annotation.Nullable;
 import java.util.List;
+import javax.annotation.Nullable;
 
 public class KettleBlock extends BaseEntityBlock {
+    public static final MapCodec<KettleBlock> CODEC = simpleCodec(KettleBlock::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
     protected static final VoxelShape SHAPE = Block.box(4.0D, 0.0D, 4.0D, 12.0D, 7.0D, 12.0D);
     public static final BooleanProperty HOOK=BooleanProperty.create("hook");
@@ -107,7 +118,8 @@ public class KettleBlock extends BaseEntityBlock {
         return level.isClientSide ? null : createTickerHelper(p_152162_, BlockEntityRegister.Kettle.get(), KettleBlockEntity::serverTick);
     }
 
-    public InteractionResult use(BlockState p_48706_, Level p_48707_, BlockPos p_48708_, Player p_48709_, InteractionHand p_48710_, BlockHitResult p_48711_) {
+    protected InteractionResult useWithoutItem(BlockState p_48706_, Level p_48707_, BlockPos p_48708_, Player p_48709_, BlockHitResult p_48711_) {
+        InteractionHand hand = InteractionHand.MAIN_HAND;
         if (p_48707_.isClientSide) {
             return InteractionResult.SUCCESS;
         } else {
@@ -123,10 +135,11 @@ public class KettleBlock extends BaseEntityBlock {
         }
     }
     public void setPlacedBy(Level p_48694_, BlockPos p_48695_, BlockState p_48696_, LivingEntity p_48697_, ItemStack p_48698_) {
-        if (p_48698_.hasCustomHoverName()) {
+        if (p_48698_.has(DataComponents.CUSTOM_NAME)) {
             BlockEntity blockentity = p_48694_.getBlockEntity(p_48695_);
             if (blockentity instanceof KettleBlockEntity) {
-                ((KettleBlockEntity)blockentity).setCustomName(p_48698_.getHoverName());
+
+                // Original: ((KettleBlockEntity)blockentity).setCustomName(p_48698_.getHoverName());
             }
         }
 
@@ -152,7 +165,7 @@ public class KettleBlock extends BaseEntityBlock {
         return p_52713_.rotate(p_52714_.getRotation(p_52713_.getValue(FACING)));
     }
     @Override
-    public void appendHoverText(ItemStack p_49816_, @org.jetbrains.annotations.Nullable BlockGetter p_49817_, List<Component> list, TooltipFlag p_49819_) {
+    public void appendHoverText(ItemStack p_49816_, Item.TooltipContext p_49817_, List<Component> list, TooltipFlag p_49819_) {
         list.add((Component.translatable("info.urushi.kettle" )).withStyle(ChatFormatting.GRAY));
     }
 }

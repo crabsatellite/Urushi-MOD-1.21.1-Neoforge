@@ -1,7 +1,5 @@
 package com.iwaliner.urushi.entiity;
 
-import com.iwaliner.urushi.EntityRegister;
-import com.mojang.logging.LogUtils;
 import net.minecraft.CrashReportCategory;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -29,6 +27,8 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import com.iwaliner.urushi.EntityRegister;
+import com.mojang.logging.LogUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
@@ -127,14 +127,14 @@ public class JufuEffectDisplayEntity extends FallingBlockEntity {
                                     if (this.blockData != null && this.blockState.hasBlockEntity()) {
                                         BlockEntity blockentity = this.level().getBlockEntity(blockpos);
                                         if (blockentity != null) {
-                                            CompoundTag compoundtag = blockentity.saveWithoutMetadata();
+                                            CompoundTag compoundtag = blockentity.saveWithoutMetadata(this.level().registryAccess());
 
                                             for(String s : this.blockData.getAllKeys()) {
                                                 compoundtag.put(s, this.blockData.get(s).copy());
                                             }
 
                                             try {
-                                                blockentity.load(compoundtag);
+                                                blockentity.loadWithComponents(compoundtag, blockentity.getLevel().registryAccess());
                                             } catch (Exception exception) {
                                                 LOGGER.error("Failed to load block entity from falling block", (Throwable)exception);
                                             }

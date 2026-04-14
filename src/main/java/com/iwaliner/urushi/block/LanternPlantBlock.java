@@ -1,11 +1,10 @@
 package com.iwaliner.urushi.block;
 
-import com.iwaliner.urushi.ItemAndBlockRegister;
-import com.iwaliner.urushi.TagUrushi;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -22,11 +21,21 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.BlockHitResult;
+import com.iwaliner.urushi.ItemAndBlockRegister;
+import com.iwaliner.urushi.TagUrushi;
+import com.mojang.serialization.MapCodec;
 
-import net.minecraft.util.RandomSource;
 import java.util.function.ToIntFunction;
 
 public class LanternPlantBlock extends BushBlock {
+    public static final MapCodec<LanternPlantBlock> CODEC = simpleCodec(LanternPlantBlock::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
     public static final IntegerProperty AGE = BlockStateProperties.AGE_1;
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
     public static final ToIntFunction<BlockState> LIGHT_EMISSION = (state) -> {
@@ -57,12 +66,12 @@ public class LanternPlantBlock extends BushBlock {
            }
        }
     }
-    public ItemStack getCloneItemStack(BlockGetter p_152966_, BlockPos p_152967_, BlockState p_152968_) {
+    public ItemStack getCloneItemStack(LevelReader p_152966_, BlockPos p_152967_, BlockState p_152968_) {
         return new ItemStack(ItemAndBlockRegister.lantern_plant_fruit.get());
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult result) {
      if(state.getValue(AGE)==Integer.valueOf(1)){
          level.setBlockAndUpdate(pos,state.setValue(LIT,Boolean.valueOf(true)));
          return InteractionResult.SUCCESS;
@@ -79,7 +88,7 @@ public class LanternPlantBlock extends BushBlock {
     public boolean canSurvive(BlockState p_51028_, LevelReader p_51029_, BlockPos p_51030_) {
         BlockPos blockpos = p_51030_.below();
         if (p_51028_.getBlock() == this) //Forge: This function is called during world gen and placement, before this block is set, so if we are not 'here' then assume it's the pre-check.
-            return p_51029_.getBlockState(blockpos).canSustainPlant(p_51029_, blockpos, Direction.UP, this);
+            return p_51029_.getBlockState(blockpos).canSustainPlant(p_51029_, blockpos, Direction.UP, this.defaultBlockState()).isTrue();
         return this.mayPlaceOn(p_51029_.getBlockState(blockpos), p_51029_, blockpos);
     }
     @Override

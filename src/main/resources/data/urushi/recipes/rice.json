@@ -1,7 +1,7 @@
 {
   "type": "minecraft:smelting",
   "ingredient": {
-     "tag": "forge:crops/rice"
+    "tag": "c:crops/rice"
   },
   "result": "urushi:rice",
   "experience": 0.1,

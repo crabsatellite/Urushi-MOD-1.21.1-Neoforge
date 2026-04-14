@@ -1,21 +1,21 @@
 {
   "type": "urushi:metal_element_tier2_crafting",
   "ingredients": [
-  {
-    "item": "urushi:crush_jufu_stamp"
+    {
+      "item": "urushi:crush_jufu_stamp"
     },
     {
-"item": "urushi:black_urushi_ball"
+      "item": "urushi:black_urushi_ball"
     },
     {
-"item": "minecraft:paper"
+      "item": "minecraft:paper"
     },
     {
-   "tag": "forge:nuggets/gold"
+      "tag": "c:nuggets/gold"
     }
   ],
   "result": {
-  "item":"urushi:crush_jufu"
+    "item": "urushi:crush_jufu"
   },
   "reiryoku": 30
 }

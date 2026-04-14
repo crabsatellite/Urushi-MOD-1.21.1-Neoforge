@@ -1,10 +1,5 @@
 package com.iwaliner.urushi.jade;
 
-import com.iwaliner.urushi.ItemAndBlockRegister;
-import com.iwaliner.urushi.ModCoreUrushi;
-import com.iwaliner.urushi.util.ElementType;
-import com.iwaliner.urushi.util.ElementUtils;
-import com.iwaliner.urushi.util.UrushiUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -12,6 +7,11 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.Vec2;
+import com.iwaliner.urushi.ItemAndBlockRegister;
+import com.iwaliner.urushi.ModCoreUrushi;
+import com.iwaliner.urushi.util.ElementType;
+import com.iwaliner.urushi.util.ElementUtils;
+import com.iwaliner.urushi.util.UrushiUtils;
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.IBlockComponentProvider;
 import snownee.jade.api.ITooltip;
@@ -52,6 +52,6 @@ public enum BlockElementComponentProvider implements IBlockComponentProvider {
 
     @Override
     public ResourceLocation getUid() {
-        return new ResourceLocation(ModCoreUrushi.ModID,"block_element");
+        return ResourceLocation.fromNamespaceAndPath(ModCoreUrushi.ModID, "block_element");
     }
 }

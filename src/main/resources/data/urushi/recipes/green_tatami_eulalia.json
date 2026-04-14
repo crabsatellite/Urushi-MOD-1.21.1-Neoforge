@@ -2,16 +2,16 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-    "item": "urushi:eulalia"
+      "item": "urushi:eulalia"
     },
     {
-    "item": "urushi:eulalia"
+      "item": "urushi:eulalia"
     },
     {
-   "item": "urushi:eulalia"
+      "item": "urushi:eulalia"
     },
     {
-     "tag": "forge:string"
+      "tag": "c:string"
     }
   ],
   "result": {

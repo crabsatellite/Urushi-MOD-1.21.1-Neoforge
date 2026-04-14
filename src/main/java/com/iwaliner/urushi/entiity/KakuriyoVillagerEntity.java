@@ -2,19 +2,11 @@ package com.iwaliner.urushi.entiity;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
-import com.iwaliner.urushi.EntityRegister;
-import com.iwaliner.urushi.ItemAndBlockRegister;
-import com.iwaliner.urushi.SoundRegister;
-import com.iwaliner.urushi.util.ElementType;
-import com.iwaliner.urushi.util.KakuriyoVillagerProfessionType;
-import com.iwaliner.urushi.util.UrushiUtils;
-import com.mojang.authlib.GameProfile;
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -49,8 +41,10 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.item.trading.MerchantOffers;
 import net.minecraft.world.level.GameRules;
@@ -61,13 +55,23 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.saveddata.maps.MapDecoration;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.common.NeoForge;
+import com.iwaliner.urushi.EntityRegister;
+import com.iwaliner.urushi.ItemAndBlockRegister;
+import com.iwaliner.urushi.SoundRegister;
+import com.iwaliner.urushi.util.ElementType;
+import com.iwaliner.urushi.util.KakuriyoVillagerProfessionType;
+import com.iwaliner.urushi.util.UrushiUtils;
+import com.mojang.authlib.GameProfile;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nullable;
 import java.util.EnumSet;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
+import javax.annotation.Nullable;
 public class KakuriyoVillagerEntity extends AbstractVillager {
     private static final EntityDataAccessor<Integer> PROFESSION = SynchedEntityData.defineId(KakuriyoVillagerEntity.class, EntityDataSerializers.INT);
   public static final Map<KakuriyoVillagerProfessionType, Int2ObjectMap<VillagerTrades.ItemListing[]>> TRADES = Util.make(Maps.newHashMap(), (p_35633_) -> {
@@ -156,7 +160,7 @@ p_35633_.put(KakuriyoVillagerProfessionType.Cook, toIntMap(ImmutableMap.of(1, ne
 
     public KakuriyoVillagerEntity(EntityType<? extends AbstractVillager> p_34271_, Level level) {
         super(EntityRegister.KakuriyoVillager.get(), level);
-        this.setProfessionType(KakuriyoVillagerProfessionType.getType(level.getRandom().nextInt(6)));
+        this.setProfessionType(KakuriyoVillagerProfessionType.getType(this.level().getRandom().nextInt(6)));
     }
     public KakuriyoVillagerEntity(Level p_i1705_1_, double p_i1705_2_, double p_i1705_4_, double p_i1705_6_) {
         this(EntityRegister.KakuriyoVillager.get(), p_i1705_1_);
@@ -168,9 +172,9 @@ p_35633_.put(KakuriyoVillagerProfessionType.Cook, toIntMap(ImmutableMap.of(1, ne
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(PROFESSION, -1);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(PROFESSION, -1);
     }
     public KakuriyoVillagerProfessionType getProfessionType() {
         return KakuriyoVillagerProfessionType.getType(this.entityData.get(PROFESSION));
@@ -213,21 +217,21 @@ p_35633_.put(KakuriyoVillagerProfessionType.Cook, toIntMap(ImmutableMap.of(1, ne
             level().addParticle(ParticleTypes.EXPLOSION, position().x, position().y+1D, position().z, 0.0D, 0.0D, 0.0D);
             discard();
             itemstack.shrink(1);
-            return InteractionResult.sidedSuccess(this.level().isClientSide);
+            return InteractionResult.SUCCESS;
         }else if (!itemstack.is(ItemAndBlockRegister.kakuriyo_villager_spawn_egg.get()) && this.isAlive() && !this.isTrading() && !this.isBaby()&&this.getProfessionType()!=KakuriyoVillagerProfessionType.Jobless) {
             if (p_35857_ == InteractionHand.MAIN_HAND) {
                 player.awardStat(Stats.TALKED_TO_VILLAGER);
             }
 
             if (this.getOffers().isEmpty()) {
-                return InteractionResult.sidedSuccess(this.level().isClientSide);
+                return InteractionResult.SUCCESS;
             } else {
                 if (!this.level().isClientSide) {
                     this.setTradingPlayer(player);
                     this.openTradingScreen(player,getProfessionComponent(), 1);
                 }
 
-                return InteractionResult.sidedSuccess(this.level().isClientSide);
+                return InteractionResult.SUCCESS;
             }
         } else {
             if(this.getProfessionType()==KakuriyoVillagerProfessionType.Jobless){
@@ -283,15 +287,19 @@ p_35633_.put(KakuriyoVillagerProfessionType.Cook, toIntMap(ImmutableMap.of(1, ne
 
     }
 
-    @Override
-    public double getMyRidingOffset() {
-        return super.getMyRidingOffset()-0.45D;
-    }
+    //   Original method:
+    //     @Override
+    //     public double getMyRidingOffset() {
+    //         return super.getMyRidingOffset()-0.45D;
+    //     }
 
-    @Override
-    public double getPassengersRidingOffset() {
-        return super.getPassengersRidingOffset();
-    }
+
+    //   Original method:
+    //     @Override
+    //     public double getPassengersRidingOffset() {
+    //         return super.getPassengersRidingOffset();
+    //     }
+
 
     protected SoundEvent getAmbientSound() {
         return null;
@@ -327,7 +335,7 @@ p_35633_.put(KakuriyoVillagerProfessionType.Cook, toIntMap(ImmutableMap.of(1, ne
             CriteriaTriggers.TRADE.trigger((ServerPlayer)getTradingPlayer(), this, offer.getResult());
         }
 
-        net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.event.entity.player.TradeWithVillagerEvent(getTradingPlayer(), offer, this));
+        net.neoforged.neoforge.common.NeoForge.EVENT_BUS.post(new net.neoforged.neoforge.event.entity.player.TradeWithVillagerEvent(getTradingPlayer(), offer, this));
     }
 
     @Override
@@ -369,7 +377,7 @@ p_35633_.put(KakuriyoVillagerProfessionType.Cook, toIntMap(ImmutableMap.of(1, ne
         }
 
         public MerchantOffer getOffer(Entity p_219699_, RandomSource p_219700_) {
-            return new MerchantOffer(new ItemStack(ItemAndBlockRegister.coin.get(), this.emeraldCost), new ItemStack(this.itemStack.getItem(), this.numberOfItems), 3000, this.villagerXp, this.priceMultiplier);
+            return new MerchantOffer(new ItemCost(ItemAndBlockRegister.coin.get(), this.emeraldCost), new ItemStack(this.itemStack.getItem(), this.numberOfItems), 3000, this.villagerXp, this.priceMultiplier);
         }
     }
     static class Sell implements VillagerTrades.ItemListing {
@@ -387,7 +395,7 @@ p_35633_.put(KakuriyoVillagerProfessionType.Cook, toIntMap(ImmutableMap.of(1, ne
 
         public MerchantOffer getOffer(Entity p_219682_, RandomSource p_219683_) {
             ItemStack itemstack = new ItemStack(this.item, this.cost);
-            return new MerchantOffer(itemstack, new ItemStack(ItemAndBlockRegister.coin.get()), 3000, this.villagerXp, this.priceMultiplier);
+            return new MerchantOffer(new ItemCost(itemstack.getItem(), itemstack.getCount()), new ItemStack(ItemAndBlockRegister.coin.get()), 3000, this.villagerXp, this.priceMultiplier);
         }
 
     }
@@ -407,23 +415,23 @@ p_35633_.put(KakuriyoVillagerProfessionType.Cook, toIntMap(ImmutableMap.of(1, ne
         public MerchantOffer getOffer(Entity entity, RandomSource p_219700_) {
           //  ItemStack stack=UrushiUtils.getRandomRiceBall(this.numberOfItems,randomSource);
             ItemStack stack=new ItemStack(ItemAndBlockRegister.rice_ball.get(), this.numberOfItems);
-            if(stack.getTag()==null){
-                stack.setTag(new CompoundTag());
+            if(!stack.has(DataComponents.CUSTOM_DATA)){
+                stack.set(DataComponents.CUSTOM_DATA, CustomData.of(new CompoundTag()));
             }
-            CompoundTag tag=stack.getTag();
+            CompoundTag tag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
             tag.putString("effect","random");
-            stack.setTag(tag);
-            return new MerchantOffer(new ItemStack(ItemAndBlockRegister.coin.get(), this.emeraldCost), stack, 3000, this.villagerXp, this.priceMultiplier);
+            stack.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
+            return new MerchantOffer(new ItemCost(ItemAndBlockRegister.coin.get(), this.emeraldCost), stack, 3000, this.villagerXp, this.priceMultiplier);
         }
     }
     private static ItemStack getRandomRiceBall( int count){
         ItemStack stack=new ItemStack(ItemAndBlockRegister.rice_ball.get(),count);
-        if(stack.getTag()==null){
-            stack.setTag(new CompoundTag());
+        if(!stack.has(DataComponents.CUSTOM_DATA)){
+            stack.set(DataComponents.CUSTOM_DATA, CustomData.of(new CompoundTag()));
         }
-        CompoundTag tag=stack.getTag();
+        CompoundTag tag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
         tag.putString("effect","random");
-        stack.setTag(tag);
+        stack.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
         return stack;
     }
  }

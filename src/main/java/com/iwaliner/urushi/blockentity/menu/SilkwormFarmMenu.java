@@ -1,11 +1,6 @@
 package com.iwaliner.urushi.blockentity.menu;
 
-import com.iwaliner.urushi.ItemAndBlockRegister;
-import com.iwaliner.urushi.MenuRegister;
-import com.iwaliner.urushi.RecipeTypeRegister;
-import com.iwaliner.urushi.blockentity.slot.FryerFuelSlot;
-import com.iwaliner.urushi.recipe.FryingRecipe;
-import com.iwaliner.urushi.recipe.SilkFarmRecipe;
+import net.minecraft.core.Holder;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
@@ -14,10 +9,19 @@ import net.minecraft.world.entity.player.StackedContents;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
+import com.iwaliner.urushi.ItemAndBlockRegister;
+import com.iwaliner.urushi.MenuRegister;
+import com.iwaliner.urushi.RecipeTypeRegister;
+import com.iwaliner.urushi.blockentity.slot.FryerFuelSlot;
+import com.iwaliner.urushi.recipe.FryingRecipe;
+import com.iwaliner.urushi.recipe.SilkFarmRecipe;
 
-public class SilkwormFarmMenu extends RecipeBookMenu<Container> {
+public class SilkwormFarmMenu extends RecipeBookMenu<RecipeInput, Recipe<RecipeInput>> {
     public static final int INGREDIENT_SLOT = 0;
     public static final int FUEL_SLOT = 1;
     public static final int RESULT_SLOT = 2;
@@ -75,8 +79,8 @@ public class SilkwormFarmMenu extends RecipeBookMenu<Container> {
         this.getSlot(2).set(ItemStack.EMPTY);
     }
 
-    public boolean recipeMatches(Recipe<? super Container> p_38980_) {
-        return p_38980_.matches(this.container, this.level);
+    public boolean recipeMatches(RecipeHolder<Recipe<RecipeInput>> p_38980_) {
+        return p_38980_.value().matches(new SingleRecipeInput(this.container.getItem(0)), this.level);
     }
 
     public int getResultSlotIndex() {

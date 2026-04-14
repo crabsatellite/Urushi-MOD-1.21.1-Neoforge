@@ -7,8 +7,17 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import com.mojang.serialization.MapCodec;
 
 public class UnfinishedShichirinBlock extends Block {
+    public static final MapCodec<UnfinishedShichirinBlock> CODEC = simpleCodec(UnfinishedShichirinBlock::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
     private static final VoxelShape UNDER = Block.box(3D, 0D, 3D, 13D, 12D, 13D);
     private static final VoxelShape UPPER = Block.box(1D, 12.0D, 1D, 15D, 15D, 15D);
     private static final VoxelShape SHAPE = Shapes.or(UNDER, UPPER);

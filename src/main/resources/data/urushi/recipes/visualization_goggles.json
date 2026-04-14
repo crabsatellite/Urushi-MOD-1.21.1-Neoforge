@@ -6,13 +6,13 @@
   ],
   "key": {
     "y": {
-    "item": "urushi:yomotsuhegui_fruit"
+      "item": "urushi:yomotsuhegui_fruit"
     },
     "i": {
-   "tag": "forge:ingots/gold"
+      "tag": "c:ingots/gold"
     },
     "g": {
-"tag": "forge:glass"
+      "tag": "c:glass"
     }
   },
   "result": {

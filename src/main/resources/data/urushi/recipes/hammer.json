@@ -6,10 +6,10 @@
   ],
   "key": {
     "i": {
-     "item": "minecraft:iron_block"
+      "item": "minecraft:iron_block"
     },
     "s": {
-    "tag": "forge:rods/wooden"
+      "tag": "c:rods/wooden"
     }
   },
   "result": {

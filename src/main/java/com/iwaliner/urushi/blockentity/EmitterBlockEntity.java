@@ -1,5 +1,17 @@
 package com.iwaliner.urushi.blockentity;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.shapes.BooleanOp;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import com.iwaliner.urushi.BlockEntityRegister;
 import com.iwaliner.urushi.block.EmitterBlock;
 import com.iwaliner.urushi.util.ComplexDirection;
@@ -9,19 +21,6 @@ import com.iwaliner.urushi.util.interfaces.Mirror;
 import com.iwaliner.urushi.util.interfaces.ReiryokuExportable;
 import com.iwaliner.urushi.util.interfaces.ReiryokuImportable;
 import com.iwaliner.urushi.util.interfaces.ReiryokuStorable;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.util.Mth;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
-
-import net.minecraft.world.phys.shapes.BooleanOp;
-import net.minecraft.world.phys.shapes.Shapes;
-import net.minecraft.world.phys.shapes.VoxelShape;
-
 import static com.iwaliner.urushi.block.EmitterBlock.FACING;
 
 public class EmitterBlockEntity extends AbstractReiryokuStorableBlockEntity implements ReiryokuExportable {
@@ -47,7 +46,7 @@ public class EmitterBlockEntity extends AbstractReiryokuStorableBlockEntity impl
     }
 
     @Override
-    public CompoundTag getUpdateTag() {
+    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
         CompoundTag compoundtag = new CompoundTag();
         this.putBaseTag(compoundtag);
         return compoundtag;
@@ -221,7 +220,7 @@ public class EmitterBlockEntity extends AbstractReiryokuStorableBlockEntity impl
     public ElementType getExportElementType() {
         return this.getStoredElementType();
     }
-    
+
 
     // change mirror incidentDirection tag when removing emitter
     public void onBlockRemove() {

@@ -6,14 +6,14 @@
     "iii"
   ],
   "key": {
-  "l": {
-     "item": "urushi:tea_leaf"
+    "l": {
+      "item": "urushi:tea_leaf"
     },
     "i": {
-      "tag": "forge:ingots/iron"
+      "tag": "c:ingots/iron"
     },
     "n": {
-      "tag": "forge:nuggets/iron"
+      "tag": "c:nuggets/iron"
     }
   },
   "result": {

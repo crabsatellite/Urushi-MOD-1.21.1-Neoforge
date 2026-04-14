@@ -8,8 +8,17 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import com.mojang.serialization.MapCodec;
 
 public class FushiranmaBlock extends HorizonalRotateBlock{
+    public static final MapCodec<FushiranmaBlock> CODEC = simpleCodec(FushiranmaBlock::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
     protected static final VoxelShape SHAPEA = Block.box(5.0D, 0.0D, 0D, 11.0D, 24.0D, 16.0D);
     protected static final VoxelShape SHAPEB = Block.box(0D, 0.0D, 5D, 16D, 24.0D, 11.0D);
     protected static final VoxelShape SHAPEAA = Block.box(5.0D, 0.0D, 0D, 11.0D, 8.0D, 16.0D);

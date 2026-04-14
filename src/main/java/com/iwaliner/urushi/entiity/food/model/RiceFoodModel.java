@@ -1,13 +1,13 @@
 package com.iwaliner.urushi.entiity.food.model;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.world.entity.Entity;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 
 
 @OnlyIn(Dist.CLIENT)
@@ -53,12 +53,12 @@ public class RiceFoodModel<T extends Entity> extends AbstractFoodModel<T> {
 
 
     @Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-        bone7.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-        bone8.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-        bone10.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-        bone11.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-        bone12.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int color) {
+        bone7.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
+        bone8.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
+        bone10.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
+        bone11.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
+        bone12.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
         }
 
     @Override

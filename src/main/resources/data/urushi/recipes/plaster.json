@@ -2,31 +2,31 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-     "tag": "forge:slimeballs"
+      "tag": "c:slimeballs"
     },
     {
       "tag": "minecraft:sand"
     },
     {
-       "tag": "minecraft:sand"
-    },
-    {
-       "tag": "minecraft:sand"
+      "tag": "minecraft:sand"
     },
     {
       "tag": "minecraft:sand"
     },
     {
-     "tag": "forge:gravel"
+      "tag": "minecraft:sand"
     },
     {
-     "tag": "forge:gravel"
+      "tag": "c:gravel"
     },
     {
-   "tag": "forge:gravel"
+      "tag": "c:gravel"
     },
     {
-    "tag": "forge:gravel"
+      "tag": "c:gravel"
+    },
+    {
+      "tag": "c:gravel"
     }
   ],
   "result": {

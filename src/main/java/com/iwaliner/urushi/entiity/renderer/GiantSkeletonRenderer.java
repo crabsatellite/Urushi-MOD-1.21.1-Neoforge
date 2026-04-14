@@ -1,20 +1,20 @@
 package com.iwaliner.urushi.entiity.renderer;
 
-import com.iwaliner.urushi.entiity.GiantSkeletonEntity;
-import com.iwaliner.urushi.entiity.model.GiantSkeletonModel;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import com.iwaliner.urushi.entiity.GiantSkeletonEntity;
+import com.iwaliner.urushi.entiity.model.GiantSkeletonModel;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 @OnlyIn(Dist.CLIENT)
 public class GiantSkeletonRenderer extends MobRenderer<GiantSkeletonEntity, HumanoidModel<GiantSkeletonEntity>> {
-    private static final ResourceLocation ZOMBIE_LOCATION = new ResourceLocation("urushi:textures/entity/giant_skeleton.png");
+    private static final ResourceLocation ZOMBIE_LOCATION = ResourceLocation.parse("urushi:textures/entity/giant_skeleton.png");
     private final float scale;
 
     public GiantSkeletonRenderer(EntityRendererProvider.Context p_174131_) {

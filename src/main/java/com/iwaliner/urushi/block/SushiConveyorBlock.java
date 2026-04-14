@@ -23,8 +23,17 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import com.mojang.serialization.MapCodec;
 
 public class SushiConveyorBlock extends HorizonalRotateBlock implements SimpleWaterloggedBlock {
+    public static final MapCodec<SushiConveyorBlock> CODEC = simpleCodec(SushiConveyorBlock::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     public static final BooleanProperty NORTH = BlockStateProperties.NORTH;
     public static final BooleanProperty EAST = BlockStateProperties.EAST;
@@ -64,7 +73,7 @@ public class SushiConveyorBlock extends HorizonalRotateBlock implements SimpleWa
     }
 
     @Override
-    public boolean isPathfindable(BlockState p_60475_, BlockGetter p_60476_, BlockPos p_60477_, PathComputationType p_60478_) {
+    public boolean isPathfindable(BlockState p_60475_, PathComputationType p_60478_) {
         return true;
     }
     private boolean isConveyor(BlockState state){

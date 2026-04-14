@@ -14,8 +14,17 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import com.mojang.serialization.MapCodec;
 
 public class TatamiBlock extends RotatedPillarBlock {
+    public static final MapCodec<TatamiBlock> CODEC = simpleCodec(TatamiBlock::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
     public static final BooleanProperty FLIP = BooleanProperty.create("flip");
     public TatamiBlock(Properties p_55926_) {
         super(p_55926_);

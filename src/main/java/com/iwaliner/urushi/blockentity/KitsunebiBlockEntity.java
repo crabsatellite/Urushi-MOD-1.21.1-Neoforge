@@ -1,15 +1,16 @@
 package com.iwaliner.urushi.blockentity;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import com.iwaliner.urushi.BlockEntityRegister;
 import com.iwaliner.urushi.ItemAndBlockRegister;
 import com.iwaliner.urushi.block.HiddenInvisibleLeverBlock;
 import com.iwaliner.urushi.block.InvisibleLeverBlock;
 import com.iwaliner.urushi.block.KitsunebiBlock;
-import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
 
 public class KitsunebiBlockEntity extends BlockEntity {
     public int time;
@@ -18,13 +19,13 @@ public class KitsunebiBlockEntity extends BlockEntity {
         super(BlockEntityRegister.Kitsunebi.get(), p_155550_, p_155551_);
     }
 
-    public void load(CompoundTag tag) {
-        super.load(tag);
+    public void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.loadAdditional(tag, registries);
         this.time = tag.getInt("time");
     }
 
-    protected void saveAdditional(CompoundTag tag) {
-        super.saveAdditional(tag);
+    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.saveAdditional(tag, registries);
         tag.putInt("time", this.time);
     }
 

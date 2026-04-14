@@ -1,11 +1,11 @@
 package com.iwaliner.urushi.block;
 
-import com.iwaliner.urushi.ItemAndBlockRegister;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.FaceAttachedHorizontalDirectionalBlock;
 import net.minecraft.world.level.block.RenderShape;
@@ -17,8 +17,18 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import com.iwaliner.urushi.ItemAndBlockRegister;
+import com.mojang.serialization.MapCodec;
 
 public class HiddenInvisibleLeverBlock extends FaceAttachedHorizontalDirectionalBlock {
+    public static final MapCodec<HiddenInvisibleLeverBlock> CODEC = simpleCodec(HiddenInvisibleLeverBlock::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
     public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
     public HiddenInvisibleLeverBlock(Properties p_49795_) {
         super(p_49795_);
@@ -27,7 +37,7 @@ public class HiddenInvisibleLeverBlock extends FaceAttachedHorizontalDirectional
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> p_51101_) {
         p_51101_.add(FACING, POWERED, FACE);
     }
-    public ItemStack getCloneItemStack(BlockGetter p_152966_, BlockPos p_152967_, BlockState p_152968_) {
+    public ItemStack getCloneItemStack(LevelReader p_152966_, BlockPos p_152967_, BlockState p_152968_) {
         return new ItemStack(ItemAndBlockRegister.invisible_lever_item.get());
     }
 
@@ -36,7 +46,7 @@ public class HiddenInvisibleLeverBlock extends FaceAttachedHorizontalDirectional
         return Shapes.empty();
     }
     public RenderShape getRenderShape(BlockState p_49232_) {
-        return RenderShape.INVISIBLE;
+        return net.minecraft.world.level.block.RenderShape.INVISIBLE;
     }
     public void onRemove(BlockState p_54647_, Level p_54648_, BlockPos p_54649_, BlockState p_54650_, boolean p_54651_) {
         if (!p_54651_ && !p_54647_.is(p_54650_.getBlock())) {

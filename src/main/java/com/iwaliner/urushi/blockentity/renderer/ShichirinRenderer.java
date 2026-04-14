@@ -1,9 +1,6 @@
 package com.iwaliner.urushi.blockentity.renderer;
 
-import com.iwaliner.urushi.block.ShichirinBlock;
-import com.iwaliner.urushi.blockentity.ShichirinBlockEntity;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Axis;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -21,8 +18,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import com.iwaliner.urushi.ModCoreUrushi;
+import com.iwaliner.urushi.block.ShichirinBlock;
+import com.iwaliner.urushi.blockentity.ShichirinBlockEntity;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
 
 @OnlyIn(Dist.CLIENT)
 public class ShichirinRenderer implements BlockEntityRenderer<ShichirinBlockEntity> {

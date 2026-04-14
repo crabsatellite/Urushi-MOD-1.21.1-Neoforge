@@ -1,12 +1,11 @@
 {
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
-   
     {
       "item": "urushi:sakura_shoji"
     },
     {
-      "tag": "forge:glass_panes"
+      "tag": "c:glass_panes"
     }
   ],
   "result": {

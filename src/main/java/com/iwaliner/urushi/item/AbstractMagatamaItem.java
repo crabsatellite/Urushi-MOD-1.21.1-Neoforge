@@ -1,28 +1,30 @@
 package com.iwaliner.urushi.item;
 
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.util.Mth;
+import net.minecraft.util.StringUtil;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.item.*;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import com.iwaliner.urushi.ConfigUrushi;
 import com.iwaliner.urushi.blockentity.TankBlockEntity;
 import com.iwaliner.urushi.util.ElementType;
 import com.iwaliner.urushi.util.ElementUtils;
 import com.iwaliner.urushi.util.UrushiUtils;
 import com.iwaliner.urushi.util.interfaces.HasReiryokuItem;
-import net.minecraft.ChatFormatting;
-import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
- 
-import net.minecraft.util.Mth;
-import net.minecraft.util.StringUtil;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.item.*;
-import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.entity.BlockEntity;
 
-import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.List;
+import javax.annotation.Nullable;
 
 public abstract class AbstractMagatamaItem extends Item implements HasReiryokuItem {
 
@@ -37,11 +39,11 @@ public abstract class AbstractMagatamaItem extends Item implements HasReiryokuIt
     @Override
 
 
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> list, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, Item.TooltipContext level, List<Component> list, TooltipFlag flag) {
         list.add((Component.translatable("info.urushi.magatama1")).withStyle(ChatFormatting.GRAY));
         list.add((Component.translatable("info.urushi.magatama2")).withStyle(ChatFormatting.GRAY));
 
-        if (stack.hasTag()) {
+        if (stack.has(DataComponents.CUSTOM_DATA)) {
             list.add((Component.translatable("info.urushi.stored_reiryoku_amount").append(" "+ElementUtils.getStoredReiryokuAmount(stack))).withStyle(ChatFormatting.WHITE));
         }
     }

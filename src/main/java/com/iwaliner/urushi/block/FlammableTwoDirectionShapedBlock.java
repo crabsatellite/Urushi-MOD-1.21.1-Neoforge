@@ -4,8 +4,13 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
+import com.mojang.serialization.MapCodec;
 
 public class FlammableTwoDirectionShapedBlock extends TwoDirectionShapedBlock{
+    public static final MapCodec<FlammableTwoDirectionShapedBlock> CODEC = simpleCodec(__p -> new FlammableTwoDirectionShapedBlock(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, false, __p));
+
+    @Override
+    public MapCodec<? extends FlammableTwoDirectionShapedBlock> codec() { return CODEC; }
     public FlammableTwoDirectionShapedBlock(double d1, double d2, double d3, double d4, double d5, double d6,boolean canSurvive, Properties p_i48377_1_) {
         super(d1, d2, d3, d4, d5, d6,canSurvive, p_i48377_1_);
     }

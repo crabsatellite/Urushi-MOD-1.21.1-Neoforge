@@ -1,12 +1,11 @@
 package com.iwaliner.urushi.block;
 
-import com.iwaliner.urushi.ConfigUrushi;
-import com.iwaliner.urushi.ItemAndBlockRegister;
-import com.iwaliner.urushi.TagUrushi;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
@@ -21,13 +20,22 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.common.PlantType;
+import net.neoforged.neoforge.common.SpecialPlantable;
+import com.iwaliner.urushi.ConfigUrushi;
+import com.iwaliner.urushi.ItemAndBlockRegister;
+import com.iwaliner.urushi.TagUrushi;
+import com.mojang.serialization.MapCodec;
 import org.jetbrains.annotations.Nullable;
 
-import net.minecraft.util.RandomSource;
+public class JapaneseTimberBambooBlock extends Block implements net.neoforged.neoforge.common.SpecialPlantable{
+    public static final MapCodec<JapaneseTimberBambooBlock> CODEC = simpleCodec(JapaneseTimberBambooBlock::new);
 
-public class JapaneseTimberBambooBlock extends Block implements net.minecraftforge.common.IPlantable{
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
     public static final IntegerProperty AGE = BlockStateProperties.AGE_3;
     protected static final VoxelShape SHAPE = Block.box(2.0D, 0.0D, 2.0D, 14.0D, 16.0D, 14.0D);
 
@@ -109,7 +117,7 @@ public class JapaneseTimberBambooBlock extends Block implements net.minecraftfor
     @Override
     public boolean canSurvive(BlockState state, LevelReader iWorldReader, BlockPos pos) {
         BlockState soil = iWorldReader.getBlockState(pos.below());
-        if (soil.canSustainPlant(iWorldReader, pos.below(), Direction.UP, this)) return true;
+        if (soil.canSustainPlant(iWorldReader, pos.below(), Direction.UP, this.defaultBlockState()).isTrue()) return true;
         BlockState blockstate = iWorldReader.getBlockState(pos.below());
 
         if (blockstate.getBlock() == this) {
@@ -129,12 +137,6 @@ public class JapaneseTimberBambooBlock extends Block implements net.minecraftfor
         p_49915_.add(AGE);
     }
 
-    @Override
-    public PlantType getPlantType(BlockGetter level, BlockPos pos) {
-        return PlantType.PLAINS;
-    }
-
-    @Override
     public BlockState getPlant(BlockGetter level, BlockPos pos) {
         return defaultBlockState();
     }
@@ -159,5 +161,15 @@ public class JapaneseTimberBambooBlock extends Block implements net.minecraftfor
     @Override
     public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
         return 60;
+    }
+
+    @Override
+    public boolean canPlacePlantAtPosition(ItemStack itemStack, LevelReader level, BlockPos pos, @Nullable Direction direction) {
+        return true;
+    }
+
+    @Override
+    public void spawnPlantAtPosition(ItemStack itemStack, LevelAccessor level, BlockPos pos, @Nullable Direction direction) {
+        level.setBlock(pos, this.defaultBlockState(), 3);
     }
 }

@@ -1,8 +1,5 @@
 package com.iwaliner.urushi.blockentity.screen;
 
-import com.iwaliner.urushi.blockentity.menu.AbstractFryerMenu;
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.recipebook.AbstractFurnaceRecipeBookComponent;
@@ -12,8 +9,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.Slot;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import com.iwaliner.urushi.blockentity.menu.AbstractFryerMenu;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 @OnlyIn(Dist.CLIENT)
 public abstract class AbstractFryerScreen<T extends AbstractFryerMenu> extends AbstractContainerScreen<T>
@@ -40,8 +40,7 @@ public abstract class AbstractFryerScreen<T extends AbstractFryerMenu> extends A
 
 
     public void render(GuiGraphics p_282573_, int p_97859_, int p_97860_, float p_97861_) {
-        this.renderBackground(p_282573_);
-        this.renderBg(p_282573_, p_97861_, p_97859_, p_97860_);
+        this.renderBackground(p_282573_, p_97859_, p_97860_, p_97861_);
         super.render(p_282573_, p_97859_, p_97860_, p_97861_);
         this.renderTooltip(p_282573_, p_97859_, p_97860_);
     }

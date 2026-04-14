@@ -7,11 +7,11 @@
   ],
   "key": {
     "D": {
-   "tag": "forge:dyes/light_gray"
-      },
+      "tag": "c:dyes/light_gray"
+    },
     "B": {
-    "tag": "urushi:smooth_planks"
-   }
+      "tag": "urushi:smooth_planks"
+    }
   },
   "result": {
     "item": "urushi:smooth_pale_oak_planks",

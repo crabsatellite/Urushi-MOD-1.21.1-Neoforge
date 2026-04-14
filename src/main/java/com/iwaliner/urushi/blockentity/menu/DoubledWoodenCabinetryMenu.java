@@ -1,7 +1,5 @@
 package com.iwaliner.urushi.blockentity.menu;
 
-import com.iwaliner.urushi.MenuRegister;
-import com.iwaliner.urushi.blockentity.DoubledWoodenCabinetryBlockEntity;
 import net.minecraft.core.NonNullList;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
@@ -14,10 +12,11 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import com.iwaliner.urushi.MenuRegister;
+import com.iwaliner.urushi.blockentity.DoubledWoodenCabinetryBlockEntity;
+import static com.iwaliner.urushi.blockentity.DoubledWoodenCabinetryBlockEntity.containerSize;
 
 import java.util.*;
-
-import static com.iwaliner.urushi.blockentity.DoubledWoodenCabinetryBlockEntity.containerSize;
 
 public class DoubledWoodenCabinetryMenu extends AbstractContainerMenu {
     //private static final int SLOTS_PER_ROW = 18;
@@ -148,7 +147,7 @@ public class DoubledWoodenCabinetryMenu extends AbstractContainerMenu {
             ItemStack stack=list1.get(i0).copy();
             for(int i=1;i<sameItemSlots.length;i++) {
                 if (sameItemSlots[i] != -2) {
-                    boolean flag = ItemStack.isSameItemSameTags(stack, list1.get(sameItemSlots[i]).copy());
+                    boolean flag = ItemStack.isSameItemSameComponents(stack, list1.get(sameItemSlots[i]).copy());
                     if (flag && !stack.isEmpty()) {
                         count += list1.get(sameItemSlots[i]).copy().getCount();
                     } else if (!flag) {

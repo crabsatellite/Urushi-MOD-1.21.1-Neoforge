@@ -2,15 +2,10 @@ package com.iwaliner.urushi.blockentity;
 
 
 import com.google.common.collect.Lists;
-import com.iwaliner.urushi.BlockEntityRegister;
-import com.iwaliner.urushi.MenuRegister;
-import com.iwaliner.urushi.RecipeTypeRegister;
-import com.iwaliner.urushi.block.HibachiBlock;
-import com.iwaliner.urushi.blockentity.menu.KettleMenu;
-import it.unimi.dsi.fastutil.objects.Object2IntMap;
-import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
@@ -27,12 +22,15 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.StackedContents;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
-import net.minecraft.world.inventory.RecipeHolder;
+import net.minecraft.world.inventory.RecipeCraftingHolder;
 import net.minecraft.world.inventory.StackedContentsCompatible;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeInput;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.AbstractFurnaceBlock;
@@ -40,12 +38,19 @@ import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import com.iwaliner.urushi.BlockEntityRegister;
+import com.iwaliner.urushi.MenuRegister;
+import com.iwaliner.urushi.RecipeTypeRegister;
+import com.iwaliner.urushi.block.HibachiBlock;
+import com.iwaliner.urushi.blockentity.menu.KettleMenu;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
+import javax.annotation.Nullable;
 
-public class KettleBlockEntity extends BaseContainerBlockEntity implements WorldlyContainer, RecipeHolder, StackedContentsCompatible {
+public class KettleBlockEntity extends BaseContainerBlockEntity implements WorldlyContainer, RecipeCraftingHolder, StackedContentsCompatible {
     private static final int[] SLOTS_FOR_UP = new int[]{0};
     private static final int[] SLOTS_FOR_DOWN = new int[]{2, 1};
     private static final int[] SLOTS_FOR_SIDES = new int[]{1};
@@ -113,10 +118,10 @@ public class KettleBlockEntity extends BaseContainerBlockEntity implements World
     public boolean isLit() {
         return this.litTime > 0;
     }
-    public void load(CompoundTag p_155025_) {
-        super.load(p_155025_);
+    public void loadAdditional(CompoundTag p_155025_, HolderLookup.Provider registries) {
+        super.loadAdditional(p_155025_, registries);
         this.items = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
-        ContainerHelper.loadAllItems(p_155025_, this.items);
+        ContainerHelper.loadAllItems(p_155025_, this.items, registries);
         this.litTime = p_155025_.getInt("BurnTime");
         this.cookingProgress = p_155025_.getInt("CookTime");
         this.cookingTotalTime = p_155025_.getInt("CookTimeTotal");
@@ -124,17 +129,17 @@ public class KettleBlockEntity extends BaseContainerBlockEntity implements World
         CompoundTag compoundtag = p_155025_.getCompound("RecipesUsed");
 
         for(String s : compoundtag.getAllKeys()) {
-            this.recipesUsed.put(new ResourceLocation(s), compoundtag.getInt(s));
+            this.recipesUsed.put(ResourceLocation.parse(s), compoundtag.getInt(s));
         }
 
     }
 
-    protected void saveAdditional(CompoundTag p_187452_) {
-        super.saveAdditional(p_187452_);
+    protected void saveAdditional(CompoundTag p_187452_, HolderLookup.Provider registries) {
+        super.saveAdditional(p_187452_, registries);
         p_187452_.putInt("BurnTime", this.litTime);
         p_187452_.putInt("CookTime", this.cookingProgress);
         p_187452_.putInt("CookTimeTotal", this.cookingTotalTime);
-        ContainerHelper.saveAllItems(p_187452_, this.items);
+        ContainerHelper.saveAllItems(p_187452_, this.items, registries);
         CompoundTag compoundtag = new CompoundTag();
         this.recipesUsed.forEach((p_187449_, p_187450_) -> {
             compoundtag.putInt(p_187449_.toString(), p_187450_);
@@ -158,12 +163,12 @@ public class KettleBlockEntity extends BaseContainerBlockEntity implements World
         }
 
         if (!level.isClientSide&&blockEntity.isOnHeatSource(level.getBlockState(pos.below()))) {
-            Recipe<?> recipe = level.getRecipeManager().getRecipeFor((RecipeTypeRegister.KettleRecipe), blockEntity, level).orElse(null);
+            RecipeHolder<?> recipe = level.getRecipeManager().getRecipeFor((RecipeTypeRegister.KettleRecipe), new SingleRecipeInput(blockEntity.getItem(0)), level).orElse(null);
             ItemStack creatureSlotItem = blockEntity.items.get(0);
             ItemStack feedSlotItem = blockEntity.items.get(1);
             ItemStack resultSlotItem = blockEntity.items.get(2);
             if(recipe!=null) {
-                ItemStack result=recipe.getResultItem(level.registryAccess());
+                ItemStack result=recipe.value().getResultItem(level.registryAccess());
                 if (blockEntity.isLit() || !result.isEmpty() && !creatureSlotItem.isEmpty()&&!feedSlotItem.isEmpty()) {
                     if (!blockEntity.isLit() && blockEntity.canBurn(level.registryAccess(),recipe,blockEntity.items,blockEntity.getMaxStackSize())) {
                         blockEntity.litTime = blockEntity.getBurnDuration();
@@ -198,16 +203,16 @@ public class KettleBlockEntity extends BaseContainerBlockEntity implements World
         }
     }
 
-    public boolean canBurn(RegistryAccess p_266924_,@Nullable Recipe<?> p_155006_, NonNullList<ItemStack> p_155007_, int p_155008_) {
+    public boolean canBurn(RegistryAccess p_266924_,@Nullable RecipeHolder<?> p_155006_, NonNullList<ItemStack> p_155007_, int p_155008_) {
         if (!p_155007_.get(0).isEmpty() && p_155006_ != null) {
-            ItemStack itemstack = ((Recipe<WorldlyContainer>) p_155006_).assemble(this,p_266924_);
+            ItemStack itemstack = ((Recipe) p_155006_.value()).assemble(new SingleRecipeInput(this.getItem(0)), p_266924_);
             if (itemstack.isEmpty()) {
                 return false;
             } else {
                 ItemStack itemstack1 = p_155007_.get(2);
                 if (itemstack1.isEmpty()) {
                     return true;
-                } else if (!ItemStack.isSameItemSameTags(itemstack, itemstack1)) {
+                } else if (!ItemStack.isSameItemSameComponents(itemstack, itemstack1)) {
                     return false;
                 } else if (itemstack1.getCount() + itemstack.getCount() <= p_155008_ && itemstack1.getCount() + itemstack.getCount() <= itemstack1.getMaxStackSize()) {
                     return true;
@@ -219,9 +224,9 @@ public class KettleBlockEntity extends BaseContainerBlockEntity implements World
             return false;
         }
     }
-    public boolean burn(RegistryAccess p_266740_, @Nullable Recipe<?> p_155027_, NonNullList<ItemStack> p_155028_, int p_155029_) {
+    public boolean burn(RegistryAccess p_266740_, @Nullable RecipeHolder<?> p_155027_, NonNullList<ItemStack> p_155028_, int p_155029_) {
         if (p_155027_ != null && this.canBurn(p_266740_,p_155027_, p_155028_, p_155029_)) {
-            ItemStack itemstack1 = ((Recipe<WorldlyContainer>) p_155027_).assemble(this,p_266740_);
+            ItemStack itemstack1 = ((Recipe) p_155027_.value()).assemble(new SingleRecipeInput(this.getItem(0)), p_266740_);
             ItemStack itemstack2 = p_155028_.get(2);
             if (itemstack2.isEmpty()) {
                 this.items.set(2, itemstack1.copy());
@@ -292,7 +297,7 @@ public class KettleBlockEntity extends BaseContainerBlockEntity implements World
     }
     public void setItem(int p_70299_1_, ItemStack p_70299_2_) {
         ItemStack itemstack = this.items.get(p_70299_1_);
-        boolean flag = !p_70299_2_.isEmpty() && ItemStack.isSameItemSameTags(itemstack, p_70299_2_);
+        boolean flag = !p_70299_2_.isEmpty() && ItemStack.isSameItemSameComponents(itemstack, p_70299_2_);
         this.items.set(p_70299_1_, p_70299_2_);
         if (p_70299_2_.getCount() > this.getMaxStackSize()) {
             p_70299_2_.setCount(this.getMaxStackSize());
@@ -326,15 +331,15 @@ public class KettleBlockEntity extends BaseContainerBlockEntity implements World
         this.items.clear();
     }
 
-    public void setRecipeUsed(@Nullable Recipe<?> p_193056_1_) {
+    public void setRecipeUsed(@Nullable RecipeHolder<?> p_193056_1_) {
         if (p_193056_1_ != null) {
-            ResourceLocation resourcelocation = p_193056_1_.getId();
+            ResourceLocation resourcelocation = p_193056_1_.id();
             this.recipesUsed.addTo(resourcelocation, 1);
         }
 
     }
     @Nullable
-    public Recipe<?> getRecipeUsed() {
+    public RecipeHolder<?> getRecipeUsed() {
         return null;
     }
 
@@ -346,27 +351,35 @@ public class KettleBlockEntity extends BaseContainerBlockEntity implements World
 
     }
 
-    net.minecraftforge.common.util.LazyOptional<? extends net.minecraftforge.items.IItemHandler>[] handlers =
-            net.minecraftforge.items.wrapper.SidedInvWrapper.create(this, Direction.UP, Direction.DOWN, Direction.NORTH);
+    // net.neoforged.neoforge.items.wrapper.SidedInvWrapper.create(this, Direction.UP, Direction.DOWN, Direction.NORTH);
+
+    //   Register via: event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, YOUR_BE_TYPE, (be, side) -> your_handler);
+    //   Original capability logic (preserve side-specific routing):
+    //     @Override
+    //         if (!this.remove && facing != null && capability == net.neoforged.neoforge.capabilities.Capabilities.ItemHandler.BLOCK) {
+    //             if (facing == Direction.UP)
+    //             else if (facing == Direction.DOWN)
+    //             else
+    //         }
+    //         return super.getCapability(capability, facing);
+    //     }
+
+
+    //     @Override
+    //     public void invalidateCaps() {
+    //         super.invalidateCaps();
+    //         for (int x = 0; x < handlers.length; x++)
+    //     }
+
+
 
     @Override
-    public <T> net.minecraftforge.common.util.LazyOptional<T> getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, @Nullable Direction facing) {
-        if (!this.remove && facing != null && capability == net.minecraftforge.common.capabilities.ForgeCapabilities.ITEM_HANDLER) {
-            if (facing == Direction.UP)
-                return handlers[0].cast();
-            else if (facing == Direction.DOWN)
-                return handlers[1].cast();
-            else
-                return handlers[2].cast();
-        }
-        return super.getCapability(capability, facing);
+    protected NonNullList<ItemStack> getItems() {
+        return this.items;
     }
 
     @Override
-    public void invalidateCaps() {
-        super.invalidateCaps();
-        for (int x = 0; x < handlers.length; x++)
-            handlers[x].invalidate();
+    protected void setItems(NonNullList<ItemStack> items) {
+        this.items = items;
     }
-
 }

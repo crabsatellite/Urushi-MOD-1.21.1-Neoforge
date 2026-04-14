@@ -1,16 +1,9 @@
 package com.iwaliner.urushi.blockentity;
 
 
-import com.iwaliner.urushi.BlockEntityRegister;
-import com.iwaliner.urushi.ItemAndBlockRegister;
-import com.iwaliner.urushi.ParticleRegister;
-import com.iwaliner.urushi.util.ElementType;
-import com.iwaliner.urushi.util.ElementUtils;
-import com.iwaliner.urushi.util.interfaces.ElementBlock;
-import com.iwaliner.urushi.util.interfaces.ReiryokuExportable;
-import com.iwaliner.urushi.util.interfaces.Tiered;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
@@ -33,6 +26,14 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import com.iwaliner.urushi.BlockEntityRegister;
+import com.iwaliner.urushi.ItemAndBlockRegister;
+import com.iwaliner.urushi.ParticleRegister;
+import com.iwaliner.urushi.util.ElementType;
+import com.iwaliner.urushi.util.ElementUtils;
+import com.iwaliner.urushi.util.interfaces.ElementBlock;
+import com.iwaliner.urushi.util.interfaces.ReiryokuExportable;
+import com.iwaliner.urushi.util.interfaces.Tiered;
 
 import javax.annotation.Nullable;
 
@@ -45,21 +46,21 @@ public  class HokoraBlockEntity extends AbstractReiryokuStorableBlockEntity impl
     public HokoraBlockEntity(BlockPos p_155052_, BlockState p_155053_) {
         super(BlockEntityRegister.Hokora.get(),1000, p_155052_, p_155053_);
     }
-    public void load(CompoundTag compoundTag) {
-        super.load(compoundTag);
+    public void loadAdditional(CompoundTag compoundTag, HolderLookup.Provider registries) {
+        super.loadAdditional(compoundTag, registries);
         this.items.clear();
-        ContainerHelper.loadAllItems(compoundTag, this.items);
+        ContainerHelper.loadAllItems(compoundTag, this.items, registries);
         this.coolTime = compoundTag.getInt("coolTime");
     }
 
-    protected void saveAdditional(CompoundTag compoundTag) {
-        super.saveAdditional(compoundTag);
-       ContainerHelper.saveAllItems(compoundTag, this.items,true);
+    protected void saveAdditional(CompoundTag compoundTag, HolderLookup.Provider registries) {
+        super.saveAdditional(compoundTag, registries);
+       ContainerHelper.saveAllItems(compoundTag, this.items,true, registries);
         compoundTag.putInt("coolTime", this.coolTime);
     }
-    public CompoundTag getUpdateTag() {
+    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
         CompoundTag compoundtag = new CompoundTag();
-        ContainerHelper.saveAllItems(compoundtag, this.items, true);
+        ContainerHelper.saveAllItems(compoundtag, this.items, true, registries);
         compoundtag.putInt("coolTime", this.coolTime);
         this.putBaseTag(compoundtag);
         return compoundtag;
@@ -256,17 +257,17 @@ public  class HokoraBlockEntity extends AbstractReiryokuStorableBlockEntity impl
             return SLOTS_FOR_UP;
 
     }
-    net.minecraftforge.common.util.LazyOptional<? extends net.minecraftforge.items.IItemHandler>[] handlers =
-            net.minecraftforge.items.wrapper.SidedInvWrapper.create(this, Direction.UP, Direction.DOWN, Direction.NORTH);
-    @Override
-    public <T> net.minecraftforge.common.util.LazyOptional<T> getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, @Nullable Direction facing) {
-        if (!this.remove && facing != null && capability == net.minecraftforge.common.capabilities.ForgeCapabilities.ITEM_HANDLER) {
-            if (facing == Direction.UP)
-                return handlers[0].cast();
+    // net.neoforged.neoforge.items.wrapper.SidedInvWrapper.create(this, Direction.UP, Direction.DOWN, Direction.NORTH);
+    //   Register via: event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, YOUR_BE_TYPE, (be, side) -> your_handler);
+    //   Original capability logic (preserve side-specific routing):
+    //     @Override
+    //         if (!this.remove && facing != null && capability == net.neoforged.neoforge.capabilities.Capabilities.ItemHandler.BLOCK) {
+    //             if (facing == Direction.UP)
+    //
+    //         }
+    //         return super.getCapability(capability, facing);
+    //     }
 
-        }
-        return super.getCapability(capability, facing);
-    }
 
     @Override
     public void clearContent() {
@@ -279,5 +280,7 @@ public  class HokoraBlockEntity extends AbstractReiryokuStorableBlockEntity impl
             contents.accountStack(itemstack);
         }
     }
-
+    protected NonNullList<ItemStack> getItems() {
+        return this.items;
+    }
 }

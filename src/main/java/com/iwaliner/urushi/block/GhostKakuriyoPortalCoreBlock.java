@@ -1,7 +1,5 @@
 package com.iwaliner.urushi.block;
 
-import com.iwaliner.urushi.util.IGhostBlock;
-import com.iwaliner.urushi.util.UrushiUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -18,13 +16,24 @@ import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import com.iwaliner.urushi.util.IGhostBlock;
+import com.iwaliner.urushi.util.UrushiUtils;
+import com.mojang.serialization.MapCodec;
 
-import javax.annotation.Nullable;
 import java.util.List;
+import javax.annotation.Nullable;
 
 public class GhostKakuriyoPortalCoreBlock extends KakuriyoPortalCoreBlock implements IGhostBlock {
+    public static final MapCodec<GhostKakuriyoPortalCoreBlock> CODEC = simpleCodec(GhostKakuriyoPortalCoreBlock::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
     public static final BooleanProperty POWERED = BooleanProperty.create("powered");
     public GhostKakuriyoPortalCoreBlock(Properties p_49795_) {
         super(p_49795_);
@@ -71,7 +80,7 @@ public class GhostKakuriyoPortalCoreBlock extends KakuriyoPortalCoreBlock implem
 
     /**falseだとモブが足場として誤認*/
     @Override
-    public boolean isPathfindable(BlockState p_60475_, BlockGetter p_60476_, BlockPos p_60477_, PathComputationType p_60478_) {
+    public boolean isPathfindable(BlockState p_60475_, PathComputationType p_60478_) {
         return false;
     }
 }

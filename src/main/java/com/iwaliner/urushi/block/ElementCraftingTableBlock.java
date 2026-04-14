@@ -1,16 +1,5 @@
 package com.iwaliner.urushi.block;
 
-import com.iwaliner.urushi.BlockEntityRegister;
-import com.iwaliner.urushi.RecipeTypeRegister;
-import com.iwaliner.urushi.blockentity.ElementCraftingTableBlockEntity;
-import com.iwaliner.urushi.blockentity.EmitterBlockEntity;
-import com.iwaliner.urushi.blockentity.TankBlockEntity;
-import com.iwaliner.urushi.recipe.AbstractElementCraftingRecipe;
-import com.iwaliner.urushi.util.ElementType;
-import com.iwaliner.urushi.util.ElementUtils;
-import com.iwaliner.urushi.util.UrushiUtils;
-import com.iwaliner.urushi.util.interfaces.ElementBlock;
-import com.iwaliner.urushi.util.interfaces.Tiered;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -20,6 +9,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
@@ -27,6 +17,7 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
@@ -39,11 +30,27 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
+import com.iwaliner.urushi.BlockEntityRegister;
+import com.iwaliner.urushi.RecipeTypeRegister;
+import com.iwaliner.urushi.blockentity.ElementCraftingTableBlockEntity;
+import com.iwaliner.urushi.blockentity.EmitterBlockEntity;
+import com.iwaliner.urushi.blockentity.TankBlockEntity;
+import com.iwaliner.urushi.recipe.AbstractElementCraftingRecipe;
+import com.iwaliner.urushi.util.ElementType;
+import com.iwaliner.urushi.util.ElementUtils;
+import com.iwaliner.urushi.util.UrushiUtils;
+import com.iwaliner.urushi.util.interfaces.ElementBlock;
+import com.iwaliner.urushi.util.interfaces.Tiered;
+import com.mojang.serialization.MapCodec;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 public class ElementCraftingTableBlock extends BaseEntityBlock implements Tiered, ElementBlock {
+    public static final MapCodec<ElementCraftingTableBlock> CODEC = simpleCodec(__p -> new ElementCraftingTableBlock(0, com.iwaliner.urushi.util.ElementType.WoodElement, () -> null, __p));
+
+    @Override
+    public MapCodec<? extends ElementCraftingTableBlock> codec() { return CODEC; }
     private final   ElementType elementType;
     private final int tier;
     private final java.util.function.Supplier<? extends RecipeType<? extends AbstractElementCraftingRecipe>> recipe;
@@ -74,7 +81,7 @@ public class ElementCraftingTableBlock extends BaseEntityBlock implements Tiered
         return RenderShape.MODEL;
     }
     @Override
-    public void appendHoverText(ItemStack p_49816_, @org.jetbrains.annotations.Nullable BlockGetter p_49817_, List<Component> list, TooltipFlag p_49819_) {
+    public void appendHoverText(ItemStack p_49816_, Item.TooltipContext p_49817_, List<Component> list, TooltipFlag p_49819_) {
         UrushiUtils.setInfo(list, "element_crafting_table1");
         UrushiUtils.setInfo(list, "element_crafting_table2");
     }
@@ -89,10 +96,10 @@ public class ElementCraftingTableBlock extends BaseEntityBlock implements Tiered
         return createTickerHelper(p_152162_, BlockEntityRegister.ElementCraftingTable.get(), ElementCraftingTableBlockEntity::tick);
     }
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult result) {
         if (level.getBlockEntity(pos) instanceof ElementCraftingTableBlockEntity &&!player.isSuppressingBounce()) {
             ElementCraftingTableBlockEntity blockEntity = (ElementCraftingTableBlockEntity) level.getBlockEntity(pos);
-            if(player.getItemInHand(hand).getItem()== Items.BARRIER){
+            if(player.getMainHandItem().getItem()== Items.BARRIER){
                 blockEntity.addStoredReiryoku(100);
             }
             if(!level.isClientSide()) {
@@ -107,24 +114,25 @@ public class ElementCraftingTableBlock extends BaseEntityBlock implements Tiered
         return recipe.get();
     }
 
-    public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+    public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
         if (!level.isClientSide && player.isCreative()) {
             BlockEntity blockentity = level.getBlockEntity(pos);
             if (blockentity instanceof ElementCraftingTableBlockEntity) {
                 ItemStack itemstack = new ItemStack(this);
-                BlockItem.setBlockEntityData(itemstack, BlockEntityRegister.ElementCraftingTable.get(), blockentity.saveWithoutMetadata());
+                BlockItem.setBlockEntityData(itemstack, BlockEntityRegister.ElementCraftingTable.get(), blockentity.saveWithoutMetadata(level.registryAccess()));
                 ItemEntity itementity = new ItemEntity(level, (double) pos.getX(), (double) pos.getY(), (double) pos.getZ(), itemstack);
                 itementity.setDefaultPickUpDelay();
                 level.addFreshEntity(itementity);
             }
-            super.playerWillDestroy(level, pos, state, player);
+            return super.playerWillDestroy(level, pos, state, player);
         }
+        return super.playerWillDestroy(level, pos, state, player);
     }
     @Override
-    public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player) {
+    public ItemStack getCloneItemStack(BlockState state, HitResult target, LevelReader level, BlockPos pos, Player player) {
         ItemStack stack= super.getCloneItemStack(state, target, level, pos, player);
         level.getBlockEntity(pos, BlockEntityRegister.ElementCraftingTable.get()).ifPresent((blockEntity) -> {
-            BlockItem.setBlockEntityData(stack, BlockEntityRegister.ElementCraftingTable.get(), blockEntity.saveWithoutMetadata());
+            BlockItem.setBlockEntityData(stack, BlockEntityRegister.ElementCraftingTable.get(), blockEntity.saveWithoutMetadata(level.registryAccess()));
         });
         return stack;
     }

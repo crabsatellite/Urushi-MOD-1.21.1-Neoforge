@@ -1,11 +1,11 @@
 package com.iwaliner.urushi.mixin;
 
-import com.iwaliner.urushi.ItemAndBlockRegister;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.Display;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import com.iwaliner.urushi.ItemAndBlockRegister;
 import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

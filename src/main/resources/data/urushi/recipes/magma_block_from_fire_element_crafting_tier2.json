@@ -1,21 +1,21 @@
 {
   "type": "urushi:fire_element_tier2_crafting",
   "ingredients": [
-  {
-    "tag": "forge:cobblestone"
+    {
+      "tag": "c:cobblestone"
     },
     {
-		"tag": "forge:cobblestone"
+      "tag": "c:cobblestone"
     },
     {
-	"tag": "forge:cobblestone"
+      "tag": "c:cobblestone"
     },
     {
-   "tag": "forge:cobblestone"
+      "tag": "c:cobblestone"
     }
   ],
   "result": {
-  "item":"minecraft:magma_block"
+    "item": "minecraft:magma_block"
   },
   "reiryoku": 50
 }

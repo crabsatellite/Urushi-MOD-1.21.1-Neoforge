@@ -1,8 +1,8 @@
 package com.iwaliner.urushi.item.container;
 
 import com.google.common.collect.Lists;
-import com.iwaliner.urushi.ItemAndBlockRegister;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.world.Container;
@@ -13,10 +13,12 @@ import net.minecraft.world.entity.player.StackedContents;
 import net.minecraft.world.inventory.StackedContentsCompatible;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
+import com.iwaliner.urushi.ItemAndBlockRegister;
 
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.annotation.Nullable;
 
 public class DrawingBagContainer implements Container, StackedContentsCompatible {
     private final NonNullList<ItemStack> items;
@@ -29,12 +31,12 @@ public class DrawingBagContainer implements Container, StackedContentsCompatible
         this.items =getItems(bagStack);
     }
     public NonNullList<ItemStack> getItems(ItemStack bagStack){
-        CompoundTag tag =bagStack.getTag();
+        CompoundTag tag = bagStack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
         if(tag==null){
             tag=new CompoundTag();
         }
         NonNullList<ItemStack> items = NonNullList.withSize(54, ItemStack.EMPTY);
-        ContainerHelper.loadAllItems(tag, items);
+        ContainerHelper.loadAllItems(tag, items, net.minecraft.core.RegistryAccess.EMPTY);
         return items;
     }
 
@@ -124,12 +126,12 @@ public class DrawingBagContainer implements Container, StackedContentsCompatible
                 containerlistener.containerChanged(this);
             }
         }
-        CompoundTag tag =bagStack.getTag();
+        CompoundTag tag = bagStack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
         if(tag==null){
             tag=new CompoundTag();
         }
-        ContainerHelper.saveAllItems(tag, this.items);
-        bagStack.setTag(tag);
+        ContainerHelper.saveAllItems(tag, this.items, net.minecraft.core.RegistryAccess.EMPTY);
+        bagStack.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
     }
 
     public boolean stillValid(Player p_19167_) {
@@ -168,7 +170,7 @@ public class DrawingBagContainer implements Container, StackedContentsCompatible
     private void moveItemToOccupiedSlotsWithSameType(ItemStack p_19192_) {
         for(int i = 0; i < this.size; ++i) {
             ItemStack itemstack = this.getItem(i);
-            if (ItemStack.isSameItemSameTags(itemstack, p_19192_)) {
+            if (ItemStack.isSameItemSameComponents(itemstack, p_19192_)) {
                 this.moveItemsBetweenStacks(p_19192_, itemstack);
                 if (p_19192_.isEmpty()) {
                     return;

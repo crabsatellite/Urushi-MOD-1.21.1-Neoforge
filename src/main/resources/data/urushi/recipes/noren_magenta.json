@@ -6,10 +6,10 @@
   ],
   "key": {
     "#": {
-     "item": "minecraft:magenta_wool"
+      "item": "minecraft:magenta_wool"
     },
     "X": {
-   "tag": "forge:bamboo"
+      "tag": "c:bamboo"
     }
   },
   "result": {

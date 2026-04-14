@@ -1,12 +1,13 @@
 package com.iwaliner.urushi.block;
 
 
-import com.iwaliner.urushi.blockentity.WoodenCabinetrySlabBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.Container;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
@@ -28,15 +29,24 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.pathfinder.PathComputationType;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import com.iwaliner.urushi.blockentity.WoodenCabinetrySlabBlockEntity;
+import com.mojang.serialization.MapCodec;
 import org.jetbrains.annotations.Nullable;
 
-import net.minecraft.util.RandomSource;
-
 public class WoodenCabinetrySlabBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
+    public static final MapCodec<WoodenCabinetrySlabBlock> CODEC = simpleCodec(WoodenCabinetrySlabBlock::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty OPEN = BlockStateProperties.OPEN;
     public static final EnumProperty<SlabType> TYPE = BlockStateProperties.SLAB_TYPE;
@@ -51,7 +61,8 @@ public class WoodenCabinetrySlabBlock extends BaseEntityBlock implements SimpleW
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand p_60507_, BlockHitResult p_60508_) {
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult p_60508_) {
+        InteractionHand hand = InteractionHand.MAIN_HAND;
         if (level.isClientSide) {
             return InteractionResult.SUCCESS;
         } else {
@@ -103,10 +114,11 @@ public class WoodenCabinetrySlabBlock extends BaseEntityBlock implements SimpleW
 
     @Override
     public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity entity, ItemStack stack) {
-        if (stack.hasCustomHoverName()) {
+        if (stack.has(DataComponents.CUSTOM_NAME)) {
             BlockEntity tileentity = level.getBlockEntity(pos);
             if (tileentity instanceof WoodenCabinetrySlabBlockEntity) {
-                ((WoodenCabinetrySlabBlockEntity)tileentity).setCustomName(stack.getHoverName());
+
+                // Original: ((WoodenCabinetrySlabBlockEntity)tileentity).setCustomName(stack.getHoverName());
             }
         }    }
 
@@ -170,8 +182,8 @@ public class WoodenCabinetrySlabBlock extends BaseEntityBlock implements SimpleW
     }
 
     @Override
-    public boolean canPlaceLiquid(BlockGetter getter, BlockPos pos, BlockState state, Fluid fluid) {
-        return state.getValue(TYPE) != SlabType.DOUBLE ? SimpleWaterloggedBlock.super.canPlaceLiquid(getter, pos, state, fluid) : false;
+    public boolean canPlaceLiquid(@Nullable Player player, BlockGetter getter, BlockPos pos, BlockState state, Fluid fluid) {
+        return state.getValue(TYPE) != SlabType.DOUBLE ? SimpleWaterloggedBlock.super.canPlaceLiquid(player, getter, pos, state, fluid) : false;
     }
 
     @Override
@@ -184,12 +196,12 @@ public class WoodenCabinetrySlabBlock extends BaseEntityBlock implements SimpleW
     }
 
     @Override
-    public boolean isPathfindable(BlockState state, BlockGetter getter, BlockPos pos, PathComputationType type) {
+    public boolean isPathfindable(BlockState state, PathComputationType type) {
         switch(type) {
             case LAND:
                 return false;
             case WATER:
-                return getter.getFluidState(pos).is(FluidTags.WATER);
+                return state.getFluidState().is(net.minecraft.tags.FluidTags.WATER) && !state.isSolid(); // Water pathfinding check (was getFluidState on BlockGetter)
             case AIR:
                 return false;
             default:

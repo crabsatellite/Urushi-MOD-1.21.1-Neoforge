@@ -1,25 +1,11 @@
 package com.iwaliner.urushi.block;
 
-import com.iwaliner.urushi.BlockEntityRegister;
-import com.iwaliner.urushi.ItemAndBlockRegister;
-import com.iwaliner.urushi.ModCoreUrushi;
-import com.iwaliner.urushi.RecipeTypeRegister;
-import com.iwaliner.urushi.blockentity.FillerBlockEntity;
-import com.iwaliner.urushi.blockentity.MarkerBlockEntity;
-import com.iwaliner.urushi.blockentity.TankBlockEntity;
-import com.iwaliner.urushi.blockentity.WoodenCabinetryBlockEntity;
-import com.iwaliner.urushi.item.AbstractMagatamaItem;
-import com.iwaliner.urushi.recipe.SandpaperPolishingRecipe;
-import com.iwaliner.urushi.util.ElementType;
-import com.iwaliner.urushi.util.ElementUtils;
-import com.iwaliner.urushi.util.UrushiUtils;
-import com.iwaliner.urushi.util.interfaces.ElementBlock;
-import com.iwaliner.urushi.util.interfaces.Tiered;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.Mth;
 import net.minecraft.world.*;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
@@ -38,12 +24,36 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import com.iwaliner.urushi.BlockEntityRegister;
+import com.iwaliner.urushi.ItemAndBlockRegister;
+import com.iwaliner.urushi.ModCoreUrushi;
+import com.iwaliner.urushi.RecipeTypeRegister;
+import com.iwaliner.urushi.blockentity.FillerBlockEntity;
+import com.iwaliner.urushi.blockentity.MarkerBlockEntity;
+import com.iwaliner.urushi.blockentity.TankBlockEntity;
+import com.iwaliner.urushi.blockentity.WoodenCabinetryBlockEntity;
+import com.iwaliner.urushi.item.AbstractMagatamaItem;
+import com.iwaliner.urushi.recipe.SandpaperPolishingRecipe;
+import com.iwaliner.urushi.util.ElementType;
+import com.iwaliner.urushi.util.ElementUtils;
+import com.iwaliner.urushi.util.UrushiUtils;
+import com.iwaliner.urushi.util.interfaces.ElementBlock;
+import com.iwaliner.urushi.util.interfaces.Tiered;
+import com.mojang.serialization.MapCodec;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Optional;
 
 public class FillerBlock extends BaseEntityBlock {
+    public static final MapCodec<FillerBlock> CODEC = simpleCodec(FillerBlock::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
     private static final VoxelShape BASE = Block.box(4D, 0.0D, 4D, 12D, 2D, 12D);
     private static final VoxelShape PILLAR = Block.box(7D, 1.0D, 7D, 9D, 16D, 9D);
     private static final VoxelShape OUTER_BOX = Block.box(4D, 0.0D, 4D, 12D, 16D, 12D);
@@ -53,7 +63,8 @@ public class FillerBlock extends BaseEntityBlock {
         super(p_49224_);
     }
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand p_60507_, BlockHitResult p_60508_) {
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult p_60508_) {
+        InteractionHand hand = InteractionHand.MAIN_HAND;
         if (level.isClientSide) {
             return InteractionResult.SUCCESS;
         } else {

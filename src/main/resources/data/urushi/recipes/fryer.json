@@ -6,11 +6,11 @@
     "iii"
   ],
   "key": {
-  "o": {
-     "item": "urushi:vegetable_oil"
+    "o": {
+      "item": "urushi:vegetable_oil"
     },
     "i": {
-      "tag": "forge:ingots/iron"
+      "tag": "c:ingots/iron"
     }
   },
   "result": {

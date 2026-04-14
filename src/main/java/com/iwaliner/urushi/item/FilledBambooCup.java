@@ -1,10 +1,9 @@
 package com.iwaliner.urushi.item;
 
-import com.iwaliner.urushi.ItemAndBlockRegister;
-import com.iwaliner.urushi.util.UrushiUtils;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -20,13 +19,17 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
-import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
+import com.iwaliner.urushi.ItemAndBlockRegister;
+import com.iwaliner.urushi.util.UrushiUtils;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -56,14 +59,14 @@ public class FilledBambooCup extends Item {
             level.playSound((Player)null, blockpos, SoundEvents.BOTTLE_EMPTY, SoundSource.BLOCKS, 1.0F, 1.0F);
             level.gameEvent((Entity)null, GameEvent.FLUID_PLACE, blockpos);
             level.setBlockAndUpdate(blockpos, Blocks.MUD.defaultBlockState());
-            return InteractionResult.sidedSuccess(level.isClientSide);
+            return InteractionResult.SUCCESS;
         } else {
             return InteractionResult.PASS;
         }
     }
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
         Player player = entity instanceof Player ? (Player)entity : null;
-        if (!level.isClientSide&&stack.getItem().equals(ItemAndBlockRegister.milk_bamboo_cup.get())) {entity.curePotionEffects(new ItemStack(Items.MILK_BUCKET));}
+        if (!level.isClientSide&&stack.getItem().equals(ItemAndBlockRegister.milk_bamboo_cup.get())) {entity.removeAllEffects();}
         if (player instanceof ServerPlayer) {
             CriteriaTriggers.CONSUME_ITEM.trigger((ServerPlayer)player, stack);
         }
@@ -102,7 +105,7 @@ public class FilledBambooCup extends Item {
         return ItemUtils.startUsingInstantly(p_42993_, p_42994_, p_42995_);
     }
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> list, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, Item.TooltipContext level, List<Component> list, TooltipFlag flag) {
         UrushiUtils.setInfo(list,"filled_bamboo_cup");
         if(stack.getItem().equals(ItemAndBlockRegister.water_bamboo_cup.get())){
             UrushiUtils.setInfo(list,"water_bamboo_cup");

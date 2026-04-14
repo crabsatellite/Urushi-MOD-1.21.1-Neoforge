@@ -1,9 +1,5 @@
 package com.iwaliner.urushi.block;
 
-import com.iwaliner.urushi.ItemAndBlockRegister;
-import com.iwaliner.urushi.TagUrushi;
-import com.iwaliner.urushi.util.ElementType;
-import com.iwaliner.urushi.util.UrushiUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -14,6 +10,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.*;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -35,11 +32,24 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import com.iwaliner.urushi.ItemAndBlockRegister;
+import com.iwaliner.urushi.TagUrushi;
+import com.iwaliner.urushi.util.ElementType;
+import com.iwaliner.urushi.util.UrushiUtils;
+import com.mojang.serialization.MapCodec;
 
-import javax.annotation.Nullable;
 import java.util.List;
+import javax.annotation.Nullable;
 
 public class FermentationBarrelBlock extends Block implements WorldlyContainerHolder {
+    public static final MapCodec<FermentationBarrelBlock> CODEC = simpleCodec(FermentationBarrelBlock::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
 
     public static final IntegerProperty LEVEL =IntegerProperty.create("level", 0, 16);
     public static final IntegerProperty TYPE = IntegerProperty.create("type", 0, 3);
@@ -93,10 +103,10 @@ public class FermentationBarrelBlock extends Block implements WorldlyContainerHo
         }
     }
 
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult result) {
         int i = state.getValue(LEVEL);
         Type type=Type.getType(state.getValue(TYPE));
-        ItemStack itemstack = player.getItemInHand(hand);
+        ItemStack itemstack = player.getMainHandItem();
         if(type==Type.MOROMI&&i>8&&itemstack.is(Items.GLASS_BOTTLE)){
             level.setBlock(pos,state.setValue(LEVEL,0),3);
             ItemStack sakeStack=new ItemStack(ItemAndBlockRegister.sake.get());
@@ -111,7 +121,7 @@ public class FermentationBarrelBlock extends Block implements WorldlyContainerHo
         if (i >=9) {
             if (type!=Type.MOROMI) {
                 extractProduce(state, level, pos);
-                return InteractionResult.sidedSuccess(level.isClientSide);
+                return InteractionResult.SUCCESS;
             }
             return InteractionResult.FAIL;
         }
@@ -152,12 +162,12 @@ public class FermentationBarrelBlock extends Block implements WorldlyContainerHo
             }
         }
 
-        return InteractionResult.sidedSuccess(level.isClientSide);
+        return InteractionResult.SUCCESS;
 
 
     }
     @Override
-    public void appendHoverText(ItemStack stack, @org.jetbrains.annotations.Nullable BlockGetter p_49817_, List<Component> list, TooltipFlag p_49819_) {
+    public void appendHoverText(ItemStack stack, Item.TooltipContext p_49817_, List<Component> list, TooltipFlag p_49819_) {
             UrushiUtils.setInfo(list,"slot_oil_extractor");
         UrushiUtils.setInfo(list, "same_as_composter");
         UrushiUtils.setInfo(list, "fermentation_barrel_1");

@@ -1,9 +1,8 @@
 {
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
-   
     {
-      "tag": "forge:crops/adzuki"
+      "tag": "c:crops/adzuki"
     },
     {
       "item": "urushi:rice"

@@ -1,7 +1,6 @@
 package com.iwaliner.urushi.block;
 
 
-import com.iwaliner.urushi.ItemAndBlockRegister;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
@@ -21,8 +20,14 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
+import com.iwaliner.urushi.ItemAndBlockRegister;
+import com.mojang.serialization.MapCodec;
 
 public class StrippableLogBlock extends RotatedPillarBlock {
+    public static final MapCodec<StrippableLogBlock> CODEC = simpleCodec(__p -> new StrippableLogBlock(net.minecraft.world.level.block.Blocks.AIR, 0, __p));
+
+    @Override
+    public MapCodec<? extends StrippableLogBlock> codec() { return CODEC; }
     private Block block;
    // private Item item;
     private int type;
@@ -33,20 +38,20 @@ public class StrippableLogBlock extends RotatedPillarBlock {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
+    protected InteractionResult useWithoutItem(BlockState state, Level world, BlockPos pos, Player player, BlockHitResult result) {
         Item item=null;
-        if(ItemAndBlockRegister.japanese_apricot_bark.isPresent()&&type==0){
+        if(ItemAndBlockRegister.japanese_apricot_bark.isBound()&&type==0){
             item= ItemAndBlockRegister.japanese_apricot_bark.get();
         }
-        else if(ItemAndBlockRegister.sakura_bark.isPresent()&&type==1){
+        else if(ItemAndBlockRegister.sakura_bark.isBound()&&type==1){
             item= ItemAndBlockRegister.sakura_bark.get();
-        }else if(ItemAndBlockRegister.cypress_bark.isPresent()&&type==2){
+        }else if(ItemAndBlockRegister.cypress_bark.isBound()&&type==2){
             item= ItemAndBlockRegister.cypress_bark.get();
-        }else if(ItemAndBlockRegister.cypress_bark.isPresent()&&type==3){
+        }else if(ItemAndBlockRegister.cypress_bark.isBound()&&type==3){
             item= ItemAndBlockRegister.japanese_cedar_bark.get();
         }
 
-        if(player.getItemInHand(hand).getItem() instanceof AxeItem){
+        if(player.getMainHandItem().getItem() instanceof AxeItem){
             EnumProperty<Direction.Axis> AXIS = BlockStateProperties.AXIS;
             world.setBlock(pos,block.defaultBlockState().setValue(AXIS,state.getValue(AXIS)),4);
             world.playSound(player, pos, SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1.0F, 1.0F);

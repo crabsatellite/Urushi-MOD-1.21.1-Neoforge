@@ -1,7 +1,5 @@
 package com.iwaliner.urushi.entiity;
 
-import com.iwaliner.urushi.EntityRegister;
-import com.iwaliner.urushi.ItemAndBlockRegister;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.util.Mth;
@@ -17,9 +15,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
-
-import net.minecraftforge.network.NetworkHooks;
-
+import com.iwaliner.urushi.EntityRegister;
+import com.iwaliner.urushi.ItemAndBlockRegister;
 
 import javax.annotation.Nonnull;
 
@@ -70,7 +67,7 @@ public class KitsunebiEntity extends ThrowableItemProjectile implements ItemSupp
 
     protected void onHit(HitResult result) {
         super.onHit(result);
-        if (ItemAndBlockRegister.kitsunebiBlock.isPresent()) {
+        if (ItemAndBlockRegister.kitsunebiBlock.isBound()) {
             BlockPos offsetPos = new BlockPos(Mth.floor(this.getX()), Mth.floor(this.getY()), Mth.floor(this.getZ()));
             //  BlockPos offsetPos = new BlockPos(Math.floor(result.getLocation().x), Math.floor(result.getLocation().y), Math.floor(result.getLocation().z));
             if(this.level().getBlockState(offsetPos).isAir()||this.level().getBlockState(offsetPos).getBlock() instanceof BushBlock) {

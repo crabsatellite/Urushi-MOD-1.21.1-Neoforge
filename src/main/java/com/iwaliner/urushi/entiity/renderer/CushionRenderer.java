@@ -1,23 +1,23 @@
 package com.iwaliner.urushi.entiity.renderer;
 
-import com.iwaliner.urushi.ClientSetUp;
-import com.iwaliner.urushi.entiity.CushionEntity;
-import com.iwaliner.urushi.entiity.model.CushionModel;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Axis;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import com.iwaliner.urushi.ClientSetUp;
+import com.iwaliner.urushi.entiity.CushionEntity;
+import com.iwaliner.urushi.entiity.model.CushionModel;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
 
 @OnlyIn(Dist.CLIENT)
 public class CushionRenderer<T extends CushionEntity> extends EntityRenderer<T> {
-    private static final ResourceLocation[] TEXTURE_LOCATIONS = new ResourceLocation[]{new ResourceLocation("urushi:textures/entity/cushion/cushion_white.png"), new ResourceLocation("urushi:textures/entity/cushion/cushion_orange.png"), new ResourceLocation("urushi:textures/entity/cushion/cushion_magenta.png"), new ResourceLocation("urushi:textures/entity/cushion/cushion_light_blue.png"), new ResourceLocation("urushi:textures/entity/cushion/cushion_yellow.png"), new ResourceLocation("urushi:textures/entity/cushion/cushion_lime.png"), new ResourceLocation("urushi:textures/entity/cushion/cushion_pink.png"), new ResourceLocation("urushi:textures/entity/cushion/cushion_gray.png"), new ResourceLocation("urushi:textures/entity/cushion/cushion_silver.png"), new ResourceLocation("urushi:textures/entity/cushion/cushion_cyan.png"), new ResourceLocation("urushi:textures/entity/cushion/cushion_purple.png"), new ResourceLocation("urushi:textures/entity/cushion/cushion_blue.png"), new ResourceLocation("urushi:textures/entity/cushion/cushion_brown.png"), new ResourceLocation("urushi:textures/entity/cushion/cushion_green.png"), new ResourceLocation("urushi:textures/entity/cushion/cushion_red.png"), new ResourceLocation("urushi:textures/entity/cushion/cushion_black.png")};
+    private static final ResourceLocation[] TEXTURE_LOCATIONS = new ResourceLocation[]{ResourceLocation.parse("urushi:textures/entity/cushion/cushion_white.png"), ResourceLocation.parse("urushi:textures/entity/cushion/cushion_orange.png"), ResourceLocation.parse("urushi:textures/entity/cushion/cushion_magenta.png"), ResourceLocation.parse("urushi:textures/entity/cushion/cushion_light_blue.png"), ResourceLocation.parse("urushi:textures/entity/cushion/cushion_yellow.png"), ResourceLocation.parse("urushi:textures/entity/cushion/cushion_lime.png"), ResourceLocation.parse("urushi:textures/entity/cushion/cushion_pink.png"), ResourceLocation.parse("urushi:textures/entity/cushion/cushion_gray.png"), ResourceLocation.parse("urushi:textures/entity/cushion/cushion_silver.png"), ResourceLocation.parse("urushi:textures/entity/cushion/cushion_cyan.png"), ResourceLocation.parse("urushi:textures/entity/cushion/cushion_purple.png"), ResourceLocation.parse("urushi:textures/entity/cushion/cushion_blue.png"), ResourceLocation.parse("urushi:textures/entity/cushion/cushion_brown.png"), ResourceLocation.parse("urushi:textures/entity/cushion/cushion_green.png"), ResourceLocation.parse("urushi:textures/entity/cushion/cushion_red.png"), ResourceLocation.parse("urushi:textures/entity/cushion/cushion_black.png")};
 
       public final EntityModel<CushionEntity> model;
 
@@ -34,7 +34,7 @@ public class CushionRenderer<T extends CushionEntity> extends EntityRenderer<T> 
         p_225623_4_.mulPose(Axis.YN.rotationDegrees(180.0F - p_225623_2_)); //この行がないとモデルの回転ができない
 
         VertexConsumer ivertexbuilder = p_225623_5_.getBuffer(this.model.renderType(TEXTURE_LOCATIONS[entity.getCushionType().ordinal()]));
-        this.model.renderToBuffer(p_225623_4_, ivertexbuilder, p_225623_6_, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        this.model.renderToBuffer(p_225623_4_, ivertexbuilder, p_225623_6_, OverlayTexture.NO_OVERLAY, -1);
         p_225623_4_.popPose();
         super.render((T) entity, p_225623_2_, p_225623_3_, p_225623_4_, p_225623_5_, p_225623_6_);
     }

@@ -16,10 +16,19 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import com.mojang.serialization.MapCodec;
 
 import java.util.Map;
 
 public class FrameBlock extends HorizonalRotateBlock implements SimpleWaterloggedBlock {
+    public static final MapCodec<FrameBlock> CODEC = simpleCodec(FrameBlock::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     protected static final VoxelShape SHAPE_S = Block.box(0D, 0.0D, 0D, 16.0D, 16D, 3D);
     protected static final VoxelShape SHAPE_N = Block.box(0D, 0.0D, 13D, 16D, 16.0D, 16D);

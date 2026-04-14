@@ -2,10 +2,6 @@ package com.iwaliner.urushi.blockentity;
 
 
 
-import com.iwaliner.urushi.BlockEntityRegister;
-import com.iwaliner.urushi.ItemAndBlockRegister;
-import com.iwaliner.urushi.block.DirtFurnaceBlock;
-import com.iwaliner.urushi.block.RiceCauldronBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
@@ -26,6 +22,10 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import com.iwaliner.urushi.BlockEntityRegister;
+import com.iwaliner.urushi.ItemAndBlockRegister;
+import com.iwaliner.urushi.block.DirtFurnaceBlock;
+import com.iwaliner.urushi.block.RiceCauldronBlock;
 
 import javax.annotation.Nullable;
 

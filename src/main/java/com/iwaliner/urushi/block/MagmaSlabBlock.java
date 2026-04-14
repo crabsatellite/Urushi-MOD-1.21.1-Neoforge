@@ -7,27 +7,35 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BubbleColumnBlock;
 import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.state.BlockState;
-
-import net.minecraft.util.RandomSource;
+import com.iwaliner.urushi.util.UrushiUtils;
+import com.mojang.serialization.MapCodec;
 
 public class MagmaSlabBlock extends SlabBlock {
+    public static final MapCodec<MagmaSlabBlock> CODEC = simpleCodec(MagmaSlabBlock::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
     private static final int BUBBLE_COLUMN_CHECK_DELAY = 20;
     public MagmaSlabBlock(Properties p_56359_) {
         super(p_56359_);
     }
     public void stepOn(Level p_153777_, BlockPos p_153778_, BlockState p_153779_, Entity p_153780_) {
-        if (!p_153780_.fireImmune() && p_153780_ instanceof LivingEntity && !EnchantmentHelper.hasFrostWalker((LivingEntity)p_153780_)) {
+        if (!p_153780_.fireImmune() && p_153780_ instanceof LivingEntity && !UrushiUtils.hasFrostWalker((LivingEntity)p_153780_)) {
             p_153780_.hurt(p_153780_.damageSources().hotFloor(), 1.0F);
         }
 

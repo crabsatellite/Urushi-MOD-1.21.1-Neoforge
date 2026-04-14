@@ -6,9 +6,18 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import com.mojang.serialization.MapCodec;
 
 
 public class HorizonalRotateBlock extends HorizontalDirectionalBlock {
+    public static final MapCodec<HorizonalRotateBlock> CODEC = simpleCodec(HorizonalRotateBlock::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
 
     public HorizonalRotateBlock(Properties p_i48377_1_) {
         super(p_i48377_1_);

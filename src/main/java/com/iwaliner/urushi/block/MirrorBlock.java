@@ -1,17 +1,12 @@
 package com.iwaliner.urushi.block;
 
-import com.iwaliner.urushi.BlockEntityRegister;
-import com.iwaliner.urushi.blockentity.MirrorBlockEntity;
-import com.iwaliner.urushi.util.ComplexDirection;
-import com.iwaliner.urushi.util.UrushiUtils;
-import com.iwaliner.urushi.util.interfaces.Tiered;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
- 
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -30,11 +25,21 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import com.iwaliner.urushi.BlockEntityRegister;
+import com.iwaliner.urushi.blockentity.MirrorBlockEntity;
+import com.iwaliner.urushi.util.ComplexDirection;
+import com.iwaliner.urushi.util.UrushiUtils;
+import com.iwaliner.urushi.util.interfaces.Tiered;
+import com.mojang.serialization.MapCodec;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 public class MirrorBlock extends BaseEntityBlock implements Tiered {
+    public static final MapCodec<MirrorBlock> CODEC = simpleCodec(__p -> new MirrorBlock(0, __p));
+
+    @Override
+    public MapCodec<? extends MirrorBlock> codec() { return CODEC; }
     private static final VoxelShape BASE = Block.box(6D, 0.0D, 6D, 10D, 1D, 10D);
     private static final VoxelShape PILLAR = Block.box(7D, 1.0D, 7D, 9D, 16D, 9D);
     private static final VoxelShape OUTER_BOX = Block.box(1D, 0.0D, 1D, 15D, 16D, 15D);
@@ -92,7 +97,7 @@ public class MirrorBlock extends BaseEntityBlock implements Tiered {
         return RenderShape.MODEL;
     }
     @Override
-    public void appendHoverText(ItemStack p_49816_, @Nullable BlockGetter p_49817_, List<Component> list, TooltipFlag p_49819_) {
+    public void appendHoverText(ItemStack p_49816_, Item.TooltipContext p_49817_, List<Component> list, TooltipFlag p_49819_) {
         UrushiUtils.setInfo(list, "mirror1");
         UrushiUtils.setInfo(list, "mirror2");
         UrushiUtils.setInfo(list, "mirror3");
@@ -105,7 +110,7 @@ public class MirrorBlock extends BaseEntityBlock implements Tiered {
         return createTickerHelper(p_152162_, BlockEntityRegister.Mirror.get(), MirrorBlockEntity::tick);
     }
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult result) {
         ComplexDirection complexDirection=MirrorBlockEntity.getDirectionFromID(state.getValue(MirrorBlock.DIRECTION));
         if (level.getBlockEntity(pos) instanceof MirrorBlockEntity) {
 

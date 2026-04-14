@@ -7,13 +7,13 @@
   ],
   "key": {
     "p": {
-    "item": "minecraft:paper"
+      "item": "minecraft:paper"
     },
     "s": {
-   "tag": "forge:string"
+      "tag": "c:string"
     },
     "r": {
-"tag": "forge:bamboo"
+      "tag": "c:bamboo"
     }
   },
   "result": {

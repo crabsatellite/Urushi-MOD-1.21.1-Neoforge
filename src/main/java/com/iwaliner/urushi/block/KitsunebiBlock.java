@@ -1,14 +1,11 @@
 package com.iwaliner.urushi.block;
 
-import com.iwaliner.urushi.BlockEntityRegister;
-import com.iwaliner.urushi.ItemAndBlockRegister;
-import com.iwaliner.urushi.blockentity.InvisibleButtonBlockEntity;
-import com.iwaliner.urushi.blockentity.KitsunebiBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.BarrierBlock;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.RenderShape;
@@ -16,10 +13,23 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import com.iwaliner.urushi.BlockEntityRegister;
+import com.iwaliner.urushi.ItemAndBlockRegister;
+import com.iwaliner.urushi.blockentity.InvisibleButtonBlockEntity;
+import com.iwaliner.urushi.blockentity.KitsunebiBlockEntity;
+import com.mojang.serialization.MapCodec;
 
 import javax.annotation.Nullable;
 
 public class KitsunebiBlock extends BaseEntityBlock {
+    public static final MapCodec<KitsunebiBlock> CODEC = simpleCodec(KitsunebiBlock::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
     public KitsunebiBlock(Properties p_49092_) {
         super(p_49092_);
     }
@@ -41,7 +51,7 @@ public class KitsunebiBlock extends BaseEntityBlock {
             ((KitsunebiBlockEntity) baseBlockEntity).time=20*5;
         }
     }
-    public ItemStack getCloneItemStack(BlockGetter p_152966_, BlockPos p_152967_, BlockState p_152968_) {
+    public ItemStack getCloneItemStack(LevelReader p_152966_, BlockPos p_152967_, BlockState p_152968_) {
         return new ItemStack(ItemAndBlockRegister.kitsunebiItem.get());
     }
 
@@ -65,7 +75,7 @@ public class KitsunebiBlock extends BaseEntityBlock {
     }
 
     public RenderShape getRenderShape(BlockState p_49098_) {
-        return RenderShape.INVISIBLE;
+        return net.minecraft.world.level.block.RenderShape.INVISIBLE;
     }
 
     public float getShadeBrightness(BlockState p_49094_, BlockGetter p_49095_, BlockPos p_49096_) {

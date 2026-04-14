@@ -1,10 +1,6 @@
 package com.iwaliner.urushi.item;
 
-import com.iwaliner.urushi.ItemAndBlockRegister;
-import com.iwaliner.urushi.util.ElementType;
-import com.iwaliner.urushi.util.ElementUtils;
-import com.iwaliner.urushi.util.UrushiUtils;
-import com.iwaliner.urushi.util.interfaces.ElementItem;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -17,6 +13,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import com.iwaliner.urushi.ItemAndBlockRegister;
+import com.iwaliner.urushi.util.ElementType;
+import com.iwaliner.urushi.util.ElementUtils;
+import com.iwaliner.urushi.util.UrushiUtils;
+import com.iwaliner.urushi.util.interfaces.ElementItem;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -84,7 +85,7 @@ public class WagasaItem extends Item implements ElementItem {
         }
     }
     @Override
-    public void appendHoverText(ItemStack p_41421_, @Nullable Level p_41422_, List<Component> list, TooltipFlag p_41424_) {
+    public void appendHoverText(ItemStack p_41421_, Item.TooltipContext p_41422_, List<Component> list, TooltipFlag p_41424_) {
     UrushiUtils.setInfo(list,"wagasa");
         UrushiUtils.setInfo(list,"wagasa2");
     }

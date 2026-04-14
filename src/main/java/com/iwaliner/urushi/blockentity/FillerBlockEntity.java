@@ -1,13 +1,8 @@
 package com.iwaliner.urushi.blockentity;
 
 
-import com.iwaliner.urushi.BlockEntityRegister;
-import com.iwaliner.urushi.ItemAndBlockRegister;
-import com.iwaliner.urushi.block.WoodenCabinetrySlabBlock;
-import com.iwaliner.urushi.blockentity.menu.DoubledWoodenCabinetryMenu;
-import com.iwaliner.urushi.blockentity.menu.FillerMenu;
-import com.iwaliner.urushi.util.ElementUtils;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
@@ -28,6 +23,12 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.ContainerOpenersCounter;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import com.iwaliner.urushi.BlockEntityRegister;
+import com.iwaliner.urushi.ItemAndBlockRegister;
+import com.iwaliner.urushi.block.WoodenCabinetrySlabBlock;
+import com.iwaliner.urushi.blockentity.menu.DoubledWoodenCabinetryMenu;
+import com.iwaliner.urushi.blockentity.menu.FillerMenu;
+import com.iwaliner.urushi.util.ElementUtils;
 
 public class FillerBlockEntity extends RandomizableContainerBlockEntity {
     public BlockPos posOrigin=getBlockPos();
@@ -80,10 +81,10 @@ public class FillerBlockEntity extends RandomizableContainerBlockEntity {
         super(BlockEntityRegister.Filler.get(), p_155052_, p_155053_);
     }
 
-    protected void saveAdditional(CompoundTag tag) {
-        super.saveAdditional(tag);
+    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.saveAdditional(tag, registries);
         if (!this.trySaveLootTable(tag)) {
-            ContainerHelper.saveAllItems(tag, this.items);
+            ContainerHelper.saveAllItems(tag, this.items, registries);
         }
         if(posOrigin!=null) {
             tag.put("posOrigin", NbtUtils.writeBlockPos(posOrigin));
@@ -98,9 +99,9 @@ public class FillerBlockEntity extends RandomizableContainerBlockEntity {
         setChanged();
         super.setItem(i, stack);
     }
-    public CompoundTag getUpdateTag() {
+    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
         CompoundTag compoundtag = new CompoundTag();
-        ContainerHelper.saveAllItems(compoundtag, this.items, true);
+        ContainerHelper.saveAllItems(compoundtag, this.items, true, registries);
         if(posOrigin!=null) {
             compoundtag.put("posOrigin", NbtUtils.writeBlockPos(posOrigin));
         }
@@ -109,14 +110,14 @@ public class FillerBlockEntity extends RandomizableContainerBlockEntity {
         compoundtag.putInt("rangeZ",rangeZ);
         return compoundtag;
     }
-    public void load(CompoundTag tag) {
-        super.load(tag);
+    public void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.loadAdditional(tag, registries);
         this.items = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
         if (!this.tryLoadLootTable(tag)) {
-            ContainerHelper.loadAllItems(tag, this.items);
+            ContainerHelper.loadAllItems(tag, this.items, registries);
         }
         if(tag.contains("posOrigin")) {
-            this.posOrigin = NbtUtils.readBlockPos(tag.getCompound("posOrigin"));
+            this.posOrigin = NbtUtils.readBlockPos(tag, "posOrigin").orElse(BlockPos.ZERO);
         }
         rangeX=tag.getInt("rangeX");
         rangeY=tag.getInt("rangeY");

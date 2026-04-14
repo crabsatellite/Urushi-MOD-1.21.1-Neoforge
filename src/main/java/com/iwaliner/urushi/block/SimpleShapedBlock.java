@@ -13,8 +13,13 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import com.mojang.serialization.MapCodec;
 
 public class SimpleShapedBlock extends Block implements SimpleWaterloggedBlock {
+    public static final MapCodec<SimpleShapedBlock> CODEC = simpleCodec(__p -> new SimpleShapedBlock(net.minecraft.world.phys.shapes.Shapes.block(), __p));
+
+    @Override
+    public MapCodec<? extends SimpleShapedBlock> codec() { return CODEC; }
     private static  VoxelShape SHAPE;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 

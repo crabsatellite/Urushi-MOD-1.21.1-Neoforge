@@ -3,9 +3,9 @@ package com.iwaliner.urushi.json;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonWriter;
+import net.minecraft.world.item.Item;
 import com.iwaliner.urushi.ConfigUrushi;
 import com.iwaliner.urushi.ModCoreUrushi;
-import net.minecraft.world.item.Item;
 
 import java.io.File;
 import java.io.FileOutputStream;

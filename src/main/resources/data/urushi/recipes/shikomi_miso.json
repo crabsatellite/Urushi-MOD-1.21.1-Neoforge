@@ -1,18 +1,17 @@
 {
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
-   
     {
-      "tag": "forge:crops/soybean"
+      "tag": "c:crops/soybean"
     },
     {
-      "tag": "forge:crops/soybean"
+      "tag": "c:crops/soybean"
     },
-     {
+    {
       "item": "urushi:rice_malt"
     },
-     {
-      "tag": "forge:salt"
+    {
+      "tag": "c:salt"
     }
   ],
   "result": {

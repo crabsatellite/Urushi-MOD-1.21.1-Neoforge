@@ -1,14 +1,15 @@
 package com.iwaliner.urushi;
 
+
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.biome.OverworldBiomes;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import com.iwaliner.urushi.ModCoreUrushi;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,11 +42,11 @@ public class BiomeRegister {
 
 
     static {
-        BIOMES = DeferredRegister.create(ForgeRegistries.BIOMES, ModCoreUrushi.ModID);
-        SakuraForest = ResourceKey.create(Registries.BIOME, new ResourceLocation("sakura_forest"));
-        EulaliaPlains =ResourceKey.create(Registries.BIOME, new ResourceLocation("eulalia_plains"));
-        AutumnForest =ResourceKey.create(Registries.BIOME, new ResourceLocation("autumn_forest"));
-        CedarForest =ResourceKey.create(Registries.BIOME, new ResourceLocation("cedar_forest"));
+        BIOMES = DeferredRegister.create(Registries.BIOME, ModCoreUrushi.ModID);
+        SakuraForest = ResourceKey.create(Registries.BIOME, ResourceLocation.withDefaultNamespace("sakura_forest"));
+        EulaliaPlains =ResourceKey.create(Registries.BIOME, ResourceLocation.withDefaultNamespace("eulalia_plains"));
+        AutumnForest =ResourceKey.create(Registries.BIOME, ResourceLocation.withDefaultNamespace("autumn_forest"));
+        CedarForest =ResourceKey.create(Registries.BIOME, ResourceLocation.withDefaultNamespace("cedar_forest"));
 
 
 

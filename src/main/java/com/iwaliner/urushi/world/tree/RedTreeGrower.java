@@ -1,19 +1,15 @@
 package com.iwaliner.urushi.world.tree;
 
+import net.minecraft.world.level.block.grower.TreeGrower;
 import com.iwaliner.urushi.ConfiguredFeatureRegister;
 
-import net.minecraft.core.Holder;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.block.grower.AbstractTreeGrower;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import java.util.Optional;
 
-import java.util.Random;
-
-public class RedTreeGrower extends AbstractTreeGrower {
-    public RedTreeGrower() {
-    }
-    protected ResourceKey<ConfiguredFeature<?, ?>> getConfiguredFeature(RandomSource p_204316_, boolean p_204317_) {
-        return ConfiguredFeatureRegister.RED_KEY;
-    }
+public class RedTreeGrower {
+    public static final TreeGrower GROWER = new TreeGrower(
+            "urushi:red",
+            Optional.empty(),
+            Optional.of(ConfiguredFeatureRegister.RED_KEY),
+            Optional.empty()
+    );
 }

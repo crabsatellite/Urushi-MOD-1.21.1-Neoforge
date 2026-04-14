@@ -1,10 +1,6 @@
 package com.iwaliner.urushi.blockentity.screen;
 
 
-import com.iwaliner.urushi.blockentity.menu.DoubledWoodenCabinetryMenu;
-import com.iwaliner.urushi.blockentity.menu.FillerMenu;
-import com.iwaliner.urushi.util.UrushiUtils;
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -15,8 +11,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import com.iwaliner.urushi.blockentity.menu.DoubledWoodenCabinetryMenu;
+import com.iwaliner.urushi.blockentity.menu.FillerMenu;
+import com.iwaliner.urushi.util.UrushiUtils;
+import com.mojang.blaze3d.systems.RenderSystem;
 
 @OnlyIn(Dist.CLIENT)
 public class FillerScreen extends AbstractContainerScreen<FillerMenu>
@@ -24,7 +24,7 @@ public class FillerScreen extends AbstractContainerScreen<FillerMenu>
 {
 
 
-    private final ResourceLocation CONTAINER_BACKGROUND = new ResourceLocation("urushi:textures/gui/filler.png");
+    private final ResourceLocation CONTAINER_BACKGROUND = ResourceLocation.parse("urushi:textures/gui/filler.png");
 
     public FillerScreen(FillerMenu p_i51104_1_, Inventory p_i51104_3_, Component p_i51104_4_) {
         super(p_i51104_1_, p_i51104_3_, p_i51104_4_);
@@ -43,7 +43,7 @@ public class FillerScreen extends AbstractContainerScreen<FillerMenu>
     }
 
     public void render(GuiGraphics guiGraphics, int p_99250_, int p_99251_, float p_99252_) {
-        this.renderBackground(guiGraphics);
+        this.renderBackground(guiGraphics, p_99250_, p_99251_, p_99252_);
         super.render(guiGraphics, p_99250_, p_99251_, p_99252_);
         this.renderTooltip(guiGraphics, p_99250_, p_99251_);
        }

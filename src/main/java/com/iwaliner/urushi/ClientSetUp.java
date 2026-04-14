@@ -1,6 +1,59 @@
 package com.iwaliner.urushi;
 
 
+
+import net.minecraft.client.AttackIndicatorStatus;
+import net.minecraft.client.KeyMapping;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.color.item.ItemColors;
+import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
+import net.minecraft.client.renderer.entity.FallingBlockRenderer;
+import net.minecraft.client.renderer.entity.ThrownItemRenderer;
+import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.DyedItemColor;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.fml.loading.FMLPaths;
+import net.neoforged.neoforge.client.event.*;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
+import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
+import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
+import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
+import net.neoforged.neoforge.client.settings.KeyConflictContext;
+import net.neoforged.neoforge.common.ItemAbilities;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.player.AdvancementEvent;
+import com.iwaliner.urushi.ModCoreUrushi;
 import com.iwaliner.urushi.block.*;
 import com.iwaliner.urushi.blockentity.menu.FillerMenu;
 import com.iwaliner.urushi.blockentity.renderer.*;
@@ -22,90 +75,62 @@ import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.AttackIndicatorStatus;
-import net.minecraft.client.KeyMapping;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.color.item.ItemColors;
-import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.MenuScreens;
-import net.minecraft.client.model.geom.ModelLayerLocation;
-import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.*;
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
-import net.minecraft.client.renderer.entity.FallingBlockRenderer;
-import net.minecraft.client.renderer.entity.ThrownItemRenderer;
-import net.minecraft.client.renderer.item.ItemProperties;
-import net.minecraft.client.resources.sounds.SimpleSoundInstance;
-import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.HumanoidArm;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.DyeableLeatherItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
-import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.ForgeHooksClient;
-import net.minecraftforge.client.RenderTypeHelper;
-import net.minecraftforge.client.event.*;
-import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
-import net.minecraftforge.client.settings.KeyConflictContext;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.ToolActions;
-import net.minecraftforge.event.entity.player.AdvancementEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.loading.FMLPaths;
 import org.lwjgl.glfw.GLFW;
 
-import javax.annotation.Nullable;
 import java.io.File;
 import java.util.Objects;
+import javax.annotation.Nullable;
 
 @OnlyIn(Dist.CLIENT)
-@Mod.EventBusSubscriber(modid = ModCoreUrushi.ModID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+@EventBusSubscriber(modid = ModCoreUrushi.ModID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ClientSetUp {
-    public static final ModelLayerLocation RICE = new ModelLayerLocation(new ResourceLocation(ModCoreUrushi.ModID, "rice_food"), "rice_food");
-    public static final ModelLayerLocation KARAAGE = new ModelLayerLocation(new ResourceLocation(ModCoreUrushi.ModID, "karaage_food"), "karaage_food");
-    public static final ModelLayerLocation TOFU = new ModelLayerLocation(new ResourceLocation(ModCoreUrushi.ModID, "tofu_food"), "tofu_food");
-    public static final ModelLayerLocation ABURAAGE = new ModelLayerLocation(new ResourceLocation(ModCoreUrushi.ModID, "aburaage_food"), "aburaage_food");
-    public static final ModelLayerLocation DANGO = new ModelLayerLocation(new ResourceLocation(ModCoreUrushi.ModID, "dango_food"), "dango_food");
-    public static final ModelLayerLocation RICE_CAKE = new ModelLayerLocation(new ResourceLocation(ModCoreUrushi.ModID, "rice_cake_food"), "rice_cake_food");
-    public static final ModelLayerLocation ROASTED_RICE_CAKE = new ModelLayerLocation(new ResourceLocation(ModCoreUrushi.ModID, "roasted_rice_cake_food"), "roasted_rice_cake_food");
-    public static final ModelLayerLocation CUSHION = new ModelLayerLocation(new ResourceLocation(ModCoreUrushi.ModID, "cushion"), "cushion");
-    public static final ModelLayerLocation SUSHI = new ModelLayerLocation(new ResourceLocation(ModCoreUrushi.ModID, "sushi_food"), "sushi_food");
-    public static final ModelLayerLocation SALMON_ROE_SUSHI = new ModelLayerLocation(new ResourceLocation(ModCoreUrushi.ModID, "salmon_roe_sushi_food"), "salmon_roe_sushi_food");
-    public static final ModelLayerLocation SHRIMP_SUSHI = new ModelLayerLocation(new ResourceLocation(ModCoreUrushi.ModID, "shrimp_sushi_food"), "shrimp_sushi_food");
-    public static final ModelLayerLocation INARI = new ModelLayerLocation(new ResourceLocation(ModCoreUrushi.ModID, "inari_food"), "inari_food");
-    public static final ModelLayerLocation RAMEN = new ModelLayerLocation(new ResourceLocation(ModCoreUrushi.ModID, "ramen_food"), "ramen_food");
-    public static final ModelLayerLocation MISO_SOUP = new ModelLayerLocation(new ResourceLocation(ModCoreUrushi.ModID, "miso_soup_food"), "miso_soup_food");
-    public static final ModelLayerLocation KAKURIYO_VILLAGER = new ModelLayerLocation(new ResourceLocation(ModCoreUrushi.ModID, "kakuriyo_villager"), "kakuriyo_villager");
-    public static final ModelLayerLocation GREEN_TEA = new ModelLayerLocation(new ResourceLocation(ModCoreUrushi.ModID, "green_tea_food"), "green_tea_food");
-    public static final ModelLayerLocation SAKE = new ModelLayerLocation(new ResourceLocation(ModCoreUrushi.ModID, "sake_food"), "sake_food");
-    public static final ModelLayerLocation TOKKURI = new ModelLayerLocation(new ResourceLocation(ModCoreUrushi.ModID, "tokkuri_food"), "tokkuri_food");
-    public static final ModelLayerLocation OCHOKO = new ModelLayerLocation(new ResourceLocation(ModCoreUrushi.ModID, "ochoko_food"), "ochoko_food");
-    public static final ModelLayerLocation MANDARIN = new ModelLayerLocation(new ResourceLocation(ModCoreUrushi.ModID, "mandarin_food"), "mandarin_food");
+    public static final ModelLayerLocation RICE = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(ModCoreUrushi.ModID, "rice_food"), "rice_food");
+    public static final ModelLayerLocation KARAAGE = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(ModCoreUrushi.ModID, "karaage_food"), "karaage_food");
+    public static final ModelLayerLocation TOFU = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(ModCoreUrushi.ModID, "tofu_food"), "tofu_food");
+    public static final ModelLayerLocation ABURAAGE = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(ModCoreUrushi.ModID, "aburaage_food"), "aburaage_food");
+    public static final ModelLayerLocation DANGO = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(ModCoreUrushi.ModID, "dango_food"), "dango_food");
+    public static final ModelLayerLocation RICE_CAKE = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(ModCoreUrushi.ModID, "rice_cake_food"), "rice_cake_food");
+    public static final ModelLayerLocation ROASTED_RICE_CAKE = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(ModCoreUrushi.ModID, "roasted_rice_cake_food"), "roasted_rice_cake_food");
+    public static final ModelLayerLocation CUSHION = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(ModCoreUrushi.ModID, "cushion"), "cushion");
+    public static final ModelLayerLocation SUSHI = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(ModCoreUrushi.ModID, "sushi_food"), "sushi_food");
+    public static final ModelLayerLocation SALMON_ROE_SUSHI = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(ModCoreUrushi.ModID, "salmon_roe_sushi_food"), "salmon_roe_sushi_food");
+    public static final ModelLayerLocation SHRIMP_SUSHI = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(ModCoreUrushi.ModID, "shrimp_sushi_food"), "shrimp_sushi_food");
+    public static final ModelLayerLocation INARI = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(ModCoreUrushi.ModID, "inari_food"), "inari_food");
+    public static final ModelLayerLocation RAMEN = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(ModCoreUrushi.ModID, "ramen_food"), "ramen_food");
+    public static final ModelLayerLocation MISO_SOUP = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(ModCoreUrushi.ModID, "miso_soup_food"), "miso_soup_food");
+    public static final ModelLayerLocation KAKURIYO_VILLAGER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(ModCoreUrushi.ModID, "kakuriyo_villager"), "kakuriyo_villager");
+    public static final ModelLayerLocation GREEN_TEA = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(ModCoreUrushi.ModID, "green_tea_food"), "green_tea_food");
+    public static final ModelLayerLocation SAKE = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(ModCoreUrushi.ModID, "sake_food"), "sake_food");
+    public static final ModelLayerLocation TOKKURI = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(ModCoreUrushi.ModID, "tokkuri_food"), "tokkuri_food");
+    public static final ModelLayerLocation OCHOKO = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(ModCoreUrushi.ModID, "ochoko_food"), "ochoko_food");
+    public static final ModelLayerLocation MANDARIN = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(ModCoreUrushi.ModID, "mandarin_food"), "mandarin_food");
 
 
     public static KeyMapping connectionKey = new ToggleKeyMappingPlus("key.urushi.connectionKey", KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_C, "key.urushi.category");
     @SubscribeEvent
     public static void keyRegister(RegisterKeyMappingsEvent event) {
         event.register(ClientSetUp.connectionKey);
+    }
+
+    @SubscribeEvent
+    public static void registerClientExtensions(RegisterClientExtensionsEvent event) {
+        event.registerFluidType(new IClientFluidTypeExtensions() {
+            private static final ResourceLocation STILL = ResourceLocation.withDefaultNamespace("block/water_still");
+            private static final ResourceLocation FLOWING = ResourceLocation.withDefaultNamespace("block/water_flow");
+            private static final ResourceLocation OVERLAY = ResourceLocation.withDefaultNamespace("block/water_overlay");
+
+            @Override
+            public ResourceLocation getStillTexture() { return STILL; }
+
+            @Override
+            public ResourceLocation getFlowingTexture() { return FLOWING; }
+
+            @Override
+            public ResourceLocation getOverlayTexture() { return OVERLAY; }
+
+            @Override
+            public int getTintColor() { return 0xbf60c3c9; }
+        }, FluidTypeRegister.HOT_SPRING_FLUID_TYPE.get());
     }
 
      /**エンティティの見た目を登録*/
@@ -209,7 +234,7 @@ public class ClientSetUp {
         event.register((stack, i) -> {return 12300080;},ItemAndBlockRegister.kakuriyo_grass_block.get());
         event.register((stack, i) -> {return 13886461;},ItemAndBlockRegister.onsen_egg.get());
         event.register((stack, i) -> {return event.getItemColors().getColor(new ItemStack(Items.OAK_LEAVES),0);},ItemAndBlockRegister.mandarin_leaves.get());
-        event.register((stack, i) -> {return i > 0 ? -1 : ((DyeableLeatherItem)stack.getItem()).getColor(stack);},ItemAndBlockRegister.drawstring_bag.get());
+        event.register((stack, i) -> {return i > 0 ? -1 : DyedItemColor.getOrDefault(stack, -1);},ItemAndBlockRegister.drawstring_bag.get());
     }
     @SubscribeEvent
     public static void registerBlockColorEvent(RegisterColorHandlersEvent.Block event) {
@@ -260,31 +285,22 @@ public class ClientSetUp {
 
         /**アイテムの状態を登録*/
         event.enqueueWork(() -> {
-            ItemProperties.register(ItemAndBlockRegister.iron_katana.get(), new ResourceLocation(ModCoreUrushi.ModID, "ishurting"), (itemStack, clientWorld, livingEntity,i) -> (livingEntity instanceof Player &&livingEntity.swinging&&livingEntity.getMainHandItem()==itemStack)?1:0);
+            ItemProperties.register(ItemAndBlockRegister.iron_katana.get(), ResourceLocation.fromNamespaceAndPath(ModCoreUrushi.ModID, "ishurting"), (itemStack, clientWorld, livingEntity,i) -> (livingEntity instanceof Player &&livingEntity.swinging&&livingEntity.getMainHandItem()==itemStack)?1:0);
 
-            ItemProperties.register(ItemAndBlockRegister.wood_element_magatama.get(), new ResourceLocation(ModCoreUrushi.ModID, "stored_amount"), (itemStack, clientWorld, livingEntity,i) -> (int)Mth.floor((float) ElementUtils.getStoredReiryokuAmount(itemStack)/400) );
-            ItemProperties.register(ItemAndBlockRegister.fire_element_magatama.get(), new ResourceLocation(ModCoreUrushi.ModID, "stored_amount"), (itemStack, clientWorld, livingEntity,i) -> (int)Mth.floor((float) ElementUtils.getStoredReiryokuAmount(itemStack)/400) );
-            ItemProperties.register(ItemAndBlockRegister.earth_element_magatama.get(), new ResourceLocation(ModCoreUrushi.ModID, "stored_amount"), (itemStack, clientWorld, livingEntity,i) -> (int)Mth.floor((float) ElementUtils.getStoredReiryokuAmount(itemStack)/400) );
-            ItemProperties.register(ItemAndBlockRegister.metal_element_magatama.get(), new ResourceLocation(ModCoreUrushi.ModID, "stored_amount"), (itemStack, clientWorld, livingEntity,i) -> (int)Mth.floor((float) ElementUtils.getStoredReiryokuAmount(itemStack)/400) );
-            ItemProperties.register(ItemAndBlockRegister.water_element_magatama.get(), new ResourceLocation(ModCoreUrushi.ModID, "stored_amount"), (itemStack, clientWorld, livingEntity,i) -> (int)Mth.floor((float) ElementUtils.getStoredReiryokuAmount(itemStack)/400) );
+            ItemProperties.register(ItemAndBlockRegister.wood_element_magatama.get(), ResourceLocation.fromNamespaceAndPath(ModCoreUrushi.ModID, "stored_amount"), (itemStack, clientWorld, livingEntity,i) -> (int)Mth.floor((float) ElementUtils.getStoredReiryokuAmount(itemStack)/400) );
+            ItemProperties.register(ItemAndBlockRegister.fire_element_magatama.get(), ResourceLocation.fromNamespaceAndPath(ModCoreUrushi.ModID, "stored_amount"), (itemStack, clientWorld, livingEntity,i) -> (int)Mth.floor((float) ElementUtils.getStoredReiryokuAmount(itemStack)/400) );
+            ItemProperties.register(ItemAndBlockRegister.earth_element_magatama.get(), ResourceLocation.fromNamespaceAndPath(ModCoreUrushi.ModID, "stored_amount"), (itemStack, clientWorld, livingEntity,i) -> (int)Mth.floor((float) ElementUtils.getStoredReiryokuAmount(itemStack)/400) );
+            ItemProperties.register(ItemAndBlockRegister.metal_element_magatama.get(), ResourceLocation.fromNamespaceAndPath(ModCoreUrushi.ModID, "stored_amount"), (itemStack, clientWorld, livingEntity,i) -> (int)Mth.floor((float) ElementUtils.getStoredReiryokuAmount(itemStack)/400) );
+            ItemProperties.register(ItemAndBlockRegister.water_element_magatama.get(), ResourceLocation.fromNamespaceAndPath(ModCoreUrushi.ModID, "stored_amount"), (itemStack, clientWorld, livingEntity,i) -> (int)Mth.floor((float) ElementUtils.getStoredReiryokuAmount(itemStack)/400) );
 
-            ItemProperties.register(Item.byBlock(ItemAndBlockRegister.japanese_timber_bamboo.get()), new ResourceLocation(ModCoreUrushi.ModID, "event"), (itemStack, clientWorld, livingEntity,i) -> UrushiUtils.isShogatsu()? 1 : 0);
-            ItemProperties.register(ItemAndBlockRegister.raw_rice.get(), new ResourceLocation(ModCoreUrushi.ModID, "is_april_fools"), (itemStack, clientWorld, livingEntity,i) -> UrushiUtils.isAprilFoolsDay()? 1 : 0);
-            ItemProperties.register(ItemAndBlockRegister.rice.get(), new ResourceLocation(ModCoreUrushi.ModID, "is_april_fools"), (itemStack, clientWorld, livingEntity,i) -> UrushiUtils.isAprilFoolsDay()? 1 : 0);
+            ItemProperties.register(Item.byBlock(ItemAndBlockRegister.japanese_timber_bamboo.get()), ResourceLocation.fromNamespaceAndPath(ModCoreUrushi.ModID, "event"), (itemStack, clientWorld, livingEntity,i) -> UrushiUtils.isShogatsu()? 1 : 0);
+            ItemProperties.register(ItemAndBlockRegister.raw_rice.get(), ResourceLocation.fromNamespaceAndPath(ModCoreUrushi.ModID, "is_april_fools"), (itemStack, clientWorld, livingEntity,i) -> UrushiUtils.isAprilFoolsDay()? 1 : 0);
+            ItemProperties.register(ItemAndBlockRegister.rice.get(), ResourceLocation.fromNamespaceAndPath(ModCoreUrushi.ModID, "is_april_fools"), (itemStack, clientWorld, livingEntity,i) -> UrushiUtils.isAprilFoolsDay()? 1 : 0);
 
 
         });
 
        /**コンテナにGUIを登録*/
-        MenuScreens.register(MenuRegister.FryerMenu.get(), FryerScreen::new);
-        MenuScreens.register(MenuRegister.DoubledWoodenCabinetryMenu.get(), DoubledWoodenCabinetryScreen::new);
-        MenuScreens.register(MenuRegister.DrawstringBagMenu.get(), DrawstringBagScreen::new);
-        MenuScreens.register(MenuRegister.UrushiHopperMenu.get(), UrushiHopperScreen::new);
-        MenuScreens.register(MenuRegister.AutoCraftingTableMenu.get(), AutoCraftingTableScreen::new);
-        MenuScreens.register(MenuRegister.SilkwormFarmMenu.get(), SilkwormFarmScreen::new);
-        MenuScreens.register(MenuRegister.KettleMenu.get(), KettleScreen::new);
-        MenuScreens.register(MenuRegister.TranslatableBookMenu.get(), TranslatableBookScreen::new);
-        MenuScreens.register(MenuRegister.FillerMenu.get(), FillerScreen::new);
 
 
        /**見た目が特殊なBlockEntityの見た目を登録*/
@@ -376,5 +392,18 @@ public class ClientSetUp {
 
         }
     }
+    @SubscribeEvent
+    public static void registerMenuScreens(RegisterMenuScreensEvent event) {
+        event.register(MenuRegister.FryerMenu.get(), FryerScreen::new);
+        event.register(MenuRegister.DoubledWoodenCabinetryMenu.get(), DoubledWoodenCabinetryScreen::new);
+        event.register(MenuRegister.DrawstringBagMenu.get(), DrawstringBagScreen::new);
+        event.register(MenuRegister.UrushiHopperMenu.get(), UrushiHopperScreen::new);
+        event.register(MenuRegister.AutoCraftingTableMenu.get(), AutoCraftingTableScreen::new);
+        event.register(MenuRegister.SilkwormFarmMenu.get(), SilkwormFarmScreen::new);
+        event.register(MenuRegister.KettleMenu.get(), KettleScreen::new);
+        event.register(MenuRegister.TranslatableBookMenu.get(), TranslatableBookScreen::new);
+        event.register(MenuRegister.FillerMenu.get(), FillerScreen::new);
+    }
+
 
 }

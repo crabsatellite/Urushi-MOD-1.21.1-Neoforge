@@ -2,16 +2,16 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-    "item": "urushi:rice_crop"
+      "item": "urushi:rice_crop"
     },
     {
-    "item": "urushi:rice_crop"
+      "item": "urushi:rice_crop"
     },
     {
-   "item": "urushi:rice_crop"
+      "item": "urushi:rice_crop"
     },
     {
-     "tag": "forge:string"
+      "tag": "c:string"
     }
   ],
   "result": {

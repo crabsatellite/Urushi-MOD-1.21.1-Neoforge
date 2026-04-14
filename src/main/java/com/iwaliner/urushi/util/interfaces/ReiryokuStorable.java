@@ -1,12 +1,12 @@
 package com.iwaliner.urushi.util.interfaces;
 
-import com.iwaliner.urushi.block.MirrorBlock;
-import com.iwaliner.urushi.util.ElementType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import com.iwaliner.urushi.block.MirrorBlock;
+import com.iwaliner.urushi.util.ElementType;
 
 public interface ReiryokuStorable {
     /**霊力の最大貯蔵容量*/

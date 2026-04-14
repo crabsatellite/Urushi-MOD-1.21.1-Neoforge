@@ -6,11 +6,11 @@
     "www"
   ],
   "key": {
-  "c": {
-     "item": "urushi:bamboo_charcoal"
+    "c": {
+      "item": "urushi:bamboo_charcoal"
     },
     "g": {
-    "tag": "forge:gravel"
+      "tag": "c:gravel"
     },
     "w": {
       "tag": "minecraft:planks"

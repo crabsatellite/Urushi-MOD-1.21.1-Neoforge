@@ -1,14 +1,6 @@
 package com.iwaliner.urushi.blockentity.screen;
 
 
-import com.iwaliner.urushi.ModCoreUrushi;
-import com.iwaliner.urushi.blockentity.AutoCraftingTableBlockEntity;
-import com.iwaliner.urushi.blockentity.menu.AbstractFryerMenu;
-import com.iwaliner.urushi.blockentity.menu.AutoCraftingTableMenu;
-import com.iwaliner.urushi.blockentity.menu.DoubledWoodenCabinetryMenu;
-import com.iwaliner.urushi.blockentity.menu.UrushiHopperMenu;
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -22,8 +14,16 @@ import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import com.iwaliner.urushi.ModCoreUrushi;
+import com.iwaliner.urushi.blockentity.AutoCraftingTableBlockEntity;
+import com.iwaliner.urushi.blockentity.menu.AbstractFryerMenu;
+import com.iwaliner.urushi.blockentity.menu.AutoCraftingTableMenu;
+import com.iwaliner.urushi.blockentity.menu.DoubledWoodenCabinetryMenu;
+import com.iwaliner.urushi.blockentity.menu.UrushiHopperMenu;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import java.util.Objects;
 
@@ -32,7 +32,7 @@ public class AutoCraftingTableScreen extends AbstractContainerScreen<AutoCraftin
 
 {
 
-    private static final ResourceLocation CRAFTING_TABLE_LOCATION = new ResourceLocation("urushi:textures/gui/auto_crafting_table.png");
+    private static final ResourceLocation CRAFTING_TABLE_LOCATION = ResourceLocation.parse("urushi:textures/gui/auto_crafting_table.png");
     private final RecipeBookComponent recipeBookComponent = new RecipeBookComponent();
 
     public AutoCraftingTableScreen(AutoCraftingTableMenu p_i51104_1_, Inventory p_i51104_3_, Component p_i51104_4_) {
@@ -54,8 +54,7 @@ public class AutoCraftingTableScreen extends AbstractContainerScreen<AutoCraftin
     }
 
     public void render(GuiGraphics p_230430_1_, int p_230430_2_, int p_230430_3_, float p_230430_4_) {
-        this.renderBackground(p_230430_1_);
-        this.renderBg(p_230430_1_, p_230430_4_, p_230430_2_, p_230430_3_);
+        this.renderBackground(p_230430_1_, p_230430_2_, p_230430_3_, p_230430_4_);
         super.render(p_230430_1_, p_230430_2_, p_230430_3_, p_230430_4_);
         this.renderTooltip(p_230430_1_, p_230430_2_, p_230430_3_);
     }

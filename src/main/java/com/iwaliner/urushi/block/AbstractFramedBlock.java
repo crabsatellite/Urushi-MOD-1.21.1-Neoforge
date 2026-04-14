@@ -1,12 +1,6 @@
 package com.iwaliner.urushi.block;
 
 import com.google.common.collect.Maps;
-
-import com.iwaliner.urushi.ClientSetUp;
-import com.iwaliner.urushi.ConfigUrushi;
-import com.iwaliner.urushi.network.FramedBlockTextureConnectionProvider;
-import com.iwaliner.urushi.util.UrushiUtils;
-import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
@@ -20,7 +14,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.*;
@@ -29,11 +22,16 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.network.PacketDistributor;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.network.PacketDistributor;
+import com.iwaliner.urushi.ClientSetUp;
+import com.iwaliner.urushi.ConfigUrushi;
+import com.iwaliner.urushi.network.FramedBlockTextureConnectionProvider;
+import com.iwaliner.urushi.util.UrushiUtils;
+import com.mojang.blaze3d.platform.InputConstants;
+import com.mojang.serialization.MapCodec;
 import org.jetbrains.annotations.Nullable;
-
 
 import java.util.List;
 import java.util.Map;
@@ -42,6 +40,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 
 public class AbstractFramedBlock extends Block {
+    public static final MapCodec<AbstractFramedBlock> CODEC = simpleCodec(__p -> new AbstractFramedBlock(__p));
+
+    @Override
+    public MapCodec<? extends AbstractFramedBlock> codec() { return CODEC; }
     private static final Direction[] DIRECTIONS = Direction.values();
     public static final BooleanProperty NORTH = BlockStateProperties.NORTH;
     public static final BooleanProperty EAST = BlockStateProperties.EAST;
@@ -177,10 +179,9 @@ public class AbstractFramedBlock extends Block {
     }
     public static boolean textureConnection(Player player){
         AtomicBoolean b = new AtomicBoolean(false);
-        player.getCapability(FramedBlockTextureConnectionProvider.FRAMED_BLOCK_TEXTURE_CONNECTION).ifPresent(data -> {
-            b.set(data.isPressed());
+        var data = player.getData(FramedBlockTextureConnectionProvider.FRAMED_BLOCK_TEXTURE_CONNECTION.get());
+        b.set(data.isPressed());
 
-        });
         return b.get();
     }
     @Override

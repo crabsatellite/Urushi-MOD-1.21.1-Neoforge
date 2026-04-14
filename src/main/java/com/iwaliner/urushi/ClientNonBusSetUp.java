@@ -1,12 +1,6 @@
 package com.iwaliner.urushi;
 
-import com.iwaliner.urushi.block.*;
-import com.iwaliner.urushi.network.FramedBlockTextureConnectionPacket;
-import com.iwaliner.urushi.network.NetworkAccess;
-import com.iwaliner.urushi.util.UrushiUtils;
-import com.mojang.blaze3d.platform.Window;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
+
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -32,17 +26,26 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.*;
-import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
-import net.minecraftforge.common.ToolActions;
-import net.minecraftforge.event.entity.player.AdvancementEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.*;
+import net.neoforged.neoforge.client.event.RenderGuiLayerEvent;
+import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
+import net.neoforged.neoforge.common.ItemAbilities;
+import net.neoforged.neoforge.event.entity.player.AdvancementEvent;
+import com.iwaliner.urushi.ModCoreUrushi;
+import com.iwaliner.urushi.block.*;
+import com.iwaliner.urushi.network.FramedBlockTextureConnectionPacket;
+import com.iwaliner.urushi.network.NetworkAccess;
+import com.iwaliner.urushi.util.UrushiUtils;
+import com.mojang.blaze3d.platform.Window;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 
 import java.util.Objects;
 
-@Mod.EventBusSubscriber(modid = ModCoreUrushi.ModID, value = Dist.CLIENT)
+@EventBusSubscriber(modid = ModCoreUrushi.ModID, value = Dist.CLIENT)
 public class ClientNonBusSetUp {
     @SubscribeEvent
     public static void onKeyInput(InputEvent.Key event) {
@@ -65,7 +68,7 @@ public class ClientNonBusSetUp {
             BlockPos hitPos = ((BlockHitResult) Objects.requireNonNull(hitResult)).getBlockPos();
             BlockState hitState=level.getBlockState(hitPos);
 
-            if (heldStack.canPerformAction(ToolActions.PICKAXE_DIG)||heldStack.canPerformAction(ToolActions.HOE_DIG)||heldStack.canPerformAction(ToolActions.SHOVEL_DIG)||heldStack.canPerformAction(ToolActions.AXE_DIG)|| Block.byItem(heldStack.getItem()) instanceof Roof225Block ||Block.byItem(heldStack.getItem()) instanceof Roof45Block) {
+            if (heldStack.canPerformAction(ItemAbilities.PICKAXE_DIG)||heldStack.canPerformAction(ItemAbilities.HOE_DIG)||heldStack.canPerformAction(ItemAbilities.SHOVEL_DIG)||heldStack.canPerformAction(ItemAbilities.AXE_DIG)|| Block.byItem(heldStack.getItem()) instanceof Roof225Block ||Block.byItem(heldStack.getItem()) instanceof Roof45Block) {
 
                 int range=1;
                 for(int i=-range;i<=range;i++){
@@ -97,8 +100,8 @@ public class ClientNonBusSetUp {
             f /= f3;
             f1 /= f3;
             f2 /= f3;
-            p_109784_.vertex(posestack$pose.pose(), (float)(p_234280_ + p_109786_), (float)(p_234281_ + p_109787_), (float)(p_234282_ + p_109788_)).color(1f, 1f, 0f, 1f).normal(posestack$pose.normal(), f, f1, f2).endVertex();
-            p_109784_.vertex(posestack$pose.pose(), (float)(p_234283_ + p_109786_), (float)(p_234284_ + p_109787_), (float)(p_234285_ + p_109788_)).color(1f, 1f, 0f, 1f).normal(posestack$pose.normal(), f, f1, f2).endVertex();
+            p_109784_.addVertex(posestack$pose.pose(), (float)(p_234280_ + p_109786_), (float)(p_234281_ + p_109787_), (float)(p_234282_ + p_109788_)).setColor(1f, 1f, 0f, 1f).setNormal(f, f1, f2);
+            p_109784_.addVertex(posestack$pose.pose(), (float)(p_234283_ + p_109786_), (float)(p_234284_ + p_109787_), (float)(p_234285_ + p_109788_)).setColor(1f, 1f, 0f, 1f).setNormal(f, f1, f2);
         });
     }
     private static void renderHitOutline(PoseStack p_109638_, VertexConsumer p_109639_, Entity p_109640_, double p_109641_, double p_109642_, double p_109643_, BlockPos p_109644_, BlockState p_109645_) {
@@ -106,16 +109,16 @@ public class ClientNonBusSetUp {
     }
 
     @SubscribeEvent
-    public static void RenderGUIEvent(RenderGuiOverlayEvent event) {
-        if(event.getOverlay()== VanillaGuiOverlay.HOTBAR.type()) {
+    public static void RenderGUIEvent(RenderGuiLayerEvent.Pre event) {
+        if(event.getName().equals(VanillaGuiLayers.HOTBAR)) {
             LocalPlayer player = Minecraft.getInstance().player;
             if (player != null&&!Minecraft.getInstance().options.hideGui) {
                 ItemStack mainHandStack = player.getMainHandItem();
                 Block heldBlock=Block.byItem(mainHandStack.getItem());
                 GuiGraphics guiGraphics=event.getGuiGraphics();
-                int screenWidth = event.getWindow().getGuiScaledWidth();
+                int screenWidth = Minecraft.getInstance().getWindow().getGuiScaledWidth();
                 int i = guiGraphics.guiWidth() / 2;
-                Window window=event.getWindow();
+                Window window=Minecraft.getInstance().getWindow();
                 if(heldBlock instanceof AbstractFramedBlock ||heldBlock instanceof FramedPaneBlock){
                     if (ClientSetUp.connectionKey.isDown()) {
                         UrushiUtils.displayToggleKeyImage(guiGraphics, "connectable_block_purple", guiGraphics.guiWidth(),guiGraphics.guiHeight());

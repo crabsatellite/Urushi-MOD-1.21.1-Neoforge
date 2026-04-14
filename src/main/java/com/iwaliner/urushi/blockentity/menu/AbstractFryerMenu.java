@@ -1,8 +1,6 @@
 package com.iwaliner.urushi.blockentity.menu;
 
-import com.iwaliner.urushi.ItemAndBlockRegister;
-import com.iwaliner.urushi.blockentity.slot.FryerFuelSlot;
-import com.iwaliner.urushi.recipe.FryingRecipe;
+import net.minecraft.core.Holder;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
@@ -12,10 +10,16 @@ import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
+import com.iwaliner.urushi.ItemAndBlockRegister;
+import com.iwaliner.urushi.blockentity.slot.FryerFuelSlot;
+import com.iwaliner.urushi.recipe.FryingRecipe;
 
-public abstract class AbstractFryerMenu extends RecipeBookMenu<Container> {
+public abstract class AbstractFryerMenu extends RecipeBookMenu<RecipeInput, Recipe<RecipeInput>> {
     public static final int INGREDIENT_SLOT = 0;
     public static final int FUEL_SLOT = 1;
     public static final int RESULT_SLOT = 2;
@@ -73,8 +77,8 @@ public abstract class AbstractFryerMenu extends RecipeBookMenu<Container> {
         this.getSlot(2).set(ItemStack.EMPTY);
     }
 
-    public boolean recipeMatches(Recipe<? super Container> p_38980_) {
-        return p_38980_.matches(this.container, this.level);
+    public boolean recipeMatches(RecipeHolder<Recipe<RecipeInput>> p_38980_) {
+        return p_38980_.value().matches(new SingleRecipeInput(this.container.getItem(0)), this.level);
     }
 
     public int getResultSlotIndex() {
@@ -146,7 +150,7 @@ public abstract class AbstractFryerMenu extends RecipeBookMenu<Container> {
     }
 
     protected boolean canSmelt(ItemStack p_38978_) {
-        return this.level.getRecipeManager().getRecipeFor((RecipeType<FryingRecipe>)this.recipeType, new SimpleContainer(p_38978_), this.level).isPresent();
+        return this.level.getRecipeManager().getRecipeFor((RecipeType<FryingRecipe>) this.recipeType, new SingleRecipeInput(p_38978_), this.level).isPresent();
     }
 
     protected boolean isFuel(ItemStack itemStack) {

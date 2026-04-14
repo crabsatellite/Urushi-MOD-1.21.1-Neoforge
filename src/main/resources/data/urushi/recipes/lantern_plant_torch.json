@@ -5,8 +5,8 @@
     "s"
   ],
   "key": {
-   "s": {
-      "tag": "forge:rods/wooden"
+    "s": {
+      "tag": "c:rods/wooden"
     },
     "#": {
       "item": "urushi:lantern_plant_fruit"

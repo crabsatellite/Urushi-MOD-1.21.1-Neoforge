@@ -7,9 +7,9 @@
   ],
   "key": {
     "g": {
-     "tag": "forge:ingots/gold"
+      "tag": "c:ingots/gold"
     },
-"c": {
+    "c": {
       "item": "minecraft:crafting_table"
     },
     "p": {

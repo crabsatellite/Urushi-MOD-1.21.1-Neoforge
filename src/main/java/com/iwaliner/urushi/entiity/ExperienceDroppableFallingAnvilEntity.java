@@ -1,6 +1,5 @@
 package com.iwaliner.urushi.entiity;
 
-import com.iwaliner.urushi.EntityRegister;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -22,6 +21,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Fallable;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import com.iwaliner.urushi.EntityRegister;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -52,8 +52,8 @@ public class ExperienceDroppableFallingAnvilEntity extends Entity {
         return null;
     }
     @Override
-    protected void defineSynchedData() {
-        this.entityData.define(UUID_DATA,Optional.empty());
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        builder.define(UUID_DATA,Optional.empty());
     }
 
     @Override

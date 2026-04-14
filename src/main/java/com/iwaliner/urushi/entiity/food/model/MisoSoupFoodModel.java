@@ -1,13 +1,13 @@
 package com.iwaliner.urushi.entiity.food.model;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.world.entity.Entity;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 
 
 
@@ -54,13 +54,13 @@ public class MisoSoupFoodModel<T extends Entity> extends AbstractFoodModel<T> {
 
 
     @Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-        bone.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-        bone2.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-        bone3.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-        bone4.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-        bone5.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-        bone6.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int color) {
+        bone.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
+        bone2.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
+        bone3.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
+        bone4.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
+        bone5.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
+        bone6.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
     }
 
     @Override

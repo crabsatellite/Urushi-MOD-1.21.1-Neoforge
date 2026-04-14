@@ -7,11 +7,11 @@
   ],
   "key": {
     "D": {
-   "tag": "forge:dyes/light_gray"
-      },
+      "tag": "c:dyes/light_gray"
+    },
     "B": {
-    "tag": "urushi:silk_block"
-   }
+      "tag": "urushi:silk_block"
+    }
   },
   "result": {
     "item": "urushi:light_gray_silk_block",

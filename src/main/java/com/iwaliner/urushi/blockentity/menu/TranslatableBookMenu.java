@@ -1,6 +1,5 @@
 package com.iwaliner.urushi.blockentity.menu;
 
-import com.iwaliner.urushi.MenuRegister;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
@@ -10,6 +9,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import com.iwaliner.urushi.MenuRegister;
 
 public class TranslatableBookMenu extends AbstractContainerMenu {
     int page;

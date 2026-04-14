@@ -7,11 +7,11 @@
   ],
   "key": {
     "D": {
-   "tag": "forge:dyes/green"
-      },
+      "tag": "c:dyes/green"
+    },
     "B": {
-    "tag": "urushi:silk_block"
-   }
+      "tag": "urushi:silk_block"
+    }
   },
   "result": {
     "item": "urushi:green_silk_block",

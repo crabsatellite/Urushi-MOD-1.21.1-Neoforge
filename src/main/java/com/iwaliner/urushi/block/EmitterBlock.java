@@ -1,26 +1,16 @@
 package com.iwaliner.urushi.block;
 
-import com.iwaliner.urushi.BlockEntityRegister;
-import com.iwaliner.urushi.blockentity.EmitterBlockEntity;
-import com.iwaliner.urushi.blockentity.SacredRockBlockEntity;
-import com.iwaliner.urushi.blockentity.TankBlockEntity;
-import com.iwaliner.urushi.util.ElementType;
-import com.iwaliner.urushi.util.ElementUtils;
-import com.iwaliner.urushi.util.UrushiUtils;
-import com.iwaliner.urushi.util.interfaces.ElementBlock;
-import com.iwaliner.urushi.util.interfaces.ReiryokuImportable;
-import com.iwaliner.urushi.util.interfaces.ReiryokuStorable;
-import com.iwaliner.urushi.util.interfaces.Tiered;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
- 
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
@@ -28,6 +18,7 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
@@ -41,12 +32,27 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import com.iwaliner.urushi.BlockEntityRegister;
+import com.iwaliner.urushi.blockentity.EmitterBlockEntity;
+import com.iwaliner.urushi.blockentity.SacredRockBlockEntity;
+import com.iwaliner.urushi.blockentity.TankBlockEntity;
+import com.iwaliner.urushi.util.ElementType;
+import com.iwaliner.urushi.util.ElementUtils;
+import com.iwaliner.urushi.util.UrushiUtils;
+import com.iwaliner.urushi.util.interfaces.ElementBlock;
+import com.iwaliner.urushi.util.interfaces.ReiryokuImportable;
+import com.iwaliner.urushi.util.interfaces.ReiryokuStorable;
+import com.iwaliner.urushi.util.interfaces.Tiered;
+import com.mojang.serialization.MapCodec;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import net.minecraft.util.RandomSource;
 
 public class EmitterBlock extends BaseEntityBlock implements Tiered, ElementBlock {
+    public static final MapCodec<EmitterBlock> CODEC = simpleCodec(__p -> new EmitterBlock(0, com.iwaliner.urushi.util.ElementType.WoodElement, __p));
+
+    @Override
+    public MapCodec<? extends EmitterBlock> codec() { return CODEC; }
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
     private static final VoxelShape NORTH_BOX = Block.box(2D, 2.0D, 13D, 14D, 14D, 16D);
@@ -115,7 +121,7 @@ public class EmitterBlock extends BaseEntityBlock implements Tiered, ElementBloc
 
 
     @Override
-    public void appendHoverText(ItemStack p_49816_, @org.jetbrains.annotations.Nullable BlockGetter p_49817_, List<Component> list, TooltipFlag p_49819_) {
+    public void appendHoverText(ItemStack p_49816_, Item.TooltipContext p_49817_, List<Component> list, TooltipFlag p_49819_) {
         UrushiUtils.setInfo(list, "emitter1");
         UrushiUtils.setInfo(list, "emitter2");
         UrushiUtils.setInfo(list, "emitter3");
@@ -141,10 +147,10 @@ public class EmitterBlock extends BaseEntityBlock implements Tiered, ElementBloc
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult result) {
         if (level.getBlockEntity(pos) instanceof EmitterBlockEntity&&!player.isSuppressingBounce()) {
             EmitterBlockEntity blockEntity = (EmitterBlockEntity) level.getBlockEntity(pos);
-            if(player.getItemInHand(hand).getItem()==Items.BARRIER){
+            if(player.getMainHandItem().getItem()==Items.BARRIER){
                 blockEntity.addStoredReiryoku(100);
             }
             if(!level.isClientSide()) {
@@ -156,26 +162,27 @@ public class EmitterBlock extends BaseEntityBlock implements Tiered, ElementBloc
         return InteractionResult.FAIL;
     }
 
-    public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+    public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
         if (!level.isClientSide && player.isCreative()) {
             BlockEntity blockentity = level.getBlockEntity(pos);
             if (blockentity instanceof EmitterBlockEntity) {
                 ItemStack itemstack = new ItemStack(this);
-                BlockItem.setBlockEntityData(itemstack, BlockEntityRegister.Emitter.get(), blockentity.saveWithoutMetadata());
+                BlockItem.setBlockEntityData(itemstack, BlockEntityRegister.Emitter.get(), blockentity.saveWithoutMetadata(level.registryAccess()));
                 ItemEntity itementity = new ItemEntity(level, (double) pos.getX(), (double) pos.getY(), (double) pos.getZ(), itemstack);
                 itementity.setDefaultPickUpDelay();
                 level.addFreshEntity(itementity);
 
                 ((EmitterBlockEntity) blockentity).onBlockRemove();
             }
-            super.playerWillDestroy(level, pos, state, player);
+            return super.playerWillDestroy(level, pos, state, player);
         }
+        return super.playerWillDestroy(level, pos, state, player);
     }
     @Override
-    public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player) {
+    public ItemStack getCloneItemStack(BlockState state, HitResult target, LevelReader level, BlockPos pos, Player player) {
         ItemStack stack= super.getCloneItemStack(state, target, level, pos, player);
         level.getBlockEntity(pos, BlockEntityRegister.Emitter.get()).ifPresent((blockEntity) -> {
-            BlockItem.setBlockEntityData(stack, BlockEntityRegister.Emitter.get(), blockEntity.saveWithoutMetadata());
+            BlockItem.setBlockEntityData(stack, BlockEntityRegister.Emitter.get(), blockEntity.saveWithoutMetadata(level.registryAccess()));
         });
         return stack;
     }

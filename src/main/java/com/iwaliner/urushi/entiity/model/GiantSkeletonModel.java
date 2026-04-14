@@ -1,10 +1,10 @@
 package com.iwaliner.urushi.entiity.model;
 
-import com.iwaliner.urushi.entiity.GiantSkeletonEntity;
 import net.minecraft.client.model.SkeletonModel;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import com.iwaliner.urushi.entiity.GiantSkeletonEntity;
 
 @OnlyIn(Dist.CLIENT)
 public class GiantSkeletonModel extends SkeletonModel<GiantSkeletonEntity> {

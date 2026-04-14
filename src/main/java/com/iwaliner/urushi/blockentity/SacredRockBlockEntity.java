@@ -1,5 +1,11 @@
 package com.iwaliner.urushi.blockentity;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import com.iwaliner.urushi.BlockEntityRegister;
 import com.iwaliner.urushi.block.SacredRockBlock;
 import com.iwaliner.urushi.util.ElementType;
@@ -7,11 +13,6 @@ import com.iwaliner.urushi.util.ElementUtils;
 import com.iwaliner.urushi.util.interfaces.ElementBlock;
 import com.iwaliner.urushi.util.interfaces.ReiryokuExportable;
 import com.iwaliner.urushi.util.interfaces.Tiered;
-import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
 
 public class SacredRockBlockEntity extends AbstractReiryokuStorableBlockEntity implements ReiryokuExportable {
     public int coolTime;
@@ -19,19 +20,19 @@ public class SacredRockBlockEntity extends AbstractReiryokuStorableBlockEntity i
         super(BlockEntityRegister.SacredRock.get(),100, p_155550_, p_155551_);
     }
 
-    public void load(CompoundTag tag) {
-        super.load(tag);
+    public void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.loadAdditional(tag, registries);
        this.coolTime = tag.getInt("coolTime");
 
     }
 
-    protected void saveAdditional(CompoundTag tag) {
-        super.saveAdditional(tag);
+    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.saveAdditional(tag, registries);
         tag.putInt("coolTime", this.coolTime);
 
     }
     @Override
-    public CompoundTag getUpdateTag() {
+    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
         CompoundTag compoundtag = new CompoundTag();
         compoundtag.putInt("coolTime", this.coolTime);
        this.putBaseTag(compoundtag);

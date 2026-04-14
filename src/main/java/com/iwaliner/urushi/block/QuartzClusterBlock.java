@@ -1,6 +1,5 @@
 package com.iwaliner.urushi.block;
 
-import com.iwaliner.urushi.TagUrushi;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.BlockTags;
@@ -18,8 +17,18 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import com.iwaliner.urushi.TagUrushi;
+import com.mojang.serialization.MapCodec;
 
 public class QuartzClusterBlock extends Block implements SimpleWaterloggedBlock {
+    public static final MapCodec<QuartzClusterBlock> CODEC = simpleCodec(QuartzClusterBlock::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     public QuartzClusterBlock(Properties p_49795_) {

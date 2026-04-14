@@ -1,12 +1,11 @@
 {
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
-   
     {
-      "tag": "forge:tofu"
+      "tag": "c:tofu"
     },
     {
-     "tag": "forge:crops/greenonion"
+      "tag": "c:crops/greenonion"
     }
   ],
   "result": {

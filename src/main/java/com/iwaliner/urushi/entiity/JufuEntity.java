@@ -1,8 +1,5 @@
 package com.iwaliner.urushi.entiity;
 
-import com.iwaliner.urushi.EntityRegister;
-import com.iwaliner.urushi.ItemAndBlockRegister;
-import com.iwaliner.urushi.blockentity.SpikeBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ItemParticleOption;
@@ -30,13 +27,16 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.PistonType;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.*;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.network.NetworkHooks;
+import com.iwaliner.urushi.EntityRegister;
+import com.iwaliner.urushi.ItemAndBlockRegister;
+import com.iwaliner.urushi.blockentity.SpikeBlockEntity;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Random;
+import javax.annotation.Nonnull;
 
 public class JufuEntity extends ThrowableItemProjectile  {
     private int life;
@@ -59,7 +59,7 @@ public class JufuEntity extends ThrowableItemProjectile  {
 
     private boolean onHitEntityEvent(LivingEntity entity){
         BlockPos entityPos=entity.blockPosition();
-        if(this.getItemRaw().getItem()==ItemAndBlockRegister.freezing_jufu.get()) {
+        if(this.getItem().getItem()==ItemAndBlockRegister.freezing_jufu.get()) {
             entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20 * 5, 20), this);
 
             BlockState state=ItemAndBlockRegister.freezing_display.get().defaultBlockState();
@@ -69,7 +69,7 @@ public class JufuEntity extends ThrowableItemProjectile  {
             return true;
 
 
-        }else if(this.getItemRaw().getItem()==ItemAndBlockRegister.crush_jufu.get()) {
+        }else if(this.getItem().getItem()==ItemAndBlockRegister.crush_jufu.get()) {
             BlockPos ceilingPos=entityPos.above(3);
             for(int i=1;i<=3;i++){
                 BlockPos eachPos=entityPos.above(i);
@@ -88,13 +88,13 @@ public class JufuEntity extends ThrowableItemProjectile  {
             return true;
 
 
-        }else if(this.getItemRaw().getItem()==ItemAndBlockRegister.knockback_jufu.get()) {
-            this.level().playSound((Player)null, this.blockPosition(), SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, 1.0F, 1.0F);
+        }else if(this.getItem().getItem()==ItemAndBlockRegister.knockback_jufu.get()) {
+            this.level().playSound((Player)null, this.blockPosition(), SoundEvents.GENERIC_EXPLODE.value(), SoundSource.BLOCKS, 1.0F, 1.0F);
 
             entity.move(MoverType.SELF, new Vec3(this.getDeltaMovement().x*6D,0.2D,this.getDeltaMovement().z*6D));
             return true;
-        }else if(this.getItemRaw().getItem()==ItemAndBlockRegister.jump_jufu.get()) {
-            this.level().playSound((Player)null, this.blockPosition(), SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, 1.0F, 1.0F);
+        }else if(this.getItem().getItem()==ItemAndBlockRegister.jump_jufu.get()) {
+            this.level().playSound((Player)null, this.blockPosition(), SoundEvents.GENERIC_EXPLODE.value(), SoundSource.BLOCKS, 1.0F, 1.0F);
 
             entity.move(MoverType.SELF, entity.getDeltaMovement().add(0D,16D,0D));
             return true;
@@ -106,7 +106,7 @@ public class JufuEntity extends ThrowableItemProjectile  {
         double vy=this.getDeltaMovement().y;
         double vz=this.getDeltaMovement().z;
 
-        if(this.getItemRaw().getItem()==ItemAndBlockRegister.liana_jufu.get()) {
+        if(this.getItem().getItem()==ItemAndBlockRegister.liana_jufu.get()) {
             BlockState state= Blocks.AZALEA_LEAVES.defaultBlockState().setValue(LeavesBlock.PERSISTENT,true);
             Direction facing=null;
             if(Mth.abs((float) vx)>Mth.abs((float) vz)){
@@ -124,9 +124,9 @@ public class JufuEntity extends ThrowableItemProjectile  {
                     }
                 }
             }
-        }else  if(this.getItemRaw().getItem()==ItemAndBlockRegister.explosion_jufu.get()) {
+        }else  if(this.getItem().getItem()==ItemAndBlockRegister.explosion_jufu.get()) {
             level().explode(player,pos.getX()+0.5D,pos.getY()+1D,pos.getZ()+0.5D,3f,false, Level.ExplosionInteraction.TNT);
-        }else if(this.getItemRaw().getItem()==ItemAndBlockRegister.growing_jufu.get()){
+        }else if(this.getItem().getItem()==ItemAndBlockRegister.growing_jufu.get()){
 
             for(int i=-5;i<=5;i++){
                 for(int j=-5;j<=5;j++){
@@ -137,7 +137,7 @@ public class JufuEntity extends ThrowableItemProjectile  {
                         }
                         if(state.getBlock() instanceof BonemealableBlock){
                             BonemealableBlock bonemealableblock = (BonemealableBlock)state.getBlock();
-                            if (bonemealableblock.isValidBonemealTarget(level(), pos.offset(i,j,k), state, level().isClientSide)) {
+                            if (bonemealableblock.isValidBonemealTarget(level(), pos.offset(i,j,k), state)) {
                                 if (level() instanceof ServerLevel) {
 
                                        bonemealableblock.performBonemeal((ServerLevel) level(), level().random, pos.offset(i, j, k), state);
@@ -152,7 +152,7 @@ public class JufuEntity extends ThrowableItemProjectile  {
                     }
                 }
             }
-        }else if(this.getItemRaw().getItem()==ItemAndBlockRegister.mountain_creation_jufu.get()){
+        }else if(this.getItem().getItem()==ItemAndBlockRegister.mountain_creation_jufu.get()){
             for(int i=-5;i<=5;i++){
                 for (int k = -5; k <= 5; k++) {
                           for(int j=-5;j<=5;j++) {
@@ -171,7 +171,7 @@ public class JufuEntity extends ThrowableItemProjectile  {
                      }
                 }
             }
-        }else if(this.getItemRaw().getItem()==ItemAndBlockRegister.fluid_erasion_jufu.get()){
+        }else if(this.getItem().getItem()==ItemAndBlockRegister.fluid_erasion_jufu.get()){
             for(int j=-5;j<=50;j++) {
                 for(int i=-5;i<=5;i++){
                     for (int k = -5; k <= 5; k++) {
@@ -188,7 +188,7 @@ public class JufuEntity extends ThrowableItemProjectile  {
                     }
                 }
             }
-        }else if(this.getItemRaw().getItem()==ItemAndBlockRegister.spike_jufu.get()){
+        }else if(this.getItem().getItem()==ItemAndBlockRegister.spike_jufu.get()){
 
             BlockState state= ItemAndBlockRegister.spike.get().defaultBlockState();
             Direction facing=null;
@@ -211,7 +211,7 @@ public class JufuEntity extends ThrowableItemProjectile  {
 
                 }
             }
-        }else if(this.getItemRaw().getItem()==ItemAndBlockRegister.lava_generation_jufu.get()){
+        }else if(this.getItem().getItem()==ItemAndBlockRegister.lava_generation_jufu.get()){
 
             level().setBlockAndUpdate(pos,Blocks.LAVA.defaultBlockState());
 
@@ -219,18 +219,18 @@ public class JufuEntity extends ThrowableItemProjectile  {
             this.level().broadcastEntityEvent(this, (byte)102);
             this.discard();
             this.markHurt();
-         this.spawnAtLocation(this.getItemRaw());
+         this.spawnAtLocation(this.getItem());
 
 
         }
     }
     public void handleEntityEvent(byte b) {
         if (b == 101) {
-            if(this.getItemRaw().getItem()==ItemAndBlockRegister.knockback_jufu.get()||this.getItemRaw().getItem()==ItemAndBlockRegister.jump_jufu.get()) {
+            if(this.getItem().getItem()==ItemAndBlockRegister.knockback_jufu.get()||this.getItem().getItem()==ItemAndBlockRegister.jump_jufu.get()) {
                 for (int i = 0; i < 8; ++i) {
                     this.level().addParticle(ParticleTypes.EXPLOSION, this.getX() - 0.5D + 0.1D * this.random.nextInt(11), this.getY() - 0.5D + 0.1D * this.random.nextInt(11), this.getZ() - 0.5D + 0.1D * this.random.nextInt(11), 0.0D, 0.0D, 0.0D);
                 }
-            }else if(this.getItemRaw().getItem()==ItemAndBlockRegister.freezing_jufu.get()) {
+            }else if(this.getItem().getItem()==ItemAndBlockRegister.freezing_jufu.get()) {
                 for (int i = 0; i < 20; ++i) {
                     this.level().addParticle(ParticleTypes.ITEM_SNOWBALL, this.getX() - 0.5D + 0.1D * this.random.nextInt(11), this.getY() - 0.5D + 0.1D * this.random.nextInt(11), this.getZ() - 0.5D + 0.1D * this.random.nextInt(11), 0.0D, 0.0D, 0.0D);
 
@@ -238,7 +238,7 @@ public class JufuEntity extends ThrowableItemProjectile  {
             }
         }else if(b==102){
                 for (int i = 0; i < 8; ++i) {
-                    ParticleOptions particleoption = new ItemParticleOption(ParticleTypes.ITEM, this.getItemRaw());
+                    ParticleOptions particleoption = new ItemParticleOption(ParticleTypes.ITEM, this.getItem());
                     this.level().addParticle(particleoption, this.getX(), this.getY(), this.getZ(), 0.0D, 0.0D, 0.0D);
                 }
 
@@ -248,7 +248,7 @@ public class JufuEntity extends ThrowableItemProjectile  {
     protected void onHit(HitResult result) {
         super.onHit(result);
 
-        ParticleOptions particleoption = new ItemParticleOption(ParticleTypes.ITEM, this.getItemRaw());
+        ParticleOptions particleoption = new ItemParticleOption(ParticleTypes.ITEM, this.getItem());
         for(int i = 8; i > 0; --i) {
             this.level().addParticle(particleoption, this.getX(), this.getY(), this.getZ(), 0.0D, 0.0D, 0.0D);
         }
@@ -297,7 +297,7 @@ public class JufuEntity extends ThrowableItemProjectile  {
                 this.level().broadcastEntityEvent(this, (byte)102);
                 this.discard();
                 this.markHurt();
-                this.spawnAtLocation(this.getItemRaw());
+                this.spawnAtLocation(this.getItem());
             }
         }
     }

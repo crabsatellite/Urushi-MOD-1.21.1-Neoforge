@@ -1,12 +1,12 @@
 package com.iwaliner.urushi.block;
 
 
-import com.iwaliner.urushi.blockentity.WoodenCabinetryBlockEntity;
-import com.iwaliner.urushi.blockentity.WoodenCabinetrySlabBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.stats.Stats;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.Container;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
@@ -26,11 +26,20 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
+import com.iwaliner.urushi.blockentity.WoodenCabinetryBlockEntity;
+import com.iwaliner.urushi.blockentity.WoodenCabinetrySlabBlockEntity;
+import com.mojang.serialization.MapCodec;
 import org.jetbrains.annotations.Nullable;
 
-import net.minecraft.util.RandomSource;
-
 public class WoodenCabinetryBlock extends BaseEntityBlock {
+    public static final MapCodec<WoodenCabinetryBlock> CODEC = simpleCodec(WoodenCabinetryBlock::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
     public static final BooleanProperty OPEN = BlockStateProperties.OPEN;
 
@@ -42,7 +51,8 @@ public class WoodenCabinetryBlock extends BaseEntityBlock {
         return true;
     }
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand p_60507_, BlockHitResult p_60508_) {
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult p_60508_) {
+        InteractionHand hand = InteractionHand.MAIN_HAND;
         if (level.isClientSide) {
             return InteractionResult.SUCCESS;
         } else {
@@ -88,10 +98,11 @@ public class WoodenCabinetryBlock extends BaseEntityBlock {
     }
     @Override
     public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity entity, ItemStack stack) {
-        if (stack.hasCustomHoverName()) {
+        if (stack.has(DataComponents.CUSTOM_NAME)) {
             BlockEntity tileentity = level.getBlockEntity(pos);
             if (tileentity instanceof WoodenCabinetryBlockEntity) {
-                ((WoodenCabinetryBlockEntity)tileentity).setCustomName(stack.getHoverName());
+
+                // Original: ((WoodenCabinetryBlockEntity)tileentity).setCustomName(stack.getHoverName());
             }
         }    }
 

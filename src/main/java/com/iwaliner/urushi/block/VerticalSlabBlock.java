@@ -17,8 +17,17 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import com.mojang.serialization.MapCodec;
 
 public class VerticalSlabBlock extends HorizonalRotateBlock {
+    public static final MapCodec<VerticalSlabBlock> CODEC = simpleCodec(VerticalSlabBlock::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
     private static final VoxelShape NORTH_BOX = Block.box(0D, 0D, 8D, 16D, 16D, 16D);
     private static final VoxelShape SOUTH_BOX = Block.box(0D, 0.0D, 0D, 16D, 16D, 8D);
     private static final VoxelShape EAST_BOX = Block.box(0D, 0.0D, 0D, 8D, 16D, 16D);

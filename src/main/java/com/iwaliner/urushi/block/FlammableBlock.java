@@ -5,8 +5,17 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import com.mojang.serialization.MapCodec;
 
 public class FlammableBlock extends Block {
+    public static final MapCodec<FlammableBlock> CODEC = simpleCodec(FlammableBlock::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
     public FlammableBlock(Properties p_49795_) {
         super(p_49795_);
     }

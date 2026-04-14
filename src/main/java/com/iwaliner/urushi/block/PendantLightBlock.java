@@ -17,8 +17,17 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import com.mojang.serialization.MapCodec;
 
 public class PendantLightBlock extends Block {
+    public static final MapCodec<PendantLightBlock> CODEC = simpleCodec(PendantLightBlock::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
     private static final VoxelShape MAIN = Block.box(2D, 0.0D, 2D, 14D, 5D, 14D);
     private static final VoxelShape ROPE = Block.box(7D, 4D, 7D, 9D, 16D, 9D);
     private static final VoxelShape SHAPE = Shapes.or(MAIN, ROPE);
@@ -39,7 +48,12 @@ public class PendantLightBlock extends Block {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
+    public int getLightEmission(BlockState state, BlockGetter level, BlockPos pos) {
+        return state.getValue(LIT) ? 15 : 0;
+    }
+
+    @Override
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult result) {
         level.setBlockAndUpdate(pos,state.cycle(LIT));
         level.playSound(player,pos, SoundEvents.DISPENSER_DISPENSE, SoundSource.BLOCKS,1F,1F);
         return InteractionResult.SUCCESS;

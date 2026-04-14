@@ -1,11 +1,5 @@
 package com.iwaliner.urushi.block;
 
-import com.iwaliner.urushi.DimensionRegister;
-import com.iwaliner.urushi.ItemAndBlockRegister;
-import com.iwaliner.urushi.ModCoreUrushi;
-import com.iwaliner.urushi.TagUrushi;
-
-import com.iwaliner.urushi.world.dimension.KakuriyoTeleporter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustColorTransitionOptions;
@@ -14,11 +8,13 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -28,14 +24,20 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.portal.DimensionTransition;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.common.util.ITeleporter;
-
-import net.minecraft.util.RandomSource;
+import com.iwaliner.urushi.DimensionRegister;
+import com.iwaliner.urushi.ItemAndBlockRegister;
+import com.iwaliner.urushi.TagUrushi;
+import com.mojang.serialization.MapCodec;
 
 public class KakuriyoPortalBlock extends HorizonalRotateBlock implements SimpleWaterloggedBlock {
+    public static final MapCodec<KakuriyoPortalBlock> CODEC = simpleCodec(__p -> new KakuriyoPortalBlock(__p));
+
+    @Override
+    public MapCodec<? extends KakuriyoPortalBlock> codec() { return CODEC; }
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     protected static final int AABB_OFFSET = 2;
@@ -59,17 +61,19 @@ public class KakuriyoPortalBlock extends HorizonalRotateBlock implements SimpleW
 
 
     public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
-        if (!entity.isPassenger() && !entity.isVehicle() && entity.canChangeDimensions()) {
+        if (!entity.isPassenger() && !entity.isVehicle() && level instanceof ServerLevel) {
 
-            if(level instanceof ServerLevel) {
+            ResourceKey<Level> resourcekey = level.dimension() == Level.OVERWORLD ? DimensionRegister.KakuriyoKey : Level.OVERWORLD;
+            ServerLevel serverlevel = ((ServerLevel)level).getServer().getLevel(resourcekey);
+            if (serverlevel == null) {
 
-                ResourceKey<Level> resourcekey = level.dimension() == Level.OVERWORLD ? DimensionRegister.KakuriyoKey : Level.OVERWORLD;
-                ServerLevel serverlevel = ((ServerLevel)level).getServer().getLevel(resourcekey);
-                if (serverlevel == null) {
+                return;
 
-                    return;
-
-                }
+            }
+            if (!entity.canChangeDimensions(level, serverlevel)) {
+                return;
+            }
+            {
                 BlockPos center=null;
 
                 outer:for(int i=-5;i<5;i++){
@@ -140,17 +144,7 @@ public class KakuriyoPortalBlock extends HorizonalRotateBlock implements SimpleW
                     entity.teleportTo(entity.getX(), portalY, entity.getZ());
 
                 }
-                ITeleporter teleporter = new KakuriyoTeleporter();
-                entity.changeDimension(serverlevel, teleporter);
-
-               // if(state.getValue(FACING).getAxis()== Direction.Axis.Z) {
-
-               // }else{
-                //    ITeleporter teleporter = new KakuriyoTeleporterAxisX();
-                //    entity.changeDimension(serverlevel, teleporter);
-               // }
-
-
+                entity.changeDimension(new DimensionTransition(serverlevel, entity.position(), entity.getDeltaMovement(), entity.getYRot(), entity.getXRot(), DimensionTransition.DO_NOTHING));
             }
         }
 
@@ -184,7 +178,7 @@ public class KakuriyoPortalBlock extends HorizonalRotateBlock implements SimpleW
 
     }
 
-    public ItemStack getCloneItemStack(BlockGetter p_54911_, BlockPos p_54912_, BlockState p_54913_) {
+    public ItemStack getCloneItemStack(LevelReader p_54911_, BlockPos p_54912_, BlockState p_54913_) {
         return ItemStack.EMPTY;
     }
 

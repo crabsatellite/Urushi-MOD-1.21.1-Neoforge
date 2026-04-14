@@ -1,15 +1,9 @@
 package com.iwaliner.urushi.item;
 
 
-import com.iwaliner.urushi.ItemAndBlockRegister;
-import com.iwaliner.urushi.RecipeTypeRegister;
-import com.iwaliner.urushi.block.SenbakokiBlock;
-import com.iwaliner.urushi.recipe.SenbakokiRecipe;
-import com.iwaliner.urushi.util.UrushiUtils;
-import com.iwaliner.urushi.entiity.food.FoodEntity;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.BlockSource;
 import net.minecraft.core.Direction;
+import net.minecraft.core.dispenser.BlockSource;
 import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
 import net.minecraft.core.dispenser.DispenseItemBehavior;
 import net.minecraft.nbt.CompoundTag;
@@ -33,6 +27,12 @@ import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import com.iwaliner.urushi.ItemAndBlockRegister;
+import com.iwaliner.urushi.RecipeTypeRegister;
+import com.iwaliner.urushi.block.SenbakokiBlock;
+import com.iwaliner.urushi.entiity.food.FoodEntity;
+import com.iwaliner.urushi.recipe.SenbakokiRecipe;
+import com.iwaliner.urushi.util.UrushiUtils;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -50,9 +50,9 @@ private java.util.function.Supplier<? extends EntityType<?>> entityType;
     public static final DispenseItemBehavior DISPENSE_ITEM_BEHAVIOR = new DefaultDispenseItemBehavior() {
         protected ItemStack execute(BlockSource source, ItemStack stack) {
             if(stack.getItem() instanceof PlaceableFoodItem){
-            Level level = source.getLevel();
-            Direction direction = source.getBlockState().getValue(DispenserBlock.FACING);
-            BlockPos blockpos = source.getPos().relative(direction);
+            Level level = source.level();
+            Direction direction = source.state().getValue(DispenserBlock.FACING);
+            BlockPos blockpos = source.pos().relative(direction);
             BlockState blockstate = level.getBlockState(blockpos);
             PlaceableFoodItem foodItem= (PlaceableFoodItem) stack.getItem();
             EntityType<?> entity=foodItem.entityType.get();
@@ -125,7 +125,7 @@ private java.util.function.Supplier<? extends EntityType<?>> entityType;
         return InteractionResult.PASS;
     }
     @Override
-    public void appendHoverText(ItemStack p_41421_, @Nullable Level p_41422_, List<Component> list, TooltipFlag p_41424_) {
+    public void appendHoverText(ItemStack p_41421_, Item.TooltipContext p_41422_, List<Component> list, TooltipFlag p_41424_) {
         UrushiUtils.setInfo(list,"placeablefood");
     }
 }

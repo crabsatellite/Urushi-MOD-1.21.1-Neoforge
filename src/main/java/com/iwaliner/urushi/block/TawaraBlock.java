@@ -16,8 +16,17 @@ import net.minecraft.world.level.block.state.properties.SlabType;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import com.mojang.serialization.MapCodec;
 
 public class TawaraBlock extends HorizontalDirectionalBlock {
+    public static final MapCodec<TawaraBlock> CODEC = simpleCodec(TawaraBlock::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
     public static final BooleanProperty TRIGGERED = BooleanProperty.create("triggered");
     protected static final VoxelShape BOX_N = Block.box(8D, 0.0D, 0.0D, 24.0D, 16.0D, 16.0D);
     protected static final VoxelShape BOX_S = Block.box(-8D, 0.0D, 0.0D, 8.0D, 16.0D, 16.0D);

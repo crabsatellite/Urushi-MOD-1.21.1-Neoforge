@@ -7,8 +7,17 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Fallable;
 import net.minecraft.world.level.block.state.BlockState;
+import com.mojang.serialization.MapCodec;
 
 public class FallingAnvilBlock extends Block implements Fallable {
+    public static final MapCodec<FallingAnvilBlock> CODEC = simpleCodec(FallingAnvilBlock::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
     public FallingAnvilBlock(Properties p_49795_) {
         super(p_49795_);
     }

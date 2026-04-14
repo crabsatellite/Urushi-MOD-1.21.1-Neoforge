@@ -2,12 +2,10 @@ package com.iwaliner.urushi.block;
 
 
 
-import com.iwaliner.urushi.ItemAndBlockRegister;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
- 
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -30,11 +28,17 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import com.iwaliner.urushi.ItemAndBlockRegister;
+import com.mojang.serialization.MapCodec;
 
-import javax.annotation.Nullable;
 import java.util.List;
+import javax.annotation.Nullable;
 
 public class KakejikuBlock extends HorizonalRotateBlock{
+    public static final MapCodec<KakejikuBlock> CODEC = simpleCodec(__p -> new KakejikuBlock(net.minecraft.world.level.block.Blocks.AIR, __p));
+
+    @Override
+    public MapCodec<? extends KakejikuBlock> codec() { return CODEC; }
     public static final BooleanProperty BOTTOM = BooleanProperty.create("bottom");
     protected static final VoxelShape SHAPEA = Block.box(15D, 2.0D, 2D, 16D, 16.0D, 14.0D);
     protected static final VoxelShape SHAPEB = Block.box(2D, 2.0D, 15D, 14D, 16.0D, 16D);
@@ -98,7 +102,7 @@ public class KakejikuBlock extends HorizonalRotateBlock{
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
+    protected InteractionResult useWithoutItem(BlockState state, Level world, BlockPos pos, Player player, BlockHitResult result) {
         if(nextBlock==null){
             nextBlock= ItemAndBlockRegister.kakejiku_1.get();
         }

@@ -1,15 +1,10 @@
 package com.iwaliner.urushi.block;
 
-import com.iwaliner.urushi.BlockEntityRegister;
-import com.iwaliner.urushi.ItemAndBlockRegister;
-import com.iwaliner.urushi.blockentity.FryerBlockEntity;
-import com.iwaliner.urushi.blockentity.InvisibleButtonBlockEntity;
-import com.iwaliner.urushi.blockentity.RiceCauldronBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.ButtonBlock;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -17,12 +12,26 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
+import com.iwaliner.urushi.BlockEntityRegister;
+import com.iwaliner.urushi.ItemAndBlockRegister;
+import com.iwaliner.urushi.blockentity.FryerBlockEntity;
+import com.iwaliner.urushi.blockentity.InvisibleButtonBlockEntity;
+import com.iwaliner.urushi.blockentity.RiceCauldronBlockEntity;
+import com.mojang.serialization.MapCodec;
 
 import javax.annotation.Nullable;
 
 public class InvisibleButtonBlock extends ButtonBlock implements EntityBlock {
+    public static final MapCodec<InvisibleButtonBlock> CODEC = simpleCodec(InvisibleButtonBlock::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
     public InvisibleButtonBlock(Properties p_57060_) {
-        super(p_57060_, BlockSetType.STONE, 20, false);
+        super(BlockSetType.STONE, 20, p_57060_);
     }
     @org.jetbrains.annotations.Nullable
     @Override
@@ -42,7 +51,7 @@ public class InvisibleButtonBlock extends ButtonBlock implements EntityBlock {
             ((InvisibleButtonBlockEntity) baseBlockEntity).time=20*5;
         }
     }
-    public ItemStack getCloneItemStack(BlockGetter p_152966_, BlockPos p_152967_, BlockState p_152968_) {
+    public ItemStack getCloneItemStack(LevelReader p_152966_, BlockPos p_152967_, BlockState p_152968_) {
         return new ItemStack(ItemAndBlockRegister.invisible_button_item.get());
     }
 

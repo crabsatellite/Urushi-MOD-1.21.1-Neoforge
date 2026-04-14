@@ -1,18 +1,17 @@
 {
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
-   
     {
       "item": "urushi:kanten_powder"
     },
     {
-       "item": "minecraft:sugar"
+      "item": "minecraft:sugar"
     },
     {
-      "tag": "forge:crops/adzuki"
+      "tag": "c:crops/adzuki"
     },
     {
-      "tag": "forge:crops/adzuki"
+      "tag": "c:crops/adzuki"
     }
   ],
   "result": {

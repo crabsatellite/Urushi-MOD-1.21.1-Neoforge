@@ -1,7 +1,6 @@
 package com.iwaliner.urushi.block;
 
 
-import com.iwaliner.urushi.ItemAndBlockRegister;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -12,12 +11,14 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -27,11 +28,16 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import com.iwaliner.urushi.ItemAndBlockRegister;
+import com.mojang.serialization.MapCodec;
 
 import java.util.List;
 
 public class TVBlock extends HorizonalRotateBlock{
+    public static final MapCodec<TVBlock> CODEC = simpleCodec(__p -> new TVBlock(net.minecraft.world.level.block.Blocks.AIR, __p));
 
+    @Override
+    public MapCodec<? extends TVBlock> codec() { return CODEC; }
     protected static final VoxelShape SHAPEA = Block.box(4D, 0.0D, 1D, 16D, 13.0D, 15.0D);
     protected static final VoxelShape SHAPEB = Block.box(1D, 0.0D, 4D, 15D, 13.0D, 16D);
     protected static final VoxelShape SHAPEC = Block.box(0D, 0.0D, 1D, 12D, 13.0D, 15.0D);
@@ -47,7 +53,7 @@ public class TVBlock extends HorizonalRotateBlock{
     }
 
     @Override
-    public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player) {
+    public ItemStack getCloneItemStack(BlockState state, HitResult target, LevelReader level, BlockPos pos, Player player) {
         return new ItemStack(ItemAndBlockRegister.tv_idle.get());
     }
 
@@ -70,7 +76,7 @@ public class TVBlock extends HorizonalRotateBlock{
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult result) {
        Block next=this.nextBlock==null? ItemAndBlockRegister.tv_idle.get():nextBlock;
        if(state.getBlock() instanceof TVBlock) {
            level.setBlockAndUpdate(pos, next.defaultBlockState().setValue(FACING, state.getValue(FACING)));
@@ -85,7 +91,7 @@ public class TVBlock extends HorizonalRotateBlock{
         p_49915_.add(FACING);
     }
     @Override
-    public void appendHoverText(ItemStack p_49816_, @org.jetbrains.annotations.Nullable BlockGetter p_49817_, List<Component> list, TooltipFlag p_49819_) {
+    public void appendHoverText(ItemStack p_49816_, Item.TooltipContext p_49817_, List<Component> list, TooltipFlag p_49819_) {
         list.add((Component.translatable("info.urushi.tv" )).withStyle(ChatFormatting.GRAY));
     }
 

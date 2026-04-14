@@ -1,16 +1,12 @@
 package com.iwaliner.urushi;
 
+
 import com.google.common.collect.ImmutableList;
-import com.iwaliner.urushi.block.LanternPlantBlock;
-import com.iwaliner.urushi.block.WallShiitakeBlock;
-import com.iwaliner.urushi.world.feature.JapaneseTimberBambooFeature;
-import com.iwaliner.urushi.world.feature.KakuriyoPortalFeature;
-import com.iwaliner.urushi.world.feature.KakuriyoTreeConfigration;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.features.FeatureUtils;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceKey;
@@ -45,9 +41,15 @@ import net.minecraft.world.level.levelgen.feature.trunkplacers.GiantTrunkPlacer;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.StraightTrunkPlacer;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
 import net.minecraft.world.level.levelgen.structure.templatesystem.TagMatchTest;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import com.iwaliner.urushi.ModCoreUrushi;
+import com.iwaliner.urushi.block.LanternPlantBlock;
+import com.iwaliner.urushi.block.WallShiitakeBlock;
+import com.iwaliner.urushi.world.feature.JapaneseTimberBambooFeature;
+import com.iwaliner.urushi.world.feature.KakuriyoPortalFeature;
+import com.iwaliner.urushi.world.feature.KakuriyoTreeConfigration;
 
 import java.awt.*;
 import java.util.List;
@@ -57,10 +59,10 @@ public class ConfiguredFeatureRegister {
     public static final DeferredRegister<ConfiguredFeature<?, ?>> ConfiguredFeatures = DeferredRegister.create(Registries.CONFIGURED_FEATURE, ModCoreUrushi.ModID);
 
     public static ResourceKey<ConfiguredFeature<?, ?>> registerKey(String name) {
-        return ResourceKey.create(Registries.CONFIGURED_FEATURE, new ResourceLocation(ModCoreUrushi.ModID, name));
+        return ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(ModCoreUrushi.ModID, name));
     }
 
-    private static <FC extends FeatureConfiguration, F extends Feature<FC>> void register(BootstapContext<ConfiguredFeature<?, ?>> context,
+    private static <FC extends FeatureConfiguration, F extends Feature<FC>> void register(BootstrapContext<ConfiguredFeature<?, ?>> context,
                                                                                           ResourceKey<ConfiguredFeature<?, ?>> key, F feature, FC configuration) {
         context.register(key, new ConfiguredFeature<>(feature, configuration));
     }
@@ -118,7 +120,7 @@ public class ConfiguredFeatureRegister {
 
 
 
-    public static void bootstrap(BootstapContext<ConfiguredFeature<?, ?>> context) {
+    public static void bootstrap(BootstrapContext<ConfiguredFeature<?, ?>> context) {
       /*  register(context, KAKURIYO_DISK_MUD_KEY, Feature.DISK, new DiskConfiguration(RuleBasedBlockStateProvider.simple(Blocks.PACKED_MUD), BlockPredicate.matchesBlocks(List.of(Blocks.DIRT, Blocks.SAND,ItemAndBlockRegister.kakuriyo_dirt.get(),ItemAndBlockRegister.kakuriyo_grass_block.get())), UniformInt.of(2, 6), 2));
         register(context, HOT_SPRING_KEY, Feature.LAKE, new LakeFeature.Configuration(BlockStateProvider.simple(ItemAndBlockRegister.HotSpringBlock.get()),BlockStateProvider.simple(Blocks.TUFF)));
         register(context, BAMBOO_KEY,FeatureRegister.Bamboo.get(), new JapaneseTimberBambooFeature.Configuration(BlockStateProvider.simple(ItemAndBlockRegister.japanese_timber_bamboo.get())));

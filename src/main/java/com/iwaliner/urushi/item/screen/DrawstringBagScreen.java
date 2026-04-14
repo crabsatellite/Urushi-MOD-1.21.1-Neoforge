@@ -1,6 +1,5 @@
 package com.iwaliner.urushi.item.screen;
 
-import com.iwaliner.urushi.item.menu.DrawstringBagMenu;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.MenuAccess;
@@ -8,12 +7,13 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.ChestMenu;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import com.iwaliner.urushi.item.menu.DrawstringBagMenu;
 
 @OnlyIn(Dist.CLIENT)
 public class DrawstringBagScreen extends AbstractContainerScreen<DrawstringBagMenu> implements MenuAccess<DrawstringBagMenu> {
-    private static final ResourceLocation CONTAINER_BACKGROUND = new ResourceLocation("textures/gui/container/generic_54.png");
+    private static final ResourceLocation CONTAINER_BACKGROUND = ResourceLocation.withDefaultNamespace("textures/gui/container/generic_54.png");
     private final int containerRows;
 
     public DrawstringBagScreen(DrawstringBagMenu p_98409_, Inventory p_98410_, Component p_98411_) {
@@ -26,7 +26,7 @@ public class DrawstringBagScreen extends AbstractContainerScreen<DrawstringBagMe
     }
 
     public void render(GuiGraphics p_282060_, int p_282533_, int p_281661_, float p_281873_) {
-        this.renderBackground(p_282060_);
+        this.renderBackground(p_282060_, p_282533_, p_281661_, p_281873_);
         super.render(p_282060_, p_282533_, p_281661_, p_281873_);
         this.renderTooltip(p_282060_, p_282533_, p_281661_);
     }

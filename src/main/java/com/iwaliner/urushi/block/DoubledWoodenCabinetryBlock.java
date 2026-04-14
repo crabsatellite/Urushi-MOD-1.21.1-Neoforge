@@ -1,24 +1,20 @@
 package com.iwaliner.urushi.block;
 
 
-import com.iwaliner.urushi.ModCoreUrushi;
-import com.iwaliner.urushi.blockentity.DoubledWoodenCabinetryBlockEntity;
-import com.iwaliner.urushi.blockentity.WoodenCabinetryBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.stats.Stats;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.Container;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.*;
@@ -32,11 +28,21 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import com.iwaliner.urushi.ModCoreUrushi;
+import com.iwaliner.urushi.blockentity.DoubledWoodenCabinetryBlockEntity;
+import com.iwaliner.urushi.blockentity.WoodenCabinetryBlockEntity;
+import com.mojang.serialization.MapCodec;
 import org.jetbrains.annotations.Nullable;
 
-import net.minecraft.util.RandomSource;
-
 public class DoubledWoodenCabinetryBlock extends BaseEntityBlock {
+    public static final MapCodec<DoubledWoodenCabinetryBlock> CODEC = simpleCodec(DoubledWoodenCabinetryBlock::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty OPEN = BlockStateProperties.OPEN;
 
@@ -52,14 +58,14 @@ public class DoubledWoodenCabinetryBlock extends BaseEntityBlock {
 
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult p_60508_) {
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult p_60508_) {
 
         if (level.isClientSide) {
             return InteractionResult.SUCCESS;
         }
         BlockEntity blockentity = level.getBlockEntity(pos);
         if (blockentity instanceof DoubledWoodenCabinetryBlockEntity) {
-            if(player.getItemInHand(hand).getItem()== Items.BARRIER&&player.isCreative()){
+            if(player.getMainHandItem().getItem()== Items.BARRIER&&player.isCreative()){
                 for(int i=0;i< ModCoreUrushi.underDevelopmentList.size();i++){
                     ((DoubledWoodenCabinetryBlockEntity) blockentity).setItem(i,new ItemStack(ModCoreUrushi.underDevelopmentList.get(i)));
                 }
@@ -102,16 +108,6 @@ public class DoubledWoodenCabinetryBlock extends BaseEntityBlock {
     public RenderShape getRenderShape(BlockState p_49090_) {
         return RenderShape.MODEL;
     }
-    @Override
-    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity entity, ItemStack stack) {
-        if (stack.hasCustomHoverName()) {
-            BlockEntity tileentity = level.getBlockEntity(pos);
-            if (tileentity instanceof DoubledWoodenCabinetryBlockEntity) {
-                ((DoubledWoodenCabinetryBlockEntity)tileentity).setCustomName(stack.getHoverName());
-            }
-        }
-    }
-
     @Override
     public int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos) {
         return AbstractContainerMenu.getRedstoneSignalFromBlockEntity(level.getBlockEntity(pos));

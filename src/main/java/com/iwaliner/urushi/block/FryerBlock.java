@@ -1,22 +1,17 @@
 package com.iwaliner.urushi.block;
 
 
-import com.iwaliner.urushi.BlockEntityRegister;
-import com.iwaliner.urushi.ItemAndBlockRegister;
-import com.iwaliner.urushi.blockentity.AbstractFryerBlockEntity;
-import com.iwaliner.urushi.blockentity.FryerBlockEntity;
-import com.iwaliner.urushi.blockentity.RiceCauldronBlockEntity;
-import com.iwaliner.urushi.util.UrushiUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
- 
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -24,6 +19,7 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -42,12 +38,26 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import com.iwaliner.urushi.BlockEntityRegister;
+import com.iwaliner.urushi.ItemAndBlockRegister;
+import com.iwaliner.urushi.blockentity.AbstractFryerBlockEntity;
+import com.iwaliner.urushi.blockentity.FryerBlockEntity;
+import com.iwaliner.urushi.blockentity.RiceCauldronBlockEntity;
+import com.iwaliner.urushi.util.UrushiUtils;
+import com.mojang.serialization.MapCodec;
 
-import javax.annotation.Nullable;
 import java.util.List;
-import net.minecraft.util.RandomSource;
+import javax.annotation.Nullable;
 
 public class FryerBlock extends BaseEntityBlock {
+    public static final MapCodec<FryerBlock> CODEC = simpleCodec(FryerBlock::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
 
@@ -59,7 +69,7 @@ public class FryerBlock extends BaseEntityBlock {
 
     }
     @Override
-    public void appendHoverText(ItemStack p_49816_, @org.jetbrains.annotations.Nullable BlockGetter p_49817_, List<Component> list, TooltipFlag p_49819_) {
+    public void appendHoverText(ItemStack p_49816_, Item.TooltipContext p_49817_, List<Component> list, TooltipFlag p_49819_) {
         UrushiUtils.setInfo(list,"slot_fryer");
     }
 
@@ -83,7 +93,8 @@ public class FryerBlock extends BaseEntityBlock {
         return level.isClientSide ? null : createTickerHelper(p_152162_, BlockEntityRegister.FryerBlockEntity.get(), AbstractFryerBlockEntity::serverTick);
     }
 
-    public InteractionResult use(BlockState p_48706_, Level p_48707_, BlockPos p_48708_, Player p_48709_, InteractionHand p_48710_, BlockHitResult p_48711_) {
+    protected InteractionResult useWithoutItem(BlockState p_48706_, Level p_48707_, BlockPos p_48708_, Player p_48709_, BlockHitResult p_48711_) {
+        InteractionHand hand = InteractionHand.MAIN_HAND;
         if (p_48707_.isClientSide) {
             return InteractionResult.SUCCESS;
         } else {
@@ -105,10 +116,11 @@ public class FryerBlock extends BaseEntityBlock {
     }
 
     public void setPlacedBy(Level p_48694_, BlockPos p_48695_, BlockState p_48696_, LivingEntity p_48697_, ItemStack p_48698_) {
-        if (p_48698_.hasCustomHoverName()) {
+        if (p_48698_.has(DataComponents.CUSTOM_NAME)) {
             BlockEntity blockentity = p_48694_.getBlockEntity(p_48695_);
             if (blockentity instanceof AbstractFryerBlockEntity) {
-                ((AbstractFryerBlockEntity)blockentity).setCustomName(p_48698_.getHoverName());
+
+                // Original: ((AbstractFryerBlockEntity)blockentity).setCustomName(p_48698_.getHoverName());
             }
         }
 

@@ -1,23 +1,15 @@
 package com.iwaliner.urushi.util;
 
-import com.iwaliner.urushi.ConfigUrushi;
-import com.iwaliner.urushi.ItemAndBlockRegister;
-import com.iwaliner.urushi.ModCoreUrushi;
-import com.iwaliner.urushi.block.HorizonalRotateSlabBlock;
-import com.mojang.blaze3d.platform.Window;
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.commands.CommandFunction;
 import net.minecraft.commands.CommandSource;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-
 import net.minecraft.network.protocol.game.ClientboundSetTitleTextPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
@@ -34,16 +26,23 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.state.BlockState;
-
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import com.iwaliner.urushi.ConfigUrushi;
+import com.iwaliner.urushi.ItemAndBlockRegister;
+import com.iwaliner.urushi.ModCoreUrushi;
+import com.iwaliner.urushi.block.HorizonalRotateSlabBlock;
+import com.mojang.blaze3d.platform.Window;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import org.joml.Vector3f;
 
 import java.awt.*;
@@ -53,6 +52,19 @@ import java.util.*;
 import java.util.List;
 
 public class UrushiUtils {
+    /**
+     * 1.21 replacement for {@code EnchantmentHelper.hasFrostWalker(LivingEntity)}. The helper was
+     * removed; we resolve the FROST_WALKER {@link net.minecraft.core.Holder} via the registry and
+     * look up the effective level on the entity's boots/armor.
+     */
+    public static boolean hasFrostWalker(net.minecraft.world.entity.LivingEntity entity) {
+        return net.minecraft.world.item.enchantment.EnchantmentHelper.getEnchantmentLevel(
+                entity.level().registryAccess()
+                        .registryOrThrow(net.minecraft.core.registries.Registries.ENCHANTMENT)
+                        .getHolderOrThrow(net.minecraft.world.item.enchantment.Enchantments.FROST_WALKER),
+                entity) > 0;
+    }
+
     public  static Direction getDirectionFromInt(int i){
         return switch (i) {
             case 0 -> Direction.DOWN;
@@ -281,15 +293,15 @@ public class UrushiUtils {
                 flag=true;
             }
             if(flag) {
-                riceBall.setTag(tag);
+                riceBall.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
             }
     }
     public static ItemStack getRandomRiceBall(int stackSize, RandomSource random){
         ItemStack stack=new ItemStack(ItemAndBlockRegister.rice_ball.get(),stackSize);
-        if(stack.getTag()==null){
-            stack.setTag(new CompoundTag());
+        if(!stack.has(DataComponents.CUSTOM_DATA)){
+            stack.set(DataComponents.CUSTOM_DATA, CustomData.of(new CompoundTag()));
         }
-        CompoundTag tag=stack.getTag();
+        CompoundTag tag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
         int i=random.nextInt(12);
         switch (i){
             case 0 -> tag.putString("effect","levitation");
@@ -305,15 +317,14 @@ public class UrushiUtils {
             case 10 -> tag.putString("effect","poison");
             case 11 -> tag.putString("effect","freeze");
         }
-        stack.setTag(tag);
+        stack.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
         return stack;
     }
     public static void runFunction(Level level,BlockPos pos,String commandUserName,String functionName){
         MinecraftServer server = level.getServer();
         if(server!=null) {
-            CommandFunction.CacheableFunction function = new CommandFunction.CacheableFunction(new ResourceLocation(ModCoreUrushi.ModID, functionName));
             CommandSourceStack commandSourceStack=new CommandSourceStack(CommandSource.NULL, pos.getCenter(), new Vec2(0f,0f),  (ServerLevel)level , 4, commandUserName, Component.empty(), server, null);
-            function.get(server.getFunctions()).ifPresent((p_289236_) -> {
+            server.getFunctions().get(ResourceLocation.fromNamespaceAndPath(ModCoreUrushi.ModID, functionName)).ifPresent((p_289236_) -> {
                 server.getFunctions().execute(p_289236_, commandSourceStack.withSuppressedOutput().withPermission(4));
             });
         }
@@ -321,9 +332,8 @@ public class UrushiUtils {
     public static void runFunction(Level level, Player player, float rotX, float rotY, Entity entity, String functionName){
         MinecraftServer server = level.getServer();
         if(server!=null) {
-            CommandFunction.CacheableFunction function = new CommandFunction.CacheableFunction(new ResourceLocation(ModCoreUrushi.ModID, functionName));
             CommandSourceStack commandSourceStack=new CommandSourceStack(player, player.position(), new Vec2(rotX,rotY),  (ServerLevel)level , 4, player.getName().toString(), player.getName(), server, entity);
-            function.get(server.getFunctions()).ifPresent((p_289236_) -> {
+            server.getFunctions().get(ResourceLocation.fromNamespaceAndPath(ModCoreUrushi.ModID, functionName)).ifPresent((p_289236_) -> {
                 server.getFunctions().execute(p_289236_, commandSourceStack.withSuppressedOutput().withPermission(4));
             });
         }
@@ -335,20 +345,20 @@ public class UrushiUtils {
         guiGraphics.pose().pushPose();
         guiGraphics.pose().translate(0.0F, 0.0F, -90.0F);
         guiGraphics.pose().scale(0.45F,0.45F,0.45F);
-        guiGraphics.blit(new ResourceLocation(ModCoreUrushi.ModID,"textures/gui/"+textureName+".png"), window.getGuiScaledWidth()+250, window.getGuiScaledHeight()-100, 0, 0, 256, 256);
+        guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(ModCoreUrushi.ModID, "textures/gui/"+textureName+".png"), window.getGuiScaledWidth()+250, window.getGuiScaledHeight()-100, 0, 0, 256, 256);
         guiGraphics.pose().popPose();
     }
     public static void displayToggleKeyImage(GuiGraphics guiGraphics, String textureName, int width,int height){
         guiGraphics.pose().pushPose();
         guiGraphics.pose().translate((float)(width/2 ), (float)(height / 2), 0.0F);
        guiGraphics.pose().scale(0.05F,0.05F,1F);
-        guiGraphics.blit(new ResourceLocation(ModCoreUrushi.ModID,"textures/gui/"+textureName+".png"), (width/2)-80, (height/2)-230, 0, 0, 256, 256);
+        guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(ModCoreUrushi.ModID, "textures/gui/"+textureName+".png"), (width/2)-80, (height/2)-230, 0, 0, 256, 256);
         guiGraphics.pose().popPose();
     }
     public static void displayImage(GuiGraphics guiGraphics, String textureName, int width,int height){
         guiGraphics.pose().pushPose();
         guiGraphics.pose().scale(0.45F,0.45F,0.45F);
-        guiGraphics.blit(new ResourceLocation(ModCoreUrushi.ModID,"textures/gui/"+textureName+".png"), width, height, 0, 0, 256, 256);
+        guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(ModCoreUrushi.ModID, "textures/gui/"+textureName+".png"), width, height, 0, 0, 256, 256);
         guiGraphics.pose().popPose();
     }
     public static boolean isJapanese(){

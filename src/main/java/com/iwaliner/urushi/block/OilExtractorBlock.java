@@ -2,11 +2,6 @@ package com.iwaliner.urushi.block;
 
 
 
-import com.iwaliner.urushi.ItemAndBlockRegister;
-import com.iwaliner.urushi.TagUrushi;
-import com.iwaliner.urushi.util.UrushiUtils;
-import it.unimi.dsi.fastutil.objects.Object2FloatMap;
-import it.unimi.dsi.fastutil.objects.Object2FloatOpenHashMap;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -15,9 +10,12 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.*;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
@@ -36,14 +34,26 @@ import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import com.iwaliner.urushi.ItemAndBlockRegister;
+import com.iwaliner.urushi.TagUrushi;
+import com.iwaliner.urushi.util.UrushiUtils;
+import com.mojang.serialization.MapCodec;
+import it.unimi.dsi.fastutil.objects.Object2FloatMap;
+import it.unimi.dsi.fastutil.objects.Object2FloatOpenHashMap;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
-
-import net.minecraft.util.RandomSource;
+import javax.annotation.Nullable;
 
 public class OilExtractorBlock extends Block implements WorldlyContainerHolder {
+    public static final MapCodec<OilExtractorBlock> CODEC = simpleCodec(OilExtractorBlock::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
     public static final IntegerProperty LEVEL = BlockStateProperties.LEVEL_COMPOSTER;
     private static final VoxelShape OUTER_SHAPE = Shapes.block();
    // public static final Object2FloatMap<ItemLike> COMPOSTABLES = new Object2FloatOpenHashMap<>();
@@ -95,9 +105,10 @@ public class OilExtractorBlock extends Block implements WorldlyContainerHolder {
         }
 
     }
-    public InteractionResult use(BlockState p_51949_, Level p_51950_, BlockPos p_51951_, Player p_51952_, InteractionHand p_51953_, BlockHitResult p_51954_) {
+    protected InteractionResult useWithoutItem(BlockState p_51949_, Level p_51950_, BlockPos p_51951_, Player p_51952_, BlockHitResult p_51954_) {
+        InteractionHand hand = InteractionHand.MAIN_HAND;
         int i = p_51949_.getValue(LEVEL);
-        ItemStack itemstack = p_51952_.getItemInHand(p_51953_);
+        ItemStack itemstack = p_51952_.getMainHandItem();
         if (i < 8 && itemstack.is(TagUrushi.OIL_EXTRACTOR_INSERTALE)) {
             if (i < 7 && !p_51950_.isClientSide) {
                 BlockState blockstate = addItem(p_51949_, p_51950_, p_51951_, itemstack);
@@ -108,10 +119,10 @@ public class OilExtractorBlock extends Block implements WorldlyContainerHolder {
                 }
             }
 
-            return InteractionResult.sidedSuccess(p_51950_.isClientSide);
+            return InteractionResult.SUCCESS;
         } else if (i == 8) {
             extractProduce(p_51949_, p_51950_, p_51951_);
-            return InteractionResult.sidedSuccess(p_51950_.isClientSide);
+            return InteractionResult.SUCCESS;
         } else {
             return InteractionResult.PASS;
         }
@@ -186,7 +197,7 @@ public class OilExtractorBlock extends Block implements WorldlyContainerHolder {
         p_51965_.add(LEVEL);
     }
 
-    public boolean isPathfindable(BlockState p_51940_, BlockGetter p_51941_, BlockPos p_51942_, PathComputationType p_51943_) {
+    public boolean isPathfindable(BlockState p_51940_, PathComputationType p_51943_) {
         return false;
     }
     public WorldlyContainer getContainer(BlockState p_51956_, LevelAccessor p_51957_, BlockPos p_51958_) {
@@ -292,7 +303,7 @@ public class OilExtractorBlock extends Block implements WorldlyContainerHolder {
 
     }
     @Override
-    public void appendHoverText(ItemStack p_49816_, @org.jetbrains.annotations.Nullable BlockGetter p_49817_, List<Component> list, TooltipFlag p_49819_) {
+    public void appendHoverText(ItemStack p_49816_, Item.TooltipContext p_49817_, List<Component> list, TooltipFlag p_49819_) {
         UrushiUtils.setInfo(list,"slot_oil_extractor");
         UrushiUtils.setInfo(list, "same_as_composter");
     }

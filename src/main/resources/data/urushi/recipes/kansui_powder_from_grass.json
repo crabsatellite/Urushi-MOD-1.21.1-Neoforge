@@ -1,7 +1,7 @@
 {
   "type": "minecraft:smelting",
   "ingredient": {
-   "tag": "forge:weed"
+    "tag": "c:weed"
   },
   "result": "urushi:kansui_powder",
   "experience": 0.1,

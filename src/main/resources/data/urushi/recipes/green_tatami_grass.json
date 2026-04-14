@@ -2,16 +2,16 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-    "tag": "forge:weed"
+      "tag": "c:weed"
     },
     {
-     "tag": "forge:weed"
+      "tag": "c:weed"
     },
     {
-   "tag": "forge:weed"
+      "tag": "c:weed"
     },
     {
-     "tag": "forge:string"
+      "tag": "c:string"
     }
   ],
   "result": {

@@ -1,11 +1,10 @@
 package com.iwaliner.urushi.block;
 
-import com.iwaliner.urushi.ConfigUrushi;
-import com.iwaliner.urushi.SoundRegister;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -16,10 +15,19 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
-
-import net.minecraft.util.RandomSource;
+import com.iwaliner.urushi.ConfigUrushi;
+import com.iwaliner.urushi.SoundRegister;
+import com.mojang.serialization.MapCodec;
 
 public class WIndBellBlock extends Block {
+    public static final MapCodec<WIndBellBlock> CODEC = simpleCodec(WIndBellBlock::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
 
     public WIndBellBlock(Properties p_49795_) {
         super(p_49795_);
@@ -42,7 +50,7 @@ public class WIndBellBlock extends Block {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult result) {
         level.playSound((Player) null,pos, SoundRegister.WindBell.get(), SoundSource.BLOCKS,0.01F,1F+level.random.nextFloat()*0.4F);
         return InteractionResult.SUCCESS;
     }

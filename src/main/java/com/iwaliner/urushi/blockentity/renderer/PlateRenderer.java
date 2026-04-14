@@ -1,10 +1,5 @@
 package com.iwaliner.urushi.blockentity.renderer;
 
-import com.iwaliner.urushi.block.PlateBlock;
-import com.iwaliner.urushi.blockentity.PlateBlockEntity;
-import com.iwaliner.urushi.blockentity.SanboBlockEntity;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
@@ -17,8 +12,13 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.CampfireBlock;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import com.iwaliner.urushi.block.PlateBlock;
+import com.iwaliner.urushi.blockentity.PlateBlockEntity;
+import com.iwaliner.urushi.blockentity.SanboBlockEntity;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
 
 import java.util.Objects;
 @OnlyIn(Dist.CLIENT)

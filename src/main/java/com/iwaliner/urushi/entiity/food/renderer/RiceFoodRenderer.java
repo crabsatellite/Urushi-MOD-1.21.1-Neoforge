@@ -1,13 +1,6 @@
 package com.iwaliner.urushi.entiity.food.renderer;
 
 
-import com.iwaliner.urushi.ClientSetUp;
-import com.iwaliner.urushi.entiity.food.FoodEntity;
-import com.iwaliner.urushi.entiity.food.RiceFoodEntity;
-import com.iwaliner.urushi.entiity.food.model.RiceFoodModel;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Axis;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -15,8 +8,15 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import com.iwaliner.urushi.ClientSetUp;
+import com.iwaliner.urushi.entiity.food.FoodEntity;
+import com.iwaliner.urushi.entiity.food.RiceFoodEntity;
+import com.iwaliner.urushi.entiity.food.model.RiceFoodModel;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
 
 @OnlyIn(Dist.CLIENT)
 public class RiceFoodRenderer<T extends RiceFoodEntity> extends EntityRenderer<T> {
@@ -25,7 +25,7 @@ public class RiceFoodRenderer<T extends RiceFoodEntity> extends EntityRenderer<T
     public RiceFoodRenderer(EntityRendererProvider.Context context) {
         super(context);
         this.model = new RiceFoodModel<>(context.bakeLayer(ClientSetUp.RICE));
-        this.TEXTURE_LOCATION=new ResourceLocation("urushi:textures/entity/food/rice.png");
+        this.TEXTURE_LOCATION=ResourceLocation.parse("urushi:textures/entity/food/rice.png");
     }
     public void render(T p_115418_, float p_115419_, float p_115420_, PoseStack p_115421_, MultiBufferSource p_115422_, int p_115423_) {
         p_115421_.pushPose();
@@ -34,7 +34,7 @@ public class RiceFoodRenderer<T extends RiceFoodEntity> extends EntityRenderer<T
         p_115421_.mulPose(Axis.YN.rotationDegrees(180.0F - p_115419_));
         p_115421_.scale(1F, 1F, 1F);
         VertexConsumer vertexconsumer = p_115422_.getBuffer(this.model.renderType(this.getTextureLocation(p_115418_)));
-        this.model.renderToBuffer(p_115421_, vertexconsumer, p_115423_, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        this.model.renderToBuffer(p_115421_, vertexconsumer, p_115423_, OverlayTexture.NO_OVERLAY, -1);
         p_115421_.popPose();
         super.render(p_115418_, p_115419_, p_115420_, p_115421_, p_115422_, p_115423_);}
 

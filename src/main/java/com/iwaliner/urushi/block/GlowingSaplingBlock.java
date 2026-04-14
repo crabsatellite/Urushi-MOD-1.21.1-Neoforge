@@ -4,18 +4,22 @@ package com.iwaliner.urushi.block;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SaplingBlock;
-import net.minecraft.world.level.block.grower.AbstractTreeGrower;
+import net.minecraft.world.level.block.grower.TreeGrower;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import net.minecraft.util.RandomSource;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import com.mojang.serialization.MapCodec;
 
 public class GlowingSaplingBlock extends SaplingBlock {
-    public GlowingSaplingBlock(AbstractTreeGrower p_55978_, Properties p_55979_) {
+    public static final MapCodec<GlowingSaplingBlock> CODEC = simpleCodec(__p -> new GlowingSaplingBlock(null, __p));
+
+    @Override
+    public MapCodec<? extends GlowingSaplingBlock> codec() { return CODEC; }
+    public GlowingSaplingBlock(TreeGrower p_55978_, Properties p_55979_) {
         super(p_55978_, p_55979_);
     }
     @OnlyIn(Dist.CLIENT)

@@ -13,10 +13,15 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.SlabType;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
+import com.mojang.serialization.MapCodec;
 
 import javax.annotation.Nullable;
 
 public class TatamiCarpetBlock extends TwoDirectionShapedBlock{
+    public static final MapCodec<TatamiCarpetBlock> CODEC = simpleCodec(__p -> new TatamiCarpetBlock(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, false, __p));
+
+    @Override
+    public MapCodec<? extends TatamiCarpetBlock> codec() { return CODEC; }
     public static final BooleanProperty FLIP = BooleanProperty.create("flip");
     public TatamiCarpetBlock(double d1, double d2, double d3, double d4, double d5, double d6, boolean canSurvive, Properties p_i48377_1_) {
         super(d1, d2, d3, d4, d5, d6,canSurvive, p_i48377_1_);

@@ -1,13 +1,11 @@
 package com.iwaliner.urushi.json;
 
 import com.google.common.collect.Lists;
-
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonWriter;
-import com.iwaliner.urushi.ModCoreUrushi;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.world.item.Item;
-
+import com.iwaliner.urushi.ModCoreUrushi;
 
 import java.io.File;
 import java.io.FileOutputStream;

@@ -1,11 +1,11 @@
 package com.iwaliner.urushi.mixin;
 
-import com.iwaliner.urushi.block.SlideDoorBlock;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.Display;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.state.BlockState;
+import com.iwaliner.urushi.block.SlideDoorBlock;
 import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -21,11 +21,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public interface DisplayMixin {
 
 
-    @Accessor("DATA_INTERPOLATION_START_DELTA_TICKS_ID")
+    @Accessor("DATA_POS_ROT_INTERPOLATION_DURATION_ID")
     public static EntityDataAccessor<Integer> getStartTickData() {
         throw new AssertionError();
     }
-    @Accessor("DATA_INTERPOLATION_DURATION_ID")
+    @Accessor("DATA_TRANSFORMATION_INTERPOLATION_DURATION_ID")
     public static EntityDataAccessor<Integer> getDurationData() {
         throw new AssertionError();
     }

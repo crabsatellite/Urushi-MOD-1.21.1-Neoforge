@@ -1,7 +1,6 @@
 package com.iwaliner.urushi.item;
 
-import com.iwaliner.urushi.ItemAndBlockRegister;
-import com.iwaliner.urushi.util.UrushiUtils;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -11,11 +10,14 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
+import com.iwaliner.urushi.ItemAndBlockRegister;
+import com.iwaliner.urushi.util.UrushiUtils;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -49,7 +51,7 @@ public class OchokoItem extends PlaceableFoodItem {
         return ItemUtils.startUsingInstantly(p_42993_, p_42994_, p_42995_);
     }
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> list, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, Item.TooltipContext level, List<Component> list, TooltipFlag flag) {
         UrushiUtils.setInfo(list,"placeablefood");
         UrushiUtils.setInfo(list,"ochoko_1");
         UrushiUtils.setInfo(list,"ochoko_2");

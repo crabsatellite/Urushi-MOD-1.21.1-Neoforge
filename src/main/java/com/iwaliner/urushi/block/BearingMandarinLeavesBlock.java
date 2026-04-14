@@ -1,6 +1,5 @@
 package com.iwaliner.urushi.block;
 
-import com.iwaliner.urushi.ItemAndBlockRegister;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -22,8 +21,18 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
+import com.iwaliner.urushi.ItemAndBlockRegister;
+import com.mojang.serialization.MapCodec;
 
 public class BearingMandarinLeavesBlock extends LeavesBlock {
+    public static final MapCodec<BearingMandarinLeavesBlock> CODEC = simpleCodec(BearingMandarinLeavesBlock::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
     public static final IntegerProperty AGE = BlockStateProperties.AGE_1;
     public BearingMandarinLeavesBlock(Properties p_54422_) {
         super(p_54422_);
@@ -40,11 +49,11 @@ public class BearingMandarinLeavesBlock extends LeavesBlock {
             BlockState blockstate = state.setValue(AGE, Integer.valueOf(i + 1));
             level.setBlock(pos, blockstate, 2);
             level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(blockstate));
-           // net.minecraftforge.common.ForgeHooks.onCropsGrowPost(level, p_222565_, state);
+           // net.neoforged.neoforge.common.CommonHooks.fireCropGrowPost(level, p_222565_, state);
         }
         super.randomTick(state,level,pos,randomSource);
     }
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult result) {
         int i = state.getValue(AGE);
         boolean flag = i == 1;
        if (i ==1) {
@@ -59,9 +68,9 @@ public class BearingMandarinLeavesBlock extends LeavesBlock {
             BlockState blockstate = state.setValue(AGE, Integer.valueOf(0));
             level.setBlock(pos, blockstate, 2);
             level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(player, blockstate));
-            return InteractionResult.sidedSuccess(level.isClientSide);
+            return InteractionResult.SUCCESS;
         } else {
-            return super.use(state, level, pos, player, hand, result);
+            return super.useWithoutItem(state, level, pos, player, result);
         }
     }
 

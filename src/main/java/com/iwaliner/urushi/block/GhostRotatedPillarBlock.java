@@ -1,10 +1,9 @@
 package com.iwaliner.urushi.block;
 
-import com.iwaliner.urushi.util.IGhostBlock;
-import com.iwaliner.urushi.util.UrushiUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -19,13 +18,20 @@ import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import com.iwaliner.urushi.util.IGhostBlock;
+import com.iwaliner.urushi.util.UrushiUtils;
+import com.mojang.serialization.MapCodec;
 
-import javax.annotation.Nullable;
 import java.util.List;
+import javax.annotation.Nullable;
 
 public class GhostRotatedPillarBlock extends RotatedPillarBlock  implements IGhostBlock {
+    public static final MapCodec<GhostRotatedPillarBlock> CODEC = simpleCodec(__p -> new GhostRotatedPillarBlock(false, __p));
+
+    @Override
+    public MapCodec<? extends GhostRotatedPillarBlock> codec() { return CODEC; }
     public static final BooleanProperty POWERED = BooleanProperty.create("powered");
     public final boolean canChange;
     public GhostRotatedPillarBlock(boolean b,Properties p_55926_) {
@@ -86,7 +92,7 @@ public class GhostRotatedPillarBlock extends RotatedPillarBlock  implements IGho
         }
     }
     @Override
-    public void appendHoverText(ItemStack p_49816_, @org.jetbrains.annotations.Nullable BlockGetter p_49817_, List<Component> list, TooltipFlag p_49819_) {
+    public void appendHoverText(ItemStack p_49816_, Item.TooltipContext p_49817_, List<Component> list, TooltipFlag p_49819_) {
         if(canChange) {
             UrushiUtils.setInfo(list, "ghost_block");
             UrushiUtils.setInfo(list, "ghost_block2");
@@ -94,7 +100,7 @@ public class GhostRotatedPillarBlock extends RotatedPillarBlock  implements IGho
     }
     /**falseだとモブが足場として誤認*/
     @Override
-    public boolean isPathfindable(BlockState p_60475_, BlockGetter p_60476_, BlockPos p_60477_, PathComputationType p_60478_) {
+    public boolean isPathfindable(BlockState p_60475_, PathComputationType p_60478_) {
         return false;
     }
 }

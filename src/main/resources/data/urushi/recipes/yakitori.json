@@ -6,15 +6,14 @@
     "s  "
   ],
   "key": {
-    
     "n": {
-      "tag": "forge:crops/greenonion"
+      "tag": "c:crops/greenonion"
     },
     "c": {
-     "item": "minecraft:cooked_chicken"
+      "item": "minecraft:cooked_chicken"
     },
     "s": {
-    "tag": "forge:rods/wooden"
+      "tag": "c:rods/wooden"
     }
   },
   "result": {

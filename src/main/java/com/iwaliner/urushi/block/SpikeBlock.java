@@ -1,7 +1,5 @@
 package com.iwaliner.urushi.block;
 
-import com.iwaliner.urushi.blockentity.PlateBlockEntity;
-import com.iwaliner.urushi.blockentity.SpikeBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -24,11 +22,22 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.AABB;
+import com.iwaliner.urushi.blockentity.PlateBlockEntity;
+import com.iwaliner.urushi.blockentity.SpikeBlockEntity;
+import com.mojang.serialization.MapCodec;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 public class SpikeBlock extends BaseEntityBlock {
+    public static final MapCodec<SpikeBlock> CODEC = simpleCodec(SpikeBlock::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
     public static final IntegerProperty LEVEL = BlockStateProperties.LEVEL;
     public static final BooleanProperty INVERTED = BlockStateProperties.INVERTED;
     public SpikeBlock(Properties p_49795_) {
@@ -43,7 +52,7 @@ public class SpikeBlock extends BaseEntityBlock {
 
 
     @Override
-    public boolean isPathfindable(BlockState p_60475_, BlockGetter p_60476_, BlockPos p_60477_, PathComputationType p_60478_) {
+    public boolean isPathfindable(BlockState p_60475_, PathComputationType p_60478_) {
         return true;
     }
     @Override

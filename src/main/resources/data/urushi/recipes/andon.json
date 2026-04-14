@@ -7,16 +7,16 @@
   ],
   "key": {
     "t": {
-     "item": "minecraft:candle"
+      "item": "minecraft:candle"
     },
     "p": {
-     "item": "minecraft:paper"
+      "item": "minecraft:paper"
     },
     "b": {
-     "tag": "forge:bamboo"
+      "tag": "c:bamboo"
     },
     "s": {
-    "tag": "minecraft:wooden_slabs"
+      "tag": "minecraft:wooden_slabs"
     }
   },
   "result": {

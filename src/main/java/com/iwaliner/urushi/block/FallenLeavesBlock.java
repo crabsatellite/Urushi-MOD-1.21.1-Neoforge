@@ -1,12 +1,9 @@
 package com.iwaliner.urushi.block;
 
-import com.iwaliner.urushi.ConfigUrushi;
-import com.iwaliner.urushi.ItemAndBlockRegister;
-import com.iwaliner.urushi.ParticleRegister;
-import com.iwaliner.urushi.TagUrushi;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -17,11 +14,22 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CarpetBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
-
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.material.Fluids;
+import com.iwaliner.urushi.ConfigUrushi;
+import com.iwaliner.urushi.ItemAndBlockRegister;
+import com.iwaliner.urushi.ParticleRegister;
+import com.iwaliner.urushi.TagUrushi;
+import com.mojang.serialization.MapCodec;
 
 public class FallenLeavesBlock extends CarpetBlock {
+    public static final MapCodec<FallenLeavesBlock> CODEC = simpleCodec(FallenLeavesBlock::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
     public FallenLeavesBlock(Properties p_152915_) {
         super(p_152915_);
     }

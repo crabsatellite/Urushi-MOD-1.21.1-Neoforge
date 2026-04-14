@@ -15,11 +15,20 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import com.mojang.serialization.MapCodec;
 
 
 
 
 public class KasugaLanternBlock extends HorizonalRotateBlock implements SimpleWaterloggedBlock {
+    public static final MapCodec<KasugaLanternBlock> CODEC = simpleCodec(KasugaLanternBlock::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
     protected static final VoxelShape SHAPE = Block.box(2.0D, 0.0D, 2.0D, 14.0D, 16.0D, 14.0D);
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 

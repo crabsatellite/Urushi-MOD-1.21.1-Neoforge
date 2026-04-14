@@ -1,8 +1,8 @@
 package com.iwaliner.urushi.blockentity;
 
 
-import com.iwaliner.urushi.BlockEntityRegister;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -15,6 +15,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import com.iwaliner.urushi.BlockEntityRegister;
 import org.jetbrains.annotations.NotNull;
 
 public  class SpikeBlockEntity extends BlockEntity {
@@ -24,15 +25,15 @@ public  class SpikeBlockEntity extends BlockEntity {
     public SpikeBlockEntity(BlockPos p_155052_, BlockState p_155053_) {
         super(BlockEntityRegister.Spike.get(), p_155052_, p_155053_);
     }
-    public void load(@NotNull CompoundTag tag) {
-        super.load(tag);
+    public void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.loadAdditional(tag, registries);
         if(level!=null) {
             player = level.getPlayerByUUID(tag.getUUID("playerUUID"));
         }
     }
 
-    protected void saveAdditional(@NotNull CompoundTag tag) {
-        super.saveAdditional(tag);
+    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.saveAdditional(tag, registries);
         tag.putUUID("playerUUID",player.getUUID());
     }
 

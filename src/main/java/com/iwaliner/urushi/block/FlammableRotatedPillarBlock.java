@@ -5,8 +5,17 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import com.mojang.serialization.MapCodec;
 
 public class FlammableRotatedPillarBlock extends RotatedPillarBlock {
+    public static final MapCodec<FlammableRotatedPillarBlock> CODEC = simpleCodec(FlammableRotatedPillarBlock::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
     public FlammableRotatedPillarBlock(Properties p_55926_) {
         super(p_55926_);
     }

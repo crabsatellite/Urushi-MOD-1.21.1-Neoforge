@@ -1,17 +1,11 @@
 package com.iwaliner.urushi.util;
 
-import com.iwaliner.urushi.ItemAndBlockRegister;
-import com.iwaliner.urushi.ParticleRegister;
-import com.iwaliner.urushi.TagUrushi;
-import com.iwaliner.urushi.item.AbstractMagatamaItem;
-import com.iwaliner.urushi.util.interfaces.*;
-import com.mojang.logging.LogUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
@@ -24,12 +18,18 @@ import net.minecraft.world.entity.animal.horse.Horse;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.piston.PistonBaseBlock;
 import net.minecraft.world.level.block.piston.PistonHeadBlock;
 import net.minecraft.world.level.block.state.BlockState;
-
+import com.iwaliner.urushi.ItemAndBlockRegister;
+import com.iwaliner.urushi.ParticleRegister;
+import com.iwaliner.urushi.TagUrushi;
+import com.iwaliner.urushi.item.AbstractMagatamaItem;
+import com.iwaliner.urushi.util.interfaces.*;
+import com.mojang.logging.LogUtils;
 
 import java.util.*;
 
@@ -227,9 +227,9 @@ return false;
         if (getReiryokuCapacity(stack) <= 0) {
             return 0;
         }
-        CompoundTag compoundtag = stack.getTag();
+        CompoundTag compoundtag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
         if (compoundtag == null) {
-            stack.setTag(new CompoundTag());
+            stack.set(DataComponents.CUSTOM_DATA, CustomData.of(new CompoundTag()));
             return 0;
         }
         return compoundtag.getInt(REIRYOKU_AMOUNT);
@@ -241,11 +241,11 @@ return false;
      **/
     public static void setStoredReiryokuAmount(ItemStack stack, int i) {
         if (0 <= i && i <= getReiryokuCapacity(stack)) {
-            CompoundTag compoundtag = stack.getTag();
+            CompoundTag compoundtag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
             if (compoundtag == null) {
-                stack.setTag(new CompoundTag());
+                stack.set(DataComponents.CUSTOM_DATA, CustomData.of(new CompoundTag()));
             }
-            stack.getTag().putInt(REIRYOKU_AMOUNT, i);
+            { CompoundTag __nbt = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag(); __nbt.putInt(REIRYOKU_AMOUNT, i); stack.set(DataComponents.CUSTOM_DATA, CustomData.of(__nbt)); };
         }
     }
 
@@ -253,19 +253,19 @@ return false;
      * 霊力を増減させるが、結果が0以下や最大容量以上になる場合を考慮していない。
      **/
     public static void increaseStoredReiryokuAmount(ItemStack stack, int i) {
-        CompoundTag compoundtag = stack.getTag();
+        CompoundTag compoundtag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
         int pre = 0;
         if (compoundtag == null) {
-            stack.setTag(new CompoundTag());
+            stack.set(DataComponents.CUSTOM_DATA, CustomData.of(new CompoundTag()));
         } else {
-            pre = stack.getTag().getInt(REIRYOKU_AMOUNT);
+            pre = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getInt(REIRYOKU_AMOUNT);
         }
         if (0 <= pre + i && pre + i <= getReiryokuCapacity(stack)) {
-            stack.getTag().putInt(REIRYOKU_AMOUNT, pre + i);
+            { CompoundTag __nbt = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag(); __nbt.putInt(REIRYOKU_AMOUNT, pre + i); stack.set(DataComponents.CUSTOM_DATA, CustomData.of(__nbt)); };
         } else if (pre + i > getReiryokuCapacity(stack)) {
-            stack.getTag().putInt(REIRYOKU_AMOUNT, getReiryokuCapacity(stack));
+            { CompoundTag __nbt = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag(); __nbt.putInt(REIRYOKU_AMOUNT, getReiryokuCapacity(stack)); stack.set(DataComponents.CUSTOM_DATA, CustomData.of(__nbt)); };
         } else {
-            stack.getTag().putInt(REIRYOKU_AMOUNT, 0);
+            { CompoundTag __nbt = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag(); __nbt.putInt(REIRYOKU_AMOUNT, 0); stack.set(DataComponents.CUSTOM_DATA, CustomData.of(__nbt)); };
         }
     }
 
@@ -273,12 +273,12 @@ return false;
      * 霊力を増減させたとき、計算結果が定義域に含まれているかどうか
      **/
     public static boolean willBeInDomain(ItemStack stack, int i) {
-        CompoundTag compoundtag = stack.getTag();
+        CompoundTag compoundtag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
         int pre = 0;
         if (compoundtag == null) {
-            stack.setTag(new CompoundTag());
+            stack.set(DataComponents.CUSTOM_DATA, CustomData.of(new CompoundTag()));
         } else {
-            pre = stack.getTag().getInt(REIRYOKU_AMOUNT);
+            pre = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getInt(REIRYOKU_AMOUNT);
         }
         return 0 <= pre + i && pre + i <= getReiryokuCapacity(stack);
     }
@@ -287,24 +287,24 @@ return false;
      * 霊力を増減させたとき、定義域からはみ出た端数を返す
      **/
     public static int getExtraReiryokuAmount(ItemStack stack, int i) {
-        CompoundTag compoundtag = stack.getTag();
+        CompoundTag compoundtag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
         int pre = 0;
         if (compoundtag == null) {
-            stack.setTag(new CompoundTag());
+            stack.set(DataComponents.CUSTOM_DATA, CustomData.of(new CompoundTag()));
         } else {
-            pre = stack.getTag().getInt(REIRYOKU_AMOUNT);
+            pre = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getInt(REIRYOKU_AMOUNT);
         }
 
         if (0 <= pre + i && pre + i <= getReiryokuCapacity(stack)) {
-            //stack.getTag().putInt(REIRYOKU_AMOUNT, pre + i);
+            //{ CompoundTag __nbt = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag(); __nbt.putInt(REIRYOKU_AMOUNT, pre + i); stack.set(DataComponents.CUSTOM_DATA, CustomData.of(__nbt)); };
             return 0;
         } else if (pre + i > getReiryokuCapacity(stack)) {
             /**霊力を増やしすぎて計算結果が最大容量を超えたとき、入りきらなかった量を正の値で返す。つまり、貯蔵量4990、最大貯蔵量5000にの霊力を30増やそうとすると20が返ってくる。**/
-            //  stack.getTag().putInt(REIRYOKU_AMOUNT, getReiryokuCapacity(stack));
+            //  { CompoundTag __nbt = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag(); __nbt.putInt(REIRYOKU_AMOUNT, getReiryokuCapacity(stack)); stack.set(DataComponents.CUSTOM_DATA, CustomData.of(__nbt)); };
             return pre + i - getReiryokuCapacity(stack);
         } else {
             /**霊力を減らしすぎて計算結果が0になったとき、引ききれなかった量を負の値で返す。つまり、貯蔵量10の霊力を90減らそうとすると-80が返ってくる。**/
-            //   stack.getTag().putInt(REIRYOKU_AMOUNT, 0);
+            //   { CompoundTag __nbt = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag(); __nbt.putInt(REIRYOKU_AMOUNT, 0); stack.set(DataComponents.CUSTOM_DATA, CustomData.of(__nbt)); };
             return -(i - pre);
         }
     }

@@ -2,13 +2,9 @@ package com.iwaliner.urushi.blockentity;
 
 
 
-import com.iwaliner.urushi.BlockEntityRegister;
-import com.iwaliner.urushi.ItemAndBlockRegister;
-import com.iwaliner.urushi.TagUrushi;
-import com.iwaliner.urushi.block.DirtFurnaceBlock;
-import com.iwaliner.urushi.block.RiceCauldronBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -28,7 +24,11 @@ import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.data.ForgeItemTagsProvider;
+import com.iwaliner.urushi.BlockEntityRegister;
+import com.iwaliner.urushi.ItemAndBlockRegister;
+import com.iwaliner.urushi.TagUrushi;
+import com.iwaliner.urushi.block.DirtFurnaceBlock;
+import com.iwaliner.urushi.block.RiceCauldronBlock;
 
 import javax.annotation.Nullable;
 
@@ -56,19 +56,19 @@ public  class RiceCauldronBlockEntity extends BaseContainerBlockEntity implement
     public RiceCauldronBlockEntity(BlockPos p_155052_, BlockState p_155053_) {
         super(BlockEntityRegister.RiceCauldronBlockEntity.get(), p_155052_, p_155053_);
     }
-    public void load(CompoundTag p_155025_) {
-        super.load(p_155025_);
+    public void loadAdditional(CompoundTag p_155025_, HolderLookup.Provider registries) {
+        super.loadAdditional(p_155025_, registries);
         this.items = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
-        ContainerHelper.loadAllItems(p_155025_, this.items);
+        ContainerHelper.loadAllItems(p_155025_, this.items, registries);
         this.processingTime = p_155025_.getInt("ProcessTime");
 
 
     }
 
-    protected void saveAdditional(CompoundTag p_187452_) {
-        super.saveAdditional(p_187452_);
+    protected void saveAdditional(CompoundTag p_187452_, HolderLookup.Provider registries) {
+        super.saveAdditional(p_187452_, registries);
         p_187452_.putInt("ProcessTime", this.processingTime);
-      ContainerHelper.saveAllItems(p_187452_, this.items);
+      ContainerHelper.saveAllItems(p_187452_, this.items, registries);
         CompoundTag compoundtag = new CompoundTag();
     }
 
@@ -116,7 +116,7 @@ public  class RiceCauldronBlockEntity extends BaseContainerBlockEntity implement
     @Override
     public void setItem(int slot, ItemStack stack) {
         ItemStack itemstack = this.items.get(slot);
-        boolean flag = !stack.isEmpty() && ItemStack.isSameItemSameTags(stack, itemstack);
+        boolean flag = !stack.isEmpty() && ItemStack.isSameItemSameComponents(stack, itemstack);
         this.items.set(slot, stack);
         if (stack.getCount() > this.getMaxStackSize()) {
             stack.setCount(this.getMaxStackSize());
@@ -210,18 +210,17 @@ public  class RiceCauldronBlockEntity extends BaseContainerBlockEntity implement
     private boolean isWorking(){
         return this.processingTime!=0;
     }
-    net.minecraftforge.common.util.LazyOptional<? extends net.minecraftforge.items.IItemHandler>[] handlers =
-            net.minecraftforge.items.wrapper.SidedInvWrapper.create(this, Direction.UP, Direction.DOWN, Direction.NORTH);
-    @Override
-    public <T> net.minecraftforge.common.util.LazyOptional<T> getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, @Nullable Direction facing) {
-        if (!this.remove && facing != null && capability == net.minecraftforge.common.capabilities.ForgeCapabilities.ITEM_HANDLER) {
-            if (facing == Direction.UP)
-                return handlers[0].cast();
-            else
-                return handlers[1].cast();
-        }
-        return super.getCapability(capability, facing);
-    }
+    // net.neoforged.neoforge.items.wrapper.SidedInvWrapper.create(this, Direction.UP, Direction.DOWN, Direction.NORTH);
+    //   Register via: event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, YOUR_BE_TYPE, (be, side) -> your_handler);
+    //   Original capability logic (preserve side-specific routing):
+    //     @Override
+    //         if (!this.remove && facing != null && capability == net.neoforged.neoforge.capabilities.Capabilities.ItemHandler.BLOCK) {
+    //             if (facing == Direction.UP)
+    //             else
+    //         }
+    //         return super.getCapability(capability, facing);
+    //     }
+
 
     @Override
     public void clearContent() {
@@ -235,4 +234,9 @@ public  class RiceCauldronBlockEntity extends BaseContainerBlockEntity implement
         }
     }
 
+
+    @Override
+    protected NonNullList<ItemStack> getItems() {
+        return this.items;
+    }
 }

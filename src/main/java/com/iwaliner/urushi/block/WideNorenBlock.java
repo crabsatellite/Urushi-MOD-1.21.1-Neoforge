@@ -14,10 +14,19 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BedPart;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import com.mojang.serialization.MapCodec;
 
 import javax.annotation.Nullable;
 
 public class WideNorenBlock extends NorenBlock{
+    public static final MapCodec<WideNorenBlock> CODEC = simpleCodec(WideNorenBlock::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
     public static final BooleanProperty VARIANT = BooleanProperty.create("variant");
     public WideNorenBlock(Properties p_i48377_1_) {
         super(p_i48377_1_);

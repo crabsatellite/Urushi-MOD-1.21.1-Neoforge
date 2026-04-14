@@ -1,9 +1,7 @@
 package com.iwaliner.urushi.item;
 
-import com.iwaliner.urushi.ItemAndBlockRegister;
-import com.iwaliner.urushi.ModCoreUrushi;
-import com.iwaliner.urushi.util.UrushiUtils;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -20,7 +18,9 @@ import net.minecraft.world.entity.animal.goat.Goat;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
-import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.ClipContext;
@@ -29,6 +29,9 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
+import com.iwaliner.urushi.ItemAndBlockRegister;
+import com.iwaliner.urushi.ModCoreUrushi;
+import com.iwaliner.urushi.util.UrushiUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -57,7 +60,7 @@ public class EmptyBambooCup extends Item {
                     level.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.BOTTLE_FILL, SoundSource.NEUTRAL, 1.0F, 1.0F);
                     level.gameEvent(player, GameEvent.FLUID_PICKUP, blockpos);
                     player.setItemInHand(hand,new ItemStack(ItemAndBlockRegister.water_bamboo_cup.get(),itemstack.getCount()));
-                    return InteractionResultHolder.sidedSuccess(itemstack, level.isClientSide());
+                    return InteractionResultHolder.success(itemstack);
                 }
             }
 
@@ -73,13 +76,13 @@ public class EmptyBambooCup extends Item {
             if(entity.isAlive()&&!entity.isBaby()) {
                 player.playSound(SoundEvents.COW_MILK, 1.0F, 1.0F);
                 player.setItemInHand(hand,new ItemStack(ItemAndBlockRegister.milk_bamboo_cup.get(),player.getItemInHand(hand).getCount()));
-                return InteractionResult.sidedSuccess(player.level().isClientSide);
+                return InteractionResult.SUCCESS;
             }
         }
         return InteractionResult.FAIL;
     }
     @Override
-    public void appendHoverText(ItemStack p_41421_, @Nullable Level p_41422_, List<Component> list, TooltipFlag p_41424_) {
+    public void appendHoverText(ItemStack p_41421_, Item.TooltipContext p_41422_, List<Component> list, TooltipFlag p_41424_) {
         UrushiUtils.setInfo(list,"bamboo_cup");
     }
 }

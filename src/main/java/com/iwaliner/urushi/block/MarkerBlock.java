@@ -1,12 +1,9 @@
 package com.iwaliner.urushi.block;
 
-import com.iwaliner.urushi.BlockEntityRegister;
-import com.iwaliner.urushi.ModCoreUrushi;
-import com.iwaliner.urushi.blockentity.FillerBlockEntity;
-import com.iwaliner.urushi.blockentity.MarkerBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.stats.Stats;
+import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.Container;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
@@ -28,9 +25,22 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import com.iwaliner.urushi.BlockEntityRegister;
+import com.iwaliner.urushi.ModCoreUrushi;
+import com.iwaliner.urushi.blockentity.FillerBlockEntity;
+import com.iwaliner.urushi.blockentity.MarkerBlockEntity;
+import com.mojang.serialization.MapCodec;
 import org.jetbrains.annotations.Nullable;
 
 public class MarkerBlock extends BaseEntityBlock {
+    public static final MapCodec<MarkerBlock> CODEC = simpleCodec(MarkerBlock::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
     private static final VoxelShape BASE = Block.box(4D, 0.0D, 4D, 12D, 2D, 12D);
     private static final VoxelShape PILLAR = Block.box(7D, 1.0D, 7D, 9D, 16D, 9D);
     private static final VoxelShape OUTER_BOX = Block.box(4D, 0.0D, 4D, 12D, 16D, 12D);
@@ -64,7 +74,7 @@ public class MarkerBlock extends BaseEntityBlock {
 
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult result) {
         if(level.getBlockEntity(pos) instanceof MarkerBlockEntity markerBlockEntity){
             if(level.isClientSide()){
                 ModCoreUrushi.logger.info("client:"+markerBlockEntity.hasRange());

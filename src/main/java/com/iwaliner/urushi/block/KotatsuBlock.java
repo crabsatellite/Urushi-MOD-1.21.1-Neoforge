@@ -1,8 +1,6 @@
 package com.iwaliner.urushi.block;
 
 
-import com.iwaliner.urushi.TagUrushi;
-import com.iwaliner.urushi.util.UrushiUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -20,14 +18,26 @@ import net.minecraft.world.level.block.FireBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import com.iwaliner.urushi.TagUrushi;
+import com.iwaliner.urushi.util.UrushiUtils;
+import com.mojang.serialization.MapCodec;
 
 import java.util.List;
 
 public class KotatsuBlock extends Block {
+    public static final MapCodec<KotatsuBlock> CODEC = simpleCodec(KotatsuBlock::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
   /*   private static final VoxelShape Shape1 = Block.box(1D, 0.0D, 1D, 4D, 16D, 4D);
     private static final VoxelShape Shape2 = Block.box(1D, 0.0D, 12D, 4D, 16D, 15D);
     private static final VoxelShape Shape3 = Block.box(12D, 0.0D, 1D, 15D, 16D, 4D);

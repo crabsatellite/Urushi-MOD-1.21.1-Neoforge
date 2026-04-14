@@ -2,11 +2,6 @@ package com.iwaliner.urushi.block;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonParser;
-import com.iwaliner.urushi.EntityRegister;
-import com.iwaliner.urushi.ModCoreUrushi;
-import com.iwaliner.urushi.ParticleRegister;
-import com.mojang.authlib.minecraft.client.ObjectMapper;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.gui.Font;
@@ -23,6 +18,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -38,25 +34,36 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.ForgeHooksClient;
-import net.minecraftforge.common.MinecraftForge;
-
-import net.minecraft.util.RandomSource;
-import net.minecraftforge.fml.loading.FMLPaths;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.fml.loading.FMLPaths;
+import net.neoforged.neoforge.common.NeoForge;
+import com.iwaliner.urushi.EntityRegister;
+import com.iwaliner.urushi.ModCoreUrushi;
+import com.iwaliner.urushi.ParticleRegister;
+import com.mojang.authlib.minecraft.client.ObjectMapper;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.serialization.MapCodec;
 import org.openjdk.nashorn.internal.parser.JSONParser;
 
-import javax.json.Json;
-import javax.json.JsonArray;
-import javax.json.JsonObject;
-import javax.json.JsonReader;
 import java.io.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
+import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
 
 public class AriakeAndonBlock extends HorizonalRotateBlock {
+    public static final MapCodec<AriakeAndonBlock> CODEC = simpleCodec(AriakeAndonBlock::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
     protected static final VoxelShape SHAPE = Block.box(3.0D, 0.0D, 3.0D, 13.0D, 12.0D, 13.0D);
     public static final BooleanProperty OPEN = BlockStateProperties.OPEN;
 
@@ -76,9 +83,9 @@ public class AriakeAndonBlock extends HorizonalRotateBlock {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult result) {
        // level.addParticle(ParticleRegister.Test.get(), pos.getX(), pos.getY()+2, pos.getZ(), 0.0D, 0D, 0.0D);
-        //Minecraft.getInstance().gameRenderer.displayItemActivation(player.getItemInHand(hand));
+        //Minecraft.getInstance().gameRenderer.displayItemActivation(player.getMainHandItem());
 
 
 
@@ -87,7 +94,7 @@ public class AriakeAndonBlock extends HorizonalRotateBlock {
 
        // level.addDestroyBlockEffect(blockpos2, blockstate1);
 
-//Minecraft.getInstance().font=new Font(new Function<ResourceLocation, FontSet>(new ResourceLocation(ModCoreUrushi.ModID,""),new FontSet(Minecraft.getInstance().textureManager,new ResourceLocation(ModCoreUrushi.ModID,""))) ;
+//Minecraft.getInstance().font=new Font(new Function<ResourceLocation, FontSet>(ResourceLocation.fromNamespaceAndPath(ModCoreUrushi.ModID, ""),new FontSet(Minecraft.getInstance().textureManager,ResourceLocation.fromNamespaceAndPath(ModCoreUrushi.ModID, ""))) ;
 
         if(state.getValue(OPEN)){
            level.setBlockAndUpdate(pos,state.setValue(OPEN,Boolean.valueOf(false)));

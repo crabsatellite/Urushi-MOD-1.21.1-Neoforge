@@ -1,7 +1,5 @@
 package com.iwaliner.urushi.block;
 
-import com.iwaliner.urushi.ItemAndBlockRegister;
-import com.iwaliner.urushi.TagUrushi;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
@@ -13,14 +11,26 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.CaveVinesBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import com.iwaliner.urushi.ItemAndBlockRegister;
+import com.iwaliner.urushi.TagUrushi;
+import com.mojang.serialization.MapCodec;
 
 import java.util.function.ToIntFunction;
 
 public class YomiVinesBlock extends CaveVinesBlock {
+    public static final MapCodec<YomiVinesBlock> CODEC = simpleCodec(YomiVinesBlock::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
     public YomiVinesBlock(Properties p_152959_) {
         super(p_152959_);
     }
@@ -30,16 +40,16 @@ public class YomiVinesBlock extends CaveVinesBlock {
     public static final ToIntFunction<BlockState> LIGHT_EMISSION = (state) -> {
        return state.getValue(BERRIES)? 5:0;
     };
-    public ItemStack getCloneItemStack(BlockGetter p_152966_, BlockPos p_152967_, BlockState p_152968_) {
+    public ItemStack getCloneItemStack(LevelReader p_152966_, BlockPos p_152967_, BlockState p_152968_) {
         return new ItemStack(ItemAndBlockRegister.yomotsuhegui_fruit.get());
     }
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult result) {
         if (state.getValue(BERRIES)) {
             Block.popResource(level, pos, new ItemStack(ItemAndBlockRegister.yomotsuhegui_fruit.get(), 1));
             float f = Mth.randomBetween(level.random, 0.8F, 1.2F);
             level.playSound((Player)null, pos, SoundEvents.CAVE_VINES_PICK_BERRIES, SoundSource.BLOCKS, 1.0F, f);
             level.setBlock(pos, state.setValue(BERRIES, Boolean.valueOf(false)), 2);
-            return InteractionResult.sidedSuccess(level.isClientSide);
+            return InteractionResult.SUCCESS;
         } else {
             return InteractionResult.PASS;
         }

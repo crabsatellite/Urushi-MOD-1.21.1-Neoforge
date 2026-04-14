@@ -7,11 +7,11 @@
   ],
   "key": {
     "D": {
-   "tag": "forge:dyes/lime"
-      },
+      "tag": "c:dyes/lime"
+    },
     "B": {
-    "tag": "urushi:plaster"
-   }
+      "tag": "urushi:plaster"
+    }
   },
   "result": {
     "item": "urushi:lime_plaster",

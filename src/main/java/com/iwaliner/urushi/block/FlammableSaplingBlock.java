@@ -1,7 +1,5 @@
 package com.iwaliner.urushi.block;
 
-import com.iwaliner.urushi.ItemAndBlockRegister;
-import com.iwaliner.urushi.util.UrushiUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
@@ -10,14 +8,21 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SaplingBlock;
-import net.minecraft.world.level.block.grower.AbstractTreeGrower;
+import net.minecraft.world.level.block.grower.TreeGrower;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import com.iwaliner.urushi.ItemAndBlockRegister;
+import com.iwaliner.urushi.util.UrushiUtils;
+import com.mojang.serialization.MapCodec;
 
 public class FlammableSaplingBlock extends SaplingBlock {
-    public FlammableSaplingBlock(AbstractTreeGrower p_55978_, Properties p_55979_) {
+    public static final MapCodec<FlammableSaplingBlock> CODEC = simpleCodec(__p -> new FlammableSaplingBlock(null, __p));
+
+    @Override
+    public MapCodec<? extends FlammableSaplingBlock> codec() { return CODEC; }
+    public FlammableSaplingBlock(TreeGrower p_55978_, Properties p_55979_) {
         super(p_55978_, p_55979_);
     }
     @OnlyIn(Dist.CLIENT)

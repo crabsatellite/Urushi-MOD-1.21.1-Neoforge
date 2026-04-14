@@ -1,9 +1,9 @@
 package com.iwaliner.urushi.blockentity;
 
 
-import com.iwaliner.urushi.BlockEntityRegister;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -21,6 +21,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import com.iwaliner.urushi.BlockEntityRegister;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -33,19 +34,19 @@ public  class PlateBlockEntity extends RandomizableContainerBlockEntity  {
     public PlateBlockEntity(BlockPos p_155052_, BlockState p_155053_) {
         super(BlockEntityRegister.Plate.get(), p_155052_, p_155053_);
     }
-    public void load(CompoundTag p_155025_) {
-        super.load(p_155025_);
+    public void loadAdditional(CompoundTag p_155025_, HolderLookup.Provider registries) {
+        super.loadAdditional(p_155025_, registries);
         this.items.clear();
-        ContainerHelper.loadAllItems(p_155025_, this.items);
+        ContainerHelper.loadAllItems(p_155025_, this.items, registries);
     }
 
-    protected void saveAdditional(CompoundTag p_187452_) {
-        super.saveAdditional(p_187452_);
-       ContainerHelper.saveAllItems(p_187452_, this.items,true);
+    protected void saveAdditional(CompoundTag p_187452_, HolderLookup.Provider registries) {
+        super.saveAdditional(p_187452_, registries);
+       ContainerHelper.saveAllItems(p_187452_, this.items,true, registries);
     }
-    public CompoundTag getUpdateTag() {
+    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
         CompoundTag compoundtag = new CompoundTag();
-        ContainerHelper.saveAllItems(compoundtag, this.items, true);
+        ContainerHelper.saveAllItems(compoundtag, this.items, true, registries);
         return compoundtag;
     }
     public ClientboundBlockEntityDataPacket getUpdatePacket() {
@@ -148,8 +149,6 @@ public  class PlateBlockEntity extends RandomizableContainerBlockEntity  {
     public void clearContent() {
         this.items.clear();
     }
-
-    @Override
     protected NonNullList<ItemStack> getItems() {
         return items;
     }

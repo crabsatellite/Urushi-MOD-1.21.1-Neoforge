@@ -2,18 +2,11 @@ package com.iwaliner.urushi.blockentity;
 
 
 
-import com.iwaliner.urushi.BlockEntityRegister;
-import com.iwaliner.urushi.ItemAndBlockRegister;
-import com.iwaliner.urushi.RecipeTypeRegister;
-import com.iwaliner.urushi.block.DirtFurnaceBlock;
-import com.iwaliner.urushi.block.RiceCauldronBlock;
-import com.iwaliner.urushi.blockentity.menu.FryerMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
- 
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.entity.player.Inventory;
@@ -28,6 +21,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import com.iwaliner.urushi.BlockEntityRegister;
+import com.iwaliner.urushi.ItemAndBlockRegister;
+import com.iwaliner.urushi.RecipeTypeRegister;
+import com.iwaliner.urushi.block.DirtFurnaceBlock;
+import com.iwaliner.urushi.block.RiceCauldronBlock;
+import com.iwaliner.urushi.blockentity.menu.FryerMenu;
 
 import javax.annotation.Nullable;
 

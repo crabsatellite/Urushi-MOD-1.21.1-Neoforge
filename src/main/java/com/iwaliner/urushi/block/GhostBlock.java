@@ -1,10 +1,9 @@
 package com.iwaliner.urushi.block;
 
-import com.iwaliner.urushi.util.IGhostBlock;
-import com.iwaliner.urushi.util.UrushiUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -20,14 +19,20 @@ import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import com.iwaliner.urushi.util.IGhostBlock;
+import com.iwaliner.urushi.util.UrushiUtils;
+import com.mojang.serialization.MapCodec;
 
-import javax.annotation.Nullable;
 import java.util.List;
+import javax.annotation.Nullable;
 
 public class GhostBlock extends Block implements IGhostBlock {
+    public static final MapCodec<GhostBlock> CODEC = simpleCodec(__p -> new GhostBlock(false, __p));
 
+    @Override
+    public MapCodec<? extends GhostBlock> codec() { return CODEC; }
     public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
     public final boolean canChange;
     public GhostBlock(boolean b,Properties p_49795_) {
@@ -106,7 +111,7 @@ public class GhostBlock extends Block implements IGhostBlock {
         }
     }
     @Override
-    public void appendHoverText(ItemStack p_49816_, @org.jetbrains.annotations.Nullable BlockGetter p_49817_, List<Component> list, TooltipFlag p_49819_) {
+    public void appendHoverText(ItemStack p_49816_, Item.TooltipContext p_49817_, List<Component> list, TooltipFlag p_49819_) {
        if(canChange) {
            UrushiUtils.setInfo(list, "ghost_block");
            UrushiUtils.setInfo(list, "ghost_block2");
@@ -115,7 +120,7 @@ public class GhostBlock extends Block implements IGhostBlock {
 
     /**falseだとモブが足場として誤認*/
     @Override
-    public boolean isPathfindable(BlockState p_60475_, BlockGetter p_60476_, BlockPos p_60477_, PathComputationType p_60478_) {
+    public boolean isPathfindable(BlockState p_60475_, PathComputationType p_60478_) {
         return false;
     }
 }

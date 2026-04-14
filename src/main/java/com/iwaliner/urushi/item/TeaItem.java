@@ -1,6 +1,6 @@
 package com.iwaliner.urushi.item;
 
-import com.iwaliner.urushi.ItemAndBlockRegister;
+import net.minecraft.core.Holder;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -9,7 +9,9 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import com.iwaliner.urushi.ItemAndBlockRegister;
 
 public class TeaItem extends PlaceableFoodItem {
     public TeaItem(java.util.function.Supplier<? extends EntityType<?>> p_54694_, Properties p_41383_) {

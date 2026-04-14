@@ -7,16 +7,16 @@
   ],
   "key": {
     "d": {
-     "tag": "forge:dyes/pink"
+      "tag": "c:dyes/pink"
     },
     "g": {
-     "tag": "forge:weed"
+      "tag": "c:weed"
     },
     "m": {
-     "item": "urushi:rice_cake"
+      "item": "urushi:rice_cake"
     },
     "s": {
-    "tag": "forge:rods/wooden"
+      "tag": "c:rods/wooden"
     }
   },
   "result": {

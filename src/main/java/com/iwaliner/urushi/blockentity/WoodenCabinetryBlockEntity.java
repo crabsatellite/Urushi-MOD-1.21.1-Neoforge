@@ -1,14 +1,12 @@
 package com.iwaliner.urushi.blockentity;
 
 
-import com.iwaliner.urushi.BlockEntityRegister;
-import com.iwaliner.urushi.block.WoodenCabinetrySlabBlock;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
- 
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -23,6 +21,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.ContainerOpenersCounter;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import com.iwaliner.urushi.BlockEntityRegister;
+import com.iwaliner.urushi.block.WoodenCabinetrySlabBlock;
 
 public class WoodenCabinetryBlockEntity extends RandomizableContainerBlockEntity {
     private NonNullList<ItemStack> items = NonNullList.withSize(54, ItemStack.EMPTY);
@@ -53,19 +53,19 @@ public class WoodenCabinetryBlockEntity extends RandomizableContainerBlockEntity
         super(BlockEntityRegister.WoodenCabinetryBlockEntity.get(), p_155052_, p_155053_);
     }
 
-    protected void saveAdditional(CompoundTag p_187459_) {
-        super.saveAdditional(p_187459_);
+    protected void saveAdditional(CompoundTag p_187459_, HolderLookup.Provider registries) {
+        super.saveAdditional(p_187459_, registries);
         if (!this.trySaveLootTable(p_187459_)) {
-            ContainerHelper.saveAllItems(p_187459_, this.items);
+            ContainerHelper.saveAllItems(p_187459_, this.items, registries);
         }
 
     }
 
-    public void load(CompoundTag p_155055_) {
-        super.load(p_155055_);
+    public void loadAdditional(CompoundTag p_155055_, HolderLookup.Provider registries) {
+        super.loadAdditional(p_155055_, registries);
         this.items = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
         if (!this.tryLoadLootTable(p_155055_)) {
-            ContainerHelper.loadAllItems(p_155055_, this.items);
+            ContainerHelper.loadAllItems(p_155055_, this.items, registries);
         }
 
     }

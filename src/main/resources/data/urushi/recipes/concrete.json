@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-     "tag": "forge:stone"
+      "tag": "c:stone"
     },
     {
       "item": "minecraft:sand"
@@ -14,19 +14,19 @@
       "item": "minecraft:sand"
     },
     {
-     "item": "minecraft:sand"
+      "item": "minecraft:sand"
     },
     {
-     "item": "minecraft:gravel"
+      "item": "minecraft:gravel"
     },
     {
-     "item": "minecraft:gravel"
+      "item": "minecraft:gravel"
     },
     {
-     "item": "minecraft:gravel"
+      "item": "minecraft:gravel"
     },
     {
-     "item": "minecraft:gravel"
+      "item": "minecraft:gravel"
     }
   ],
   "result": {

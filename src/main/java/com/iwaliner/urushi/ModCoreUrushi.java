@@ -1,24 +1,8 @@
 package com.iwaliner.urushi;
 
-import com.iwaliner.urushi.block.*;
-import com.iwaliner.urushi.blockentity.ShichirinBlockEntity;
 
-import com.iwaliner.urushi.network.AdditionalHeartProvider;
-import com.iwaliner.urushi.network.FramedBlockTextureConnectionData;
-import com.iwaliner.urushi.network.FramedBlockTextureConnectionProvider;
-import com.iwaliner.urushi.util.ElementType;
-import com.iwaliner.urushi.util.ElementUtils;
-import com.iwaliner.urushi.util.MemoryScreen;
-import com.iwaliner.urushi.util.UrushiUtils;
-import com.iwaliner.urushi.util.interfaces.ElementBlock;
-import com.iwaliner.urushi.util.interfaces.ElementItem;
-import com.iwaliner.urushi.util.interfaces.Tiered;
-import com.mojang.blaze3d.platform.Window;
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.ChatFormatting;
-import net.minecraft.advancements.FrameType;
+import net.minecraft.advancements.AdvancementType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
@@ -30,6 +14,8 @@ import net.minecraft.client.renderer.OutlineBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.core.*;
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.*;
@@ -45,6 +31,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.Fox;
 import net.minecraft.world.entity.animal.Squid;
@@ -52,7 +39,9 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.PlayerModelPart;
 import net.minecraft.world.item.*;
-import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.alchemy.PotionContents;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.ItemLike;
@@ -61,7 +50,6 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
-
 import net.minecraft.world.level.block.state.properties.SlabType;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
@@ -72,35 +60,56 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.client.event.*;
-import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.ToolAction;
-import net.minecraftforge.common.ToolActions;
-import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
-import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
-import net.minecraftforge.event.LootTableLoadEvent;
-import net.minecraftforge.event.entity.EntityEvent;
-import net.minecraftforge.event.entity.living.*;
-import net.minecraftforge.event.entity.player.*;
-import net.minecraftforge.event.furnace.FurnaceFuelBurnTimeEvent;
-import net.minecraftforge.event.level.BlockEvent;
-import net.minecraftforge.event.level.SleepFinishedTimeEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.VersionChecker;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.loading.FMLPaths;
-import net.minecraftforge.forgespi.language.IConfigurable;
-import net.minecraftforge.forgespi.language.IModFileInfo;
-import net.minecraftforge.forgespi.language.IModInfo;
-import net.minecraftforge.forgespi.locating.ForgeFeature;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.VersionChecker;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.loading.FMLPaths;
+import net.neoforged.neoforge.attachment.AttachmentType;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.items.wrapper.InvWrapper;
+import net.neoforged.neoforge.items.wrapper.SidedInvWrapper;
+import net.neoforged.neoforge.client.event.*;
+import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
+import net.neoforged.neoforge.common.ItemAbilities;
+import net.neoforged.neoforge.common.ItemAbility;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
+import net.neoforged.neoforge.event.LootTableLoadEvent;
+import net.neoforged.neoforge.event.entity.EntityEvent;
+import net.neoforged.neoforge.event.entity.living.*;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
+import net.neoforged.neoforge.event.entity.player.*;
+import net.neoforged.neoforge.event.furnace.FurnaceFuelBurnTimeEvent;
+import net.neoforged.neoforge.event.level.BlockEvent;
+import net.neoforged.neoforge.event.level.SleepFinishedTimeEvent;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforgespi.language.IConfigurable;
+import net.neoforged.neoforgespi.language.IModFileInfo;
+import net.neoforged.neoforgespi.language.IModInfo;
+import net.neoforged.neoforgespi.locating.ForgeFeature;
+import com.iwaliner.urushi.ModCoreUrushi;
+import com.iwaliner.urushi.block.*;
+import com.iwaliner.urushi.blockentity.ShichirinBlockEntity;
+import com.iwaliner.urushi.network.AdditionalHeartProvider;
+import com.iwaliner.urushi.network.FramedBlockTextureConnectionData;
+import com.iwaliner.urushi.network.FramedBlockTextureConnectionProvider;
+import com.iwaliner.urushi.util.ElementType;
+import com.iwaliner.urushi.util.ElementUtils;
+import com.iwaliner.urushi.util.MemoryScreen;
+import com.iwaliner.urushi.util.UrushiUtils;
+import com.iwaliner.urushi.util.interfaces.ElementBlock;
+import com.iwaliner.urushi.util.interfaces.ElementItem;
+import com.iwaliner.urushi.util.interfaces.Tiered;
+import com.mojang.blaze3d.platform.Window;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.maven.artifact.versioning.ArtifactVersion;
@@ -131,24 +140,28 @@ public class ModCoreUrushi {
     public static List<String> diamondToolList=new ArrayList<>();
     public static List<String> netheriteToolList=new ArrayList<>();
     public static List<Item> underDevelopmentList=new ArrayList<>();
-    public static List<RegistryObject<Item>> redstoneTabContents=new ArrayList<>();
-    public static List<RegistryObject<Item>> urushiTabContents=new ArrayList<>();
-    public static List<RegistryObject<Item>> urushiPlasterTabContents=new ArrayList<>();
-    public static List<RegistryObject<Item>> urushiWoodTabContents=new ArrayList<>();
-    public static List<RegistryObject<Item>> urushiFoodTabContents=new ArrayList<>();
-    public static List<RegistryObject<Item>> urushiMagicTabContents=new ArrayList<>();
+    public static List<DeferredHolder<Item, Item>> redstoneTabContents=new ArrayList<>();
+    public static List<DeferredHolder<Item, Item>> urushiTabContents=new ArrayList<>();
+    public static List<DeferredHolder<Item, Item>> urushiPlasterTabContents=new ArrayList<>();
+    public static List<DeferredHolder<Item, Item>> urushiWoodTabContents=new ArrayList<>();
+    public static List<DeferredHolder<Item, Item>> urushiFoodTabContents=new ArrayList<>();
+    public static List<DeferredHolder<Item, Item>> urushiMagicTabContents=new ArrayList<>();
 
     public static boolean isDebug=FMLPaths.GAMEDIR.get().toString().contains("イワライナー")&&FMLPaths.GAMEDIR.get().toString().contains("run");
     public static Logger logger = LogManager.getLogger("urushi");
     public static IEventBus modEventBus;
 
-    public ModCoreUrushi() {
-        modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+    public ModCoreUrushi(IEventBus modEventBus, ModContainer modContainer) {
+        ModCoreUrushi.modEventBus = modEventBus;
         /**コンフィグを登録*/
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON,ConfigUrushi.spec,"urushi.toml");
+        modContainer.registerConfig(ModConfig.Type.COMMON,ConfigUrushi.spec,"urushi.toml");
 
         /**アイテムとブロックを登録*/
         ItemAndBlockRegister.register(modEventBus);
+
+        /**アタッチメント(旧Capability)を登録*/
+        AdditionalHeartProvider.ATTACHMENT_TYPES.register(modEventBus);
+        FramedBlockTextureConnectionProvider.ATTACHMENT_TYPES.register(modEventBus);
 
         /**ブロックエンティティ(旧タイルエンティティ)を登録*/
         BlockEntityRegister.register(modEventBus);
@@ -180,10 +193,10 @@ public class ModCoreUrushi {
         FeatureRegister.register(modEventBus);
 
         modEventBus.addListener(this::CreativeTabEvent);
-        MinecraftForge.EVENT_BUS.register(this);
+        modEventBus.addListener(this::RegisterCapabilities);
+        NeoForge.EVENT_BUS.register(this);
 
     }
-    @SubscribeEvent
     public void CreativeTabEvent(BuildCreativeModeTabContentsEvent event)
     {
         if (event.getTabKey() == CreativeModeTabs.REDSTONE_BLOCKS) {
@@ -336,7 +349,7 @@ public class ModCoreUrushi {
     }*/
     /**葉の上に落下したとき落下ダメージを受けないように*/
     @SubscribeEvent
-    public void LeavesDamageEvent(LivingHurtEvent event) {
+    public void LeavesDamageEvent(LivingIncomingDamageEvent event) {
         if(event.getSource()==event.getEntity().damageSources().fall()){
             Entity entity = event.getEntity();
             if(entity.level().getBlockState(entity.blockPosition().below()).getBlock() instanceof LeavesBlock){
@@ -484,13 +497,14 @@ public class ModCoreUrushi {
 
         }
         if(ModCoreUrushi.isDebug){
-            CompoundTag tag=event.getItemStack().getTag();
+            CompoundTag tag=event.getItemStack().getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
             if(tag!=null&&!tag.isEmpty()){
                 event.getToolTip().add((Component.literal(tag.getAsString())).withStyle(ChatFormatting.AQUA));
             }
         }
         if(block instanceof ElementBlock){
-            CompoundTag tag=BlockItem.getBlockEntityData(stack);
+            CustomData _customData = stack.get(DataComponents.BLOCK_ENTITY_DATA);
+        CompoundTag tag = _customData != null ? _customData.copyTag() : null;
             if(tag==null){
                 return;
             }
@@ -561,8 +575,8 @@ public class ModCoreUrushi {
             }
         }
 
-        if(stack.getTag()!=null){
-            CompoundTag tag=stack.getTag();
+        if(stack.has(DataComponents.CUSTOM_DATA)){
+            CompoundTag tag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
             if(tag.contains("cookingEnum")){
                 int i=tag.getInt("cookingEnum");
                 int level=ShichirinBlockEntity.getCookingLevel(i);
@@ -578,7 +592,7 @@ public class ModCoreUrushi {
                     tooltipList.add((Component.translatable("info.urushi.undercooked" ).append(" "+level)).withStyle(color));
                     List<MobEffectInstance> list=new ArrayList<>();
                     list.add(new MobEffectInstance(MobEffects.HUNGER,300+60*level,level+15));
-                    PotionUtils.addPotionTooltip(list,tooltipList,1.0F);
+                    PotionContents.addPotionTooltip(list, tooltipList::add, 1.0F, 20.0F);
                 }else if(ShichirinBlockEntity.getCookingType(i).equals("wellcooked")){
                     tooltipList.add((Component.translatable("info.urushi.wellcooked" ).append(" "+level)).withStyle(color));
                     List<MobEffectInstance> list=new ArrayList<>();
@@ -586,12 +600,12 @@ public class ModCoreUrushi {
                     if(level==5){
                         list.add(new MobEffectInstance(MobEffects.HEALTH_BOOST,180*20,0));
                     }
-                    PotionUtils.addPotionTooltip(list,tooltipList,1.0F);
+                    PotionContents.addPotionTooltip(list, tooltipList::add, 1.0F, 20.0F);
                 }else{
                     tooltipList.add((Component.translatable("info.urushi.overcooked" ).append(" "+level)).withStyle(color));
                     List<MobEffectInstance> list=new ArrayList<>();
                     list.add(new MobEffectInstance(MobEffects.POISON,10+10*level,1));
-                    PotionUtils.addPotionTooltip(list,tooltipList,1.0F);
+                    PotionContents.addPotionTooltip(list, tooltipList::add, 1.0F, 20.0F);
                 }
             }
         }
@@ -612,7 +626,7 @@ public class ModCoreUrushi {
             List<MobEffectInstance> list=new ArrayList<>();
             list.add(new MobEffectInstance(MobEffects.MOVEMENT_SPEED,20*60*1,1));
             list.add(new MobEffectInstance(MobEffects.NIGHT_VISION,20*60*2,0));
-            PotionUtils.addPotionTooltip(list,tooltipList,1.0F);
+            PotionContents.addPotionTooltip(list, tooltipList::add, 1.0F, 20.0F);
         }
     }
 
@@ -623,7 +637,7 @@ public class ModCoreUrushi {
     public void FoodEatEvent(LivingEntityUseItemEvent.Finish event) {
         LivingEntity livingEntity=event.getEntity();
         ItemStack stack=event.getResultStack();
-        CompoundTag tag=stack.getTag();
+        CompoundTag tag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
         if(tag==null || !tag.contains("cookingEnum")){
             return;
         }
@@ -662,7 +676,7 @@ public class ModCoreUrushi {
                 }else if(i==3){
                     crop=new ItemStack(ItemAndBlockRegister.green_onion_crop.get());
                 }
-                if (event.getToolAction() == ToolActions.HOE_TILL &&(state.getBlock() instanceof GrassBlock)) {
+                if (event.getItemAbility() == ItemAbilities.HOE_TILL &&(state.getBlock() instanceof GrassBlock)) {
                         ItemEntity itemEntity = new ItemEntity(level, pos.getX() + 0.5D, pos.getY() + 1D, pos.getZ() + 0.5D,crop);
                         level.addFreshEntity(itemEntity);
                 }
@@ -702,13 +716,13 @@ public class ModCoreUrushi {
        event.getDrops().add(new ItemEntity(entity.level(),entity.getX(),entity.getY(),entity.getZ(),
                new ItemStack(ItemAndBlockRegister.squid_sashimi.get())));
         }else if(entity instanceof Player){
-            event.getEntity().getCapability(AdditionalHeartProvider.ADDITIONAL_HEART).ifPresent(data -> {
-                int additionalHeart=data.getAdditionalHeartValue();
-                if(additionalHeart>0){
-                    event.getDrops().add(new ItemEntity(entity.level(),entity.getX(),entity.getY(),entity.getZ(),
-                            new ItemStack(ItemAndBlockRegister.additional_heart.get(),additionalHeart)));
-                }
-            });
+            var data = event.getEntity().getData(AdditionalHeartProvider.ADDITIONAL_HEART.get());
+            int additionalHeart=data.getAdditionalHeartValue();
+            if(additionalHeart>0){
+            event.getDrops().add(new ItemEntity(entity.level(),entity.getX(),entity.getY(),entity.getZ(),
+            new ItemStack(ItemAndBlockRegister.additional_heart.get(),additionalHeart)));
+            }
+
         }
     }
 
@@ -764,32 +778,46 @@ public class ModCoreUrushi {
         }
     }
 
-    @SubscribeEvent
-    public void AttachCapabilitiesPlayer(AttachCapabilitiesEvent<Entity> event) {
-        if(event.getObject() instanceof Player) {
-            if(!event.getObject().getCapability(FramedBlockTextureConnectionProvider.FRAMED_BLOCK_TEXTURE_CONNECTION).isPresent()) {
-                event.addCapability(new ResourceLocation(ModID, "properties"), new FramedBlockTextureConnectionProvider());
-            }
-        }
-    }
-   
-    @SubscribeEvent
     public void RegisterCapabilities(RegisterCapabilitiesEvent event) {
-        event.register(FramedBlockTextureConnectionData.class);
+        // WorldlyContainer-implementing block entities: hopper-facing item handler
+        // delegates to the BE's own getSlotsForFace / canPlace / canTake logic.
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK,
+                BlockEntityRegister.FryerBlockEntity.get(),
+                (be, side) -> side == null ? new InvWrapper(be) : new SidedInvWrapper(be, side));
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK,
+                BlockEntityRegister.Hokora.get(),
+                (be, side) -> side == null ? new InvWrapper(be) : new SidedInvWrapper(be, side));
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK,
+                BlockEntityRegister.Kettle.get(),
+                (be, side) -> side == null ? new InvWrapper(be) : new SidedInvWrapper(be, side));
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK,
+                BlockEntityRegister.SilkwormFarm.get(),
+                (be, side) -> side == null ? new InvWrapper(be) : new SidedInvWrapper(be, side));
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK,
+                BlockEntityRegister.RiceCauldronBlockEntity.get(),
+                (be, side) -> side == null ? new InvWrapper(be) : new SidedInvWrapper(be, side));
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK,
+                BlockEntityRegister.Sanbo.get(),
+                (be, side) -> side == null ? new InvWrapper(be) : new SidedInvWrapper(be, side));
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK,
+                BlockEntityRegister.Shichirin.get(),
+                (be, side) -> side == null ? new InvWrapper(be) : new SidedInvWrapper(be, side));
+
+        // RandomizableContainerBlockEntity (Container-only): wrap whole inventory.
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK,
+                BlockEntityRegister.FoxHopperBlockEntity.get(),
+                (be, side) -> new InvWrapper(be));
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK,
+                BlockEntityRegister.UrushiHopper.get(),
+                (be, side) -> new InvWrapper(be));
+
+        // AutoCraftingTable uses ItemStackHandler directly: hoppers push to ingredients,
+        // pull from result. Side-agnostic for parity with the original LazyOptional behavior.
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK,
+                BlockEntityRegister.AutoCraftingTable.get(),
+                (be, side) -> side == net.minecraft.core.Direction.DOWN ? be.getResult() : be.getIngredients());
     }
 
-    @SubscribeEvent
-    public void RegisterAttributeCapabilitiesEvent(AttachCapabilitiesEvent<Entity> event) {
-        if(event.getObject() instanceof Player){
-            if(!event.getObject().getCapability(AdditionalHeartProvider.ADDITIONAL_HEART).isPresent()){
-                event.addCapability(new ResourceLocation(ModID,"additional_heart"),new AdditionalHeartProvider());
-            }
-            if(!event.getObject().getCapability(FramedBlockTextureConnectionProvider.FRAMED_BLOCK_TEXTURE_CONNECTION).isPresent()){
-                event.addCapability(new ResourceLocation(ModID,"framed_blocks_texture_connection"),new FramedBlockTextureConnectionProvider());
-            }
-
-        }
-    }
     /*@SubscribeEvent
     public static void onScreenDrawPost(ScreenEvent.Init.Post event) {
         if ( event.getScreen() instanceof TitleScreen titleScreen) {
@@ -834,7 +862,7 @@ public class ModCoreUrushi {
     }
     @SubscribeEvent
     public void AdvancementEvent(AdvancementEvent.AdvancementProgressEvent event) {
-        if(event.getAdvancement().getDisplay()!=null&& UrushiUtils.isUrushiObject(event.getAdvancement().getDisplay().getTitle().toString())){
+        if(event.getAdvancement().value().display().orElse(null)!=null&& UrushiUtils.isUrushiObject(event.getAdvancement().value().display().orElse(null).getTitle().toString())){
               event.getEntity().playNotifySound(SoundRegister.UrushiAdvancements.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
         }
     }

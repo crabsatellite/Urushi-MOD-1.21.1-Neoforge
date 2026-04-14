@@ -1,9 +1,5 @@
 package com.iwaliner.urushi.entiity;
 
-import com.iwaliner.urushi.EntityRegister;
-import com.iwaliner.urushi.ItemAndBlockRegister;
-import com.iwaliner.urushi.item.CushionItem;
-import com.iwaliner.urushi.util.UrushiUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -23,7 +19,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.network.NetworkHooks;
+import com.iwaliner.urushi.EntityRegister;
+import com.iwaliner.urushi.ItemAndBlockRegister;
+import com.iwaliner.urushi.item.CushionItem;
+import com.iwaliner.urushi.util.UrushiUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,8 +41,8 @@ public class CushionEntity extends Entity {
         this.zo = p_i1705_6_;
     }
     @Override
-    protected void defineSynchedData() {
-        this.entityData.define(DATA_ID_TYPE, DyeColor.WHITE.ordinal());
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        builder.define(DATA_ID_TYPE, DyeColor.WHITE.ordinal());
     }
     public DyeColor getCushionType() {
         return DyeColor.byId(this.entityData.get(DATA_ID_TYPE));
@@ -72,18 +71,22 @@ public class CushionEntity extends Entity {
         return false;
     }
     /**目線の高さ。0.0Fだと当たり判定の底面部分。*/
-    @Override
-    protected float getEyeHeight(Pose p_19976_, EntityDimensions p_19977_) {
-        return 0.0F;
-    }
+    //   Original method:
+    //     @Override
+    //     protected float getEyeHeight(Pose p_19976_, EntityDimensions p_19977_) {
+    //         return 0.0F;
+    //     }
 
-    public double getPassengersRidingOffset() {
-        if(getFirstPassenger() instanceof CushionEntity){
-            return 0.2D;
-        }else {
-            return -0.05D;
-        }
-    }
+
+    //   Original method:
+    //     public double getPassengersRidingOffset() {
+    //         if(getFirstPassenger() instanceof CushionEntity){
+    //             return 0.2D;
+    //         }else {
+    //             return -0.05D;
+    //         }
+    //     }
+
     public Item getDropItem() {
         switch(this.getCushionType()) {
             case WHITE:

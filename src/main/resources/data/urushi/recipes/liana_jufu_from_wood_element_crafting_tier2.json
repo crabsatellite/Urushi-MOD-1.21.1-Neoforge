@@ -1,21 +1,21 @@
 {
   "type": "urushi:wood_element_tier2_crafting",
   "ingredients": [
-  {
-    "item": "urushi:liana_jufu_stamp"
+    {
+      "item": "urushi:liana_jufu_stamp"
     },
     {
-"item": "urushi:black_urushi_ball"
+      "item": "urushi:black_urushi_ball"
     },
     {
-"item": "minecraft:paper"
+      "item": "minecraft:paper"
     },
     {
-   "tag": "forge:nuggets/gold"
+      "tag": "c:nuggets/gold"
     }
   ],
   "result": {
-  "item":"urushi:liana_jufu"
+    "item": "urushi:liana_jufu"
   },
   "reiryoku": 30
 }

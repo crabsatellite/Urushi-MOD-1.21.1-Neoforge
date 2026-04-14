@@ -7,11 +7,11 @@
   ],
   "key": {
     "D": {
-   "tag": "forge:dyes/purple"
-      },
+      "tag": "c:dyes/purple"
+    },
     "B": {
-    "tag": "urushi:plaster"
-   }
+      "tag": "urushi:plaster"
+    }
   },
   "result": {
     "item": "urushi:purple_plaster",

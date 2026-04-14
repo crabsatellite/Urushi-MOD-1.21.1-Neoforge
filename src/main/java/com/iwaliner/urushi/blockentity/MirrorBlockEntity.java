@@ -1,5 +1,18 @@
 package com.iwaliner.urushi.blockentity;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.shapes.BooleanOp;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import com.iwaliner.urushi.BlockEntityRegister;
 import com.iwaliner.urushi.block.MirrorBlock;
 import com.iwaliner.urushi.util.ComplexDirection;
@@ -8,17 +21,6 @@ import com.iwaliner.urushi.util.ElementUtils;
 import com.iwaliner.urushi.util.interfaces.Mirror;
 import com.iwaliner.urushi.util.interfaces.ReiryokuImportable;
 import com.iwaliner.urushi.util.interfaces.ReiryokuStorable;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.util.Mth;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.shapes.BooleanOp;
-import net.minecraft.world.phys.shapes.Shapes;
-import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.Objects;
 
@@ -28,21 +30,21 @@ public class MirrorBlockEntity extends AbstractReiryokuStorableBlockEntity  impl
     public MirrorBlockEntity(BlockPos p_155550_, BlockState p_155551_) {
         super(BlockEntityRegister.Mirror.get(),100, p_155550_, p_155551_);
     }
-    public void load(CompoundTag tag) {
-        super.load(tag);
+    public void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.loadAdditional(tag, registries);
         this.canReach = tag.getBoolean("canReach");
         this.incidentDirection = tag.getInt("incidentDirection");
 
     }
 
-    protected void saveAdditional(CompoundTag tag) {
-        super.saveAdditional(tag);
+    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.saveAdditional(tag, registries);
         tag.putBoolean("canReach", this.canReach);
         tag.putInt("incidentDirection", this.incidentDirection);
     }
 
     @Override
-    public CompoundTag getUpdateTag() {
+    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
         CompoundTag compoundtag = new CompoundTag();
         compoundtag.putBoolean("canReach", this.canReach);
         compoundtag.putInt("incidentDirection", this.incidentDirection);

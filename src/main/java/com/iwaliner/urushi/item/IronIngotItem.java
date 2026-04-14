@@ -10,8 +10,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 
-import javax.annotation.Nullable;
 import java.util.List;
+import javax.annotation.Nullable;
 
 public class IronIngotItem extends BlockItem {
   public IronIngotItem(Block p_i48527_1_, Properties p_i48527_2_) {

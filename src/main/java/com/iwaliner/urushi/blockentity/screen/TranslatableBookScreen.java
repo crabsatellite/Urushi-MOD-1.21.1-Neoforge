@@ -1,12 +1,5 @@
 package com.iwaliner.urushi.blockentity.screen;
 
-import com.ibm.icu.lang.CharacterProperties;
-import com.ibm.icu.lang.UProperty;
-import com.iwaliner.urushi.ModCoreUrushi;
-import com.iwaliner.urushi.blockentity.menu.DoubledWoodenCabinetryMenu;
-import com.iwaliner.urushi.blockentity.menu.TranslatableBookMenu;
-import com.iwaliner.urushi.util.UrushiUtils;
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -18,21 +11,27 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
-
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import com.ibm.icu.lang.CharacterProperties;
+import com.ibm.icu.lang.UProperty;
+import com.iwaliner.urushi.ModCoreUrushi;
+import com.iwaliner.urushi.blockentity.menu.DoubledWoodenCabinetryMenu;
+import com.iwaliner.urushi.blockentity.menu.TranslatableBookMenu;
+import com.iwaliner.urushi.util.UrushiUtils;
+import com.mojang.blaze3d.systems.RenderSystem;
 import static com.ibm.icu.lang.UCharacter.DecompositionType.NARROW;
 import static com.ibm.icu.lang.UCharacter.DecompositionType.WIDE;
 import static com.ibm.icu.lang.UCharacter.EastAsianWidth.FULLWIDTH;
 import static com.ibm.icu.lang.UCharacter.EastAsianWidth.HALFWIDTH;
 import static com.ibm.icu.lang.UCharacter.LineBreak.AMBIGUOUS;
 
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+
 @OnlyIn(Dist.CLIENT)
 public class TranslatableBookScreen extends AbstractContainerScreen<TranslatableBookMenu> {
-    public static final ResourceLocation BOOK_LOCATION = new ResourceLocation(ModCoreUrushi.ModID,"textures/gui/book.png");
+    public static final ResourceLocation BOOK_LOCATION = ResourceLocation.fromNamespaceAndPath(ModCoreUrushi.ModID, "textures/gui/book.png");
 
 
     public TranslatableBookScreen(TranslatableBookMenu p_97741_, Inventory p_97742_, Component p_97743_) {
@@ -43,8 +42,7 @@ public class TranslatableBookScreen extends AbstractContainerScreen<Translatable
 
     @Override
     public void render(GuiGraphics guiGraphics, int i01, int i02, float b0) {
-        //this.renderBackground(guiGraphics);
-        this.renderBg(guiGraphics, b0, i01, i02);
+        //this.renderBackground(guiGraphics, i01, i02, b0);
         //super.render(guiGraphics, i01, i02, b0);
     }
 

@@ -12,22 +12,31 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import com.mojang.serialization.MapCodec;
 
 public class AbstractHighBlock extends Block {
+    public static final MapCodec<AbstractHighBlock> CODEC = simpleCodec(AbstractHighBlock::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
     public static final EnumProperty<DoubleBlockHalf> HALF = BlockStateProperties.DOUBLE_BLOCK_HALF;
 
     public AbstractHighBlock(Properties p_49795_) {
         super(p_49795_);
     }
     @Override
-    public void playerWillDestroy(Level world, BlockPos pos, BlockState state, Player entity) {
+    public BlockState playerWillDestroy(Level world, BlockPos pos, BlockState state, Player entity) {
         if (!world.isClientSide && entity.isCreative()) {
             this.preventCreativeDropFromBottomPart(world, pos, state, entity);
         }
 
-        super.playerWillDestroy(world, pos, state, entity); }
+        return super.playerWillDestroy(world, pos, state, entity); }
 
 
     protected static void preventCreativeDropFromBottomPart(Level world, BlockPos pos, BlockState state, Player entity) {

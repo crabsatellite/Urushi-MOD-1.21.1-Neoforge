@@ -7,10 +7,10 @@
   ],
   "key": {
     "i": {
-      "tag": "forge:ingots/iron"
+      "tag": "c:ingots/iron"
     },
-     "r": {
-      "tag": "forge:rods/wooden"
+    "r": {
+      "tag": "c:rods/wooden"
     }
   },
   "result": {

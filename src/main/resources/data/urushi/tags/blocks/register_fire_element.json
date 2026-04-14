@@ -1,19 +1,19 @@
 {
   "replace": false,
   "values": [
-  "#minecraft:fire",
-  "#minecraft:campfires",
-  "minecraft:torch",
-  "minecraft:soul_torch",
-  "minecraft:wall_torch",
-  "minecraft:soul_wall_torch",
-  "minecraft:magma_block",
-  "urushi:lantern_plant",
-  "urushi:magma_slab",
-   "urushi:magma_stairs",
-  "urushi:lantern_plant_block",
-  "urushi:lantern_plant_torch",
-  "urushi:wall_lantern_plant_torch",
-  "#forge:netherrack"
+    "#minecraft:fire",
+    "#minecraft:campfires",
+    "minecraft:torch",
+    "minecraft:soul_torch",
+    "minecraft:wall_torch",
+    "minecraft:soul_wall_torch",
+    "minecraft:magma_block",
+    "urushi:lantern_plant",
+    "urushi:magma_slab",
+    "urushi:magma_stairs",
+    "urushi:lantern_plant_block",
+    "urushi:lantern_plant_torch",
+    "urushi:wall_lantern_plant_torch",
+    "#c:netherrack"
   ]
 }

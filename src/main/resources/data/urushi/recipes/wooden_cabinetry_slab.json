@@ -7,10 +7,10 @@
   ],
   "key": {
     "s": {
-    "tag": "minecraft:wooden_slabs"
+      "tag": "minecraft:wooden_slabs"
     },
     "i": {
-      "tag": "forge:nuggets/iron"
+      "tag": "c:nuggets/iron"
     }
   },
   "result": {

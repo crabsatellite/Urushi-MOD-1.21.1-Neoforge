@@ -3,7 +3,7 @@
   "category": "misc",
   "key": {
     "I": {
-      "tag": "forge:bamboo"
+      "tag": "c:bamboo"
     },
     "~": {
       "item": "minecraft:string"

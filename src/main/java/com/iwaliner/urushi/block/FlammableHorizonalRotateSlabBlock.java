@@ -4,8 +4,17 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
+import com.mojang.serialization.MapCodec;
 
 public class FlammableHorizonalRotateSlabBlock extends HorizonalRotateSlabBlock{
+    public static final MapCodec<FlammableHorizonalRotateSlabBlock> CODEC = simpleCodec(FlammableHorizonalRotateSlabBlock::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
     public FlammableHorizonalRotateSlabBlock(Properties p_i48377_1_) {
         super(p_i48377_1_);
     }

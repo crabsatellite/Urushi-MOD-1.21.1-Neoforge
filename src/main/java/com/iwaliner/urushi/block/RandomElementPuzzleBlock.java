@@ -1,8 +1,5 @@
 package com.iwaliner.urushi.block;
 
-import com.iwaliner.urushi.BlockEntityRegister;
-import com.iwaliner.urushi.blockentity.NullBlockEntity;
-import com.iwaliner.urushi.blockentity.RandomElementPuzzleBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
@@ -11,9 +8,21 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import com.iwaliner.urushi.BlockEntityRegister;
+import com.iwaliner.urushi.blockentity.NullBlockEntity;
+import com.iwaliner.urushi.blockentity.RandomElementPuzzleBlockEntity;
+import com.mojang.serialization.MapCodec;
 import org.jetbrains.annotations.Nullable;
 
 public class RandomElementPuzzleBlock extends BaseEntityBlock {
+    public static final MapCodec<RandomElementPuzzleBlock> CODEC = simpleCodec(RandomElementPuzzleBlock::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
     public RandomElementPuzzleBlock(Properties p_49795_) {
         super(p_49795_);
     }

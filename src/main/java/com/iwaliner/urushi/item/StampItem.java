@@ -1,11 +1,11 @@
 package com.iwaliner.urushi.item;
 
-import com.iwaliner.urushi.util.UrushiUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import com.iwaliner.urushi.util.UrushiUtils;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -25,7 +25,7 @@ public class StampItem extends Item {
         return itemStack;
     }
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level p_41422_, List<Component> list, TooltipFlag p_41424_) {
+    public void appendHoverText(ItemStack stack, Item.TooltipContext p_41422_, List<Component> list, TooltipFlag p_41424_) {
         UrushiUtils.setInfo(list, "jufu_stamp1");
         UrushiUtils.setInfo(list, "jufu_stamp2");
     }

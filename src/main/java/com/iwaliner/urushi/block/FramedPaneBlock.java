@@ -1,18 +1,12 @@
 package com.iwaliner.urushi.block;
 
 import com.google.common.collect.Maps;
-import com.iwaliner.urushi.ClientSetUp;
-import com.iwaliner.urushi.ConfigUrushi;
-import com.iwaliner.urushi.network.FramedBlockTextureConnectionProvider;
-import com.iwaliner.urushi.util.ElementUtils;
-import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -29,17 +23,31 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import com.iwaliner.urushi.ClientSetUp;
+import com.iwaliner.urushi.ConfigUrushi;
+import com.iwaliner.urushi.network.FramedBlockTextureConnectionProvider;
+import com.iwaliner.urushi.util.ElementUtils;
+import com.mojang.blaze3d.platform.InputConstants;
+import com.mojang.serialization.MapCodec;
 
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
+import javax.annotation.Nullable;
 
 
 public class FramedPaneBlock extends HorizonalRotateBlock{
+    public static final MapCodec<FramedPaneBlock> CODEC = simpleCodec(FramedPaneBlock::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
     protected static final VoxelShape SHAPEA = Block.box(7.0D, 0.0D, 0D, 9.0D, 16.0D, 16.0D);
     protected static final VoxelShape SHAPEB = Block.box(0D, 0.0D, 7D, 16D, 16.0D, 9.0D);
     public static final BooleanProperty NORTH = BlockStateProperties.NORTH;
@@ -161,10 +169,9 @@ public class FramedPaneBlock extends HorizonalRotateBlock{
     }
     private boolean textureConnection(Player player){
         AtomicBoolean b = new AtomicBoolean(false);
-        player.getCapability(FramedBlockTextureConnectionProvider.FRAMED_BLOCK_TEXTURE_CONNECTION).ifPresent(data -> {
-            b.set(data.isPressed());
+        var data = player.getData(FramedBlockTextureConnectionProvider.FRAMED_BLOCK_TEXTURE_CONNECTION.get());
+        b.set(data.isPressed());
 
-        });
         return b.get();
     }
     @Override

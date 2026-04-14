@@ -1,14 +1,15 @@
 package com.iwaliner.urushi.recipe;
 
-import com.iwaliner.urushi.ModCoreUrushi;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.item.crafting.RecipeType;
+import com.iwaliner.urushi.ModCoreUrushi;
 
-public interface IFryingRecipe extends Recipe<Container> {
-    ResourceLocation locationType=new ResourceLocation(ModCoreUrushi.ModID,"frying");
+public interface IFryingRecipe extends Recipe<RecipeInput> {
+    ResourceLocation locationType=ResourceLocation.fromNamespaceAndPath(ModCoreUrushi.ModID, "frying");
 
   /*  @Override
     default RecipeType<?> getType(){

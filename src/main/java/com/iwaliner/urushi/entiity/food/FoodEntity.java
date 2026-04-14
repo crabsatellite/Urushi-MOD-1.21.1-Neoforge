@@ -1,9 +1,9 @@
 package com.iwaliner.urushi.entiity.food;
 
 
-import com.iwaliner.urushi.util.UrushiUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -15,7 +15,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.network.NetworkHooks;
+import com.iwaliner.urushi.util.UrushiUtils;
 
 public abstract class FoodEntity extends Entity {
     private Item itemContains;
@@ -38,10 +38,12 @@ public abstract class FoodEntity extends Entity {
 
 
     /**目線の高さ。0.0Fだと当たり判定の底面部分。*/
-    @Override
-    protected float getEyeHeight(Pose p_19976_, EntityDimensions p_19977_) {
-        return 0.0F;
-    }
+    //   Original method:
+    //     @Override
+    //     protected float getEyeHeight(Pose p_19976_, EntityDimensions p_19977_) {
+    //         return 0.0F;
+    //     }
+
 
 
 
@@ -91,7 +93,7 @@ public abstract class FoodEntity extends Entity {
 
     }
     @Override
-    protected void defineSynchedData() {
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
 
     }
 

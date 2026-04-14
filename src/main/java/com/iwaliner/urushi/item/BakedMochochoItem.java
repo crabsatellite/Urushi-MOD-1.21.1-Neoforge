@@ -1,11 +1,5 @@
 package com.iwaliner.urushi.item;
 
-import com.iwaliner.urushi.MenuRegister;
-import com.iwaliner.urushi.ModCoreUrushi;
-import com.iwaliner.urushi.block.SlideDoorBlock;
-import com.iwaliner.urushi.blockentity.menu.TranslatableBookMenu;
-import com.iwaliner.urushi.mixin.BlockDisplayMixin;
-import com.iwaliner.urushi.util.UrushiUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.BookViewScreen;
@@ -35,6 +29,12 @@ import net.minecraft.world.level.block.piston.MovingPistonBlock;
 import net.minecraft.world.level.block.piston.PistonBaseBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.PistonType;
+import com.iwaliner.urushi.MenuRegister;
+import com.iwaliner.urushi.ModCoreUrushi;
+import com.iwaliner.urushi.block.SlideDoorBlock;
+import com.iwaliner.urushi.blockentity.menu.TranslatableBookMenu;
+import com.iwaliner.urushi.mixin.BlockDisplayMixin;
+import com.iwaliner.urushi.util.UrushiUtils;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -45,9 +45,13 @@ public class BakedMochochoItem extends Item {
         super(p_41383_);
     }
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> list, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, Item.TooltipContext level, List<Component> list, TooltipFlag flag) {
        try {
-           long gametime= level.getGameTime()%100;
+           Level clientLevel = net.minecraft.client.Minecraft.getInstance().level;
+
+           if (clientLevel == null) return;
+
+           long gametime= clientLevel.getGameTime()%100;
            if (gametime<20) {
                UrushiUtils.setInfoWithColor(list, "obanyaki", ChatFormatting.WHITE);
            } else if(gametime<40){

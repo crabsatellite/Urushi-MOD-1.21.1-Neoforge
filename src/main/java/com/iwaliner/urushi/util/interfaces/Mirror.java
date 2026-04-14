@@ -1,11 +1,11 @@
 package com.iwaliner.urushi.util.interfaces;
 
-import com.iwaliner.urushi.block.MirrorBlock;
-import com.iwaliner.urushi.util.ComplexDirection;
-import com.iwaliner.urushi.util.ElementType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
+import com.iwaliner.urushi.block.MirrorBlock;
+import com.iwaliner.urushi.util.ComplexDirection;
+import com.iwaliner.urushi.util.ElementType;
 
 public interface Mirror {
 

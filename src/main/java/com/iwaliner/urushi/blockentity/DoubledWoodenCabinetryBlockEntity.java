@@ -1,16 +1,13 @@
 package com.iwaliner.urushi.blockentity;
 
 
-import com.iwaliner.urushi.BlockEntityRegister;
-import com.iwaliner.urushi.block.WoodenCabinetrySlabBlock;
-import com.iwaliner.urushi.blockentity.menu.DoubledWoodenCabinetryMenu;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
-
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -20,12 +17,14 @@ import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.ContainerOpenersCounter;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import com.iwaliner.urushi.BlockEntityRegister;
+import com.iwaliner.urushi.block.WoodenCabinetrySlabBlock;
+import com.iwaliner.urushi.blockentity.menu.DoubledWoodenCabinetryMenu;
 
 public class DoubledWoodenCabinetryBlockEntity extends RandomizableContainerBlockEntity {
     public static final int containerSize = 108;
@@ -58,24 +57,24 @@ public class DoubledWoodenCabinetryBlockEntity extends RandomizableContainerBloc
         super(BlockEntityRegister.DoubledWoodenCabinetryBlockEntity.get(), p_155052_, p_155053_);
     }
 
-    protected void saveAdditional(CompoundTag p_187459_) {
-        super.saveAdditional(p_187459_);
+    protected void saveAdditional(CompoundTag p_187459_, HolderLookup.Provider registries) {
+        super.saveAdditional(p_187459_, registries);
         if (!this.trySaveLootTable(p_187459_)) {
-            ContainerHelper.saveAllItems(p_187459_, this.items);
+            ContainerHelper.saveAllItems(p_187459_, this.items, registries);
         }
 
     }
-	
-    public CompoundTag getUpdateTag() {
+
+    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
         CompoundTag compoundtag = new CompoundTag();
-        ContainerHelper.saveAllItems(compoundtag, this.items, true);
+        ContainerHelper.saveAllItems(compoundtag, this.items, true, registries);
         return compoundtag;
     }
-    public void load(CompoundTag tag) {
-        super.load(tag);
+    public void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.loadAdditional(tag, registries);
         this.items = NonNullList.withSize(this.containerSize, ItemStack.EMPTY);
         if (!this.tryLoadLootTable(tag)) {
-            ContainerHelper.loadAllItems(tag, this.items);
+            ContainerHelper.loadAllItems(tag, this.items, registries);
         }
 
     }

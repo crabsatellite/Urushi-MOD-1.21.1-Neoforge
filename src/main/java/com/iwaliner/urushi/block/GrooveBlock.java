@@ -21,8 +21,13 @@ import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import com.mojang.serialization.MapCodec;
 
 public class GrooveBlock extends HorizonalRotateBlock implements SimpleWaterloggedBlock {
+    public static final MapCodec<GrooveBlock> CODEC = simpleCodec(__p -> new GrooveBlock(false, __p));
+
+    @Override
+    public MapCodec<? extends GrooveBlock> codec() { return CODEC; }
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     public static final BooleanProperty NORTH = BlockStateProperties.NORTH;
     public static final BooleanProperty EAST = BlockStateProperties.EAST;
@@ -63,7 +68,7 @@ public class GrooveBlock extends HorizonalRotateBlock implements SimpleWaterlogg
     }
 
     @Override
-    public boolean isPathfindable(BlockState p_60475_, BlockGetter p_60476_, BlockPos p_60477_, PathComputationType p_60478_) {
+    public boolean isPathfindable(BlockState p_60475_, PathComputationType p_60478_) {
         return true;
     }
     private boolean isGroove(BlockState state){

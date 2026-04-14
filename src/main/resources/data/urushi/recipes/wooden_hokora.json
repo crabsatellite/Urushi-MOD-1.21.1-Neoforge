@@ -6,11 +6,11 @@
     "ppp"
   ],
   "key": {
-  "k": {
-     "item": "urushi:ibushi_kawara_block"
+    "k": {
+      "item": "urushi:ibushi_kawara_block"
     },
     "r": {
-    "tag": "forge:rods/wooden"
+      "tag": "c:rods/wooden"
     },
     "p": {
       "tag": "minecraft:planks"

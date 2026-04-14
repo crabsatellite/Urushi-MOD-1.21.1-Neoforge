@@ -1,10 +1,10 @@
 package com.iwaliner.urushi.mixin;
 
-import com.iwaliner.urushi.block.SlideDoorBlock;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.world.entity.Display;
 import net.minecraft.world.level.block.IronBarsBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import com.iwaliner.urushi.block.SlideDoorBlock;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.gen.Invoker;

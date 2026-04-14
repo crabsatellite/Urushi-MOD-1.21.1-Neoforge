@@ -1,11 +1,12 @@
 package com.iwaliner.urushi.block;
 
-import com.iwaliner.urushi.util.UrushiUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.BlockGetter;
@@ -19,11 +20,16 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import com.iwaliner.urushi.util.UrushiUtils;
+import com.mojang.serialization.MapCodec;
 
 import java.util.List;
-import net.minecraft.util.RandomSource;
 
 public class SmallFlowerBlock extends BushBlock implements BonemealableBlock {
+    public static final MapCodec<SmallFlowerBlock> CODEC = simpleCodec(__p -> new SmallFlowerBlock(__p));
+
+    @Override
+    public MapCodec<? extends SmallFlowerBlock> codec() { return CODEC; }
     protected static final float AABB_OFFSET = 3.0F;
     protected static final VoxelShape SHAPE = Block.box(5.0D, 0.0D, 5.0D, 11.0D, 10.0D, 11.0D);
 
@@ -40,12 +46,8 @@ public class SmallFlowerBlock extends BushBlock implements BonemealableBlock {
     public BlockBehaviour.OffsetType getOffsetType() {
         return BlockBehaviour.OffsetType.XZ;
     }
-    public boolean isValidBonemealTarget(BlockGetter p_57303_, BlockPos p_57304_, BlockState p_57305_, boolean p_57306_) {
-        return true;
-    }
-
     @Override
-    public boolean isValidBonemealTarget(LevelReader p_256559_, BlockPos p_50898_, BlockState p_50899_, boolean p_50900_) {
+    public boolean isValidBonemealTarget(LevelReader p_256559_, BlockPos p_50898_, BlockState p_50899_) {
         return true;
     }
 
@@ -57,7 +59,7 @@ public class SmallFlowerBlock extends BushBlock implements BonemealableBlock {
         popResource(p_57298_, p_57300_, new ItemStack(this));
     }
     @Override
-    public void appendHoverText(ItemStack p_49816_, @org.jetbrains.annotations.Nullable BlockGetter p_49817_, List<Component> list, TooltipFlag p_49819_) {
+    public void appendHoverText(ItemStack p_49816_, Item.TooltipContext p_49817_, List<Component> list, TooltipFlag p_49819_) {
         UrushiUtils.setInfo(list,"small_flower");
     }
     @Override

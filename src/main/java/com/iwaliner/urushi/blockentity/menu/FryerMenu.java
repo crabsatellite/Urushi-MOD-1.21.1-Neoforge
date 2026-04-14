@@ -1,11 +1,11 @@
 package com.iwaliner.urushi.blockentity.menu;
 
-import com.iwaliner.urushi.MenuRegister;
-import com.iwaliner.urushi.RecipeTypeRegister;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.MenuType;
+import com.iwaliner.urushi.MenuRegister;
+import com.iwaliner.urushi.RecipeTypeRegister;
 
 
 public class FryerMenu extends AbstractFryerMenu{

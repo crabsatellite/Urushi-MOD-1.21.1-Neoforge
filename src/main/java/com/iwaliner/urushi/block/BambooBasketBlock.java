@@ -1,8 +1,5 @@
 package com.iwaliner.urushi.block;
 
-import com.iwaliner.urushi.blockentity.BambooBasketBlockEntity;
-import com.iwaliner.urushi.blockentity.PlateBlockEntity;
-import com.iwaliner.urushi.util.UrushiUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -13,6 +10,7 @@ import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -28,11 +26,23 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import com.iwaliner.urushi.blockentity.BambooBasketBlockEntity;
+import com.iwaliner.urushi.blockentity.PlateBlockEntity;
+import com.iwaliner.urushi.util.UrushiUtils;
+import com.mojang.serialization.MapCodec;
 
 import java.util.List;
 import java.util.Objects;
 
 public class BambooBasketBlock extends BaseEntityBlock {
+    public static final MapCodec<BambooBasketBlock> CODEC = simpleCodec(BambooBasketBlock::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
 
@@ -44,7 +54,7 @@ public class BambooBasketBlock extends BaseEntityBlock {
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
     }
     @Override
-    public void appendHoverText(ItemStack stack, @org.jetbrains.annotations.Nullable BlockGetter p_49817_, List<Component> list, TooltipFlag p_49819_) {
+    public void appendHoverText(ItemStack stack, Item.TooltipContext p_49817_, List<Component> list, TooltipFlag p_49819_) {
         UrushiUtils.setInfo(list, "bamboo_basket");
     }
 
@@ -69,10 +79,10 @@ public class BambooBasketBlock extends BaseEntityBlock {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
+    protected InteractionResult useWithoutItem(BlockState state, Level world, BlockPos pos, Player player, BlockHitResult result) {
         if(world.getBlockEntity(pos)instanceof BambooBasketBlockEntity) {
             if(!player.isSuppressingBounce()&&world.getBlockEntity(pos) instanceof  BambooBasketBlockEntity tileEntity) {
-                 ItemStack heldStack = player.getItemInHand(hand);
+                 ItemStack heldStack = player.getMainHandItem();
                 ItemStack insertStack = heldStack.copy();
                 insertStack.setCount(1);
                 boolean isFull=true;

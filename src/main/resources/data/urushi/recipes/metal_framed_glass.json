@@ -6,11 +6,11 @@
     "ggg"
   ],
   "key": {
-  "g": {
-     "tag": "forge:glass"
+    "g": {
+      "tag": "c:glass"
     },
     "i": {
-       "tag": "forge:nuggets/iron"
+      "tag": "c:nuggets/iron"
     }
   },
   "result": {

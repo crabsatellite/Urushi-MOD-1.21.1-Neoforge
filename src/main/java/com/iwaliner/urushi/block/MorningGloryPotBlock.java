@@ -17,10 +17,19 @@ import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import com.mojang.serialization.MapCodec;
 
 import javax.annotation.Nullable;
 
 public class MorningGloryPotBlock extends AbstractHighBlock{
+    public static final MapCodec<MorningGloryPotBlock> CODEC = simpleCodec(MorningGloryPotBlock::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
 
     public MorningGloryPotBlock( Properties p_49795_) {
         super( p_49795_);

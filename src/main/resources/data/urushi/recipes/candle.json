@@ -6,10 +6,10 @@
   ],
   "key": {
     "o": {
-    "item": "urushi:vegetable_oil"
+      "item": "urushi:vegetable_oil"
     },
     "s": {
-   "tag": "forge:string"
+      "tag": "c:string"
     }
   },
   "result": {

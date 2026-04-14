@@ -1,7 +1,5 @@
 package com.iwaliner.urushi.particle;
 
-import com.iwaliner.urushi.ItemAndBlockRegister;
-import com.iwaliner.urushi.ParticleRegister;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.SimpleAnimatedParticle;
@@ -12,6 +10,8 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import com.iwaliner.urushi.ItemAndBlockRegister;
+import com.iwaliner.urushi.ParticleRegister;
 
 public abstract class AbstractFallingLeavesParticle extends SimpleAnimatedParticle {
 

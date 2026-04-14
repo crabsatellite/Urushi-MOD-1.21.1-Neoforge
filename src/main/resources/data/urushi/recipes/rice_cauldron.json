@@ -7,10 +7,10 @@
   ],
   "key": {
     "i": {
-     "tag": "forge:ingots/iron"
+      "tag": "c:ingots/iron"
     },
     "p": {
-     "tag": "minecraft:planks"
+      "tag": "minecraft:planks"
     }
   },
   "result": {

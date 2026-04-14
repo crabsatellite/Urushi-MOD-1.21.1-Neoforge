@@ -1,10 +1,10 @@
 package com.iwaliner.urushi.block;
 
-import com.iwaliner.urushi.ItemAndBlockRegister;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.FaceAttachedHorizontalDirectionalBlock;
 import net.minecraft.world.level.block.RenderShape;
@@ -16,8 +16,18 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import com.iwaliner.urushi.ItemAndBlockRegister;
+import com.mojang.serialization.MapCodec;
 
 public class HiddenInvisibleButtonBlock extends FaceAttachedHorizontalDirectionalBlock {
+    public static final MapCodec<HiddenInvisibleButtonBlock> CODEC = simpleCodec(HiddenInvisibleButtonBlock::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
     public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
     public HiddenInvisibleButtonBlock(Properties p_49795_) {
         super(p_49795_);
@@ -26,7 +36,7 @@ public class HiddenInvisibleButtonBlock extends FaceAttachedHorizontalDirectiona
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> p_51101_) {
         p_51101_.add(FACING, POWERED, FACE);
     }
-    public ItemStack getCloneItemStack(BlockGetter p_152966_, BlockPos p_152967_, BlockState p_152968_) {
+    public ItemStack getCloneItemStack(LevelReader p_152966_, BlockPos p_152967_, BlockState p_152968_) {
         return new ItemStack(ItemAndBlockRegister.invisible_button_item.get());
     }
 
@@ -35,7 +45,7 @@ public class HiddenInvisibleButtonBlock extends FaceAttachedHorizontalDirectiona
         return Shapes.empty();
     }
     public RenderShape getRenderShape(BlockState p_49232_) {
-        return RenderShape.INVISIBLE;
+        return net.minecraft.world.level.block.RenderShape.INVISIBLE;
     }
 
 }

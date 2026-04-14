@@ -1,9 +1,5 @@
 package com.iwaliner.urushi.block;
 
-import com.iwaliner.urushi.BlockEntityRegister;
-import com.iwaliner.urushi.blockentity.PlateBlockEntity;
-import com.iwaliner.urushi.blockentity.SanboBlockEntity;
-import com.iwaliner.urushi.util.UrushiUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -14,6 +10,7 @@ import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -32,12 +29,25 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import com.iwaliner.urushi.BlockEntityRegister;
+import com.iwaliner.urushi.blockentity.PlateBlockEntity;
+import com.iwaliner.urushi.blockentity.SanboBlockEntity;
+import com.iwaliner.urushi.util.UrushiUtils;
+import com.mojang.serialization.MapCodec;
 
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Objects;
+import javax.annotation.Nullable;
 
 public class PlateBlock extends BaseEntityBlock {
+    public static final MapCodec<PlateBlock> CODEC = simpleCodec(PlateBlock::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
 
@@ -70,11 +80,11 @@ public class PlateBlock extends BaseEntityBlock {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
+    protected InteractionResult useWithoutItem(BlockState state, Level world, BlockPos pos, Player player, BlockHitResult result) {
         if(world.getBlockEntity(pos)instanceof PlateBlockEntity) {
             if(!player.isSuppressingBounce()){
                 PlateBlockEntity  tileEntity= (PlateBlockEntity) world.getBlockEntity(pos);
-                ItemStack heldStack=player.getItemInHand(hand);
+                ItemStack heldStack=player.getMainHandItem();
                 ItemStack insertStack=heldStack.copy();
                 insertStack.setCount(1);
                 if(tileEntity.canPlaceItem(0)){
@@ -87,7 +97,7 @@ public class PlateBlock extends BaseEntityBlock {
                     ItemStack pickedStack = tileEntity.pickItem().copy();
                     if (heldStack.isEmpty()) {
                         tileEntity.markUpdated();
-                        player.setItemInHand(hand, pickedStack);
+                        player.setItemInHand(InteractionHand.MAIN_HAND, pickedStack);
                         world.playSound((Player) null, pos, SoundEvents.WOOD_PLACE, SoundSource.BLOCKS, 1F, 1F);
                         return InteractionResult.SUCCESS;
                     } else if (!player.getInventory().add(pickedStack)) {
@@ -123,7 +133,7 @@ public class PlateBlock extends BaseEntityBlock {
 
 
     @Override
-    public void appendHoverText(ItemStack stack, @org.jetbrains.annotations.Nullable BlockGetter p_49817_, List<Component> list, TooltipFlag p_49819_) {
+    public void appendHoverText(ItemStack stack, Item.TooltipContext p_49817_, List<Component> list, TooltipFlag p_49819_) {
         UrushiUtils.setInfo(list, "plate");
     }
 

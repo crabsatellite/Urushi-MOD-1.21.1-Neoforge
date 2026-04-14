@@ -7,10 +7,10 @@
   ],
   "key": {
     "B": {
-     "tag": "urushi:wooden_bars"
+      "tag": "urushi:wooden_bars"
     },
     "D": {
-    "tag": "forge:dyes/green"
+      "tag": "c:dyes/green"
     }
   },
   "result": {

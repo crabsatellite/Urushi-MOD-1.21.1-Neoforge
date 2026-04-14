@@ -1,5 +1,5 @@
 {
-  "type": "forge:add_features",
+  "type": "neoforge:add_features",
   "biomes": "#minecraft:is_taiga",
   "features": "urushi:hill_japanese_cedar",
   "step": "vegetal_decoration"

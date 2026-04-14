@@ -1,9 +1,9 @@
 package com.iwaliner.urushi.entiity;
 
-import com.iwaliner.urushi.EntityRegister;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -34,6 +34,7 @@ import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import com.iwaliner.urushi.EntityRegister;
 
 public class GhostEntity extends Zombie {
     public float flap;
@@ -101,11 +102,11 @@ public class GhostEntity extends Zombie {
         int i = Mth.floor(this.getX());
         int j = Mth.floor(this.getY());
         int k = Mth.floor(this.getZ());
-        net.minecraftforge.event.entity.living.ZombieEvent.SummonAidEvent event = net.minecraftforge.event.ForgeEventFactory.fireZombieSummonAid(this, level(), i, j, k, livingentity, this.getAttribute(Attributes.SPAWN_REINFORCEMENTS_CHANCE).getValue());
-        if (event.getResult() == net.minecraftforge.eventbus.api.Event.Result.DENY) return true;
-        if (event.getResult() == net.minecraftforge.eventbus.api.Event.Result.ALLOW  ||
+        // ZombieEvent.SummonAidEvent removed in NeoForge 1.21 - using direct logic
+        if (
                 livingentity != null && this.level().getDifficulty() == Difficulty.HARD && (double)this.random.nextFloat() < this.getAttribute(Attributes.SPAWN_REINFORCEMENTS_CHANCE).getValue() && this.level().getGameRules().getBoolean(GameRules.RULE_DOMOBSPAWNING)) {
-            Zombie zombie = event.getCustomSummonedAid() != null && event.getResult() == net.minecraftforge.eventbus.api.Event.Result.ALLOW ? event.getCustomSummonedAid() : EntityRegister.Ghost.get().create(this.level());
+            Zombie zombie =         // event.getCustomSummonedAid() != null && event.getResult() == net.neoforged.bus.api.Event.Result.ALLOW ? event.getCustomSummonedAid() :
+EntityRegister.Ghost.get().create(this.level());
 
             for(int l = 0; l < 50; ++l) {
                 int i1 = i + Mth.nextInt(this.random, 7, 40) * Mth.nextInt(this.random, -1, 1);
@@ -113,16 +114,16 @@ public class GhostEntity extends Zombie {
                 int k1 = k + Mth.nextInt(this.random, 7, 40) * Mth.nextInt(this.random, -1, 1);
                 BlockPos blockpos = new BlockPos(i1, j1, k1);
                 EntityType<?> entitytype = zombie.getType();
-                SpawnPlacements.Type spawnplacements$type = SpawnPlacements.getPlacementType(entitytype);
-                if (NaturalSpawner.isSpawnPositionOk(spawnplacements$type, this.level(), blockpos, entitytype) && SpawnPlacements.checkSpawnRules(entitytype, serverlevel, MobSpawnType.REINFORCEMENT, blockpos, this.level().random)) {
+                SpawnPlacementType spawnplacements$type = SpawnPlacements.getPlacementType(entitytype);
+                if (/* NaturalSpawner.isSpawnPositionOk removed in 1.21; was SpawnPlacementType=spawnplacements$type */ this.level().getBlockState(blockpos.below()).isValidSpawn(this.level(), blockpos.below(), entitytype) && SpawnPlacements.checkSpawnRules(entitytype, serverlevel, MobSpawnType.REINFORCEMENT, blockpos, this.level().random)) {
                     zombie.setPos((double)i1, (double)j1, (double)k1);
                     if (!this.level().hasNearbyAlivePlayer((double)i1, (double)j1, (double)k1, 7.0D) && this.level().isUnobstructed(zombie) && this.level().noCollision(zombie) && !this.level().containsAnyLiquid(zombie.getBoundingBox())) {
                         if (livingentity != null)
                             zombie.setTarget(livingentity);
-                        zombie.finalizeSpawn(serverlevel, this.level().getCurrentDifficultyAt(zombie.blockPosition()), MobSpawnType.REINFORCEMENT, (SpawnGroupData)null, (CompoundTag)null);
+                        zombie.finalizeSpawn(serverlevel, this.level().getCurrentDifficultyAt(zombie.blockPosition()), MobSpawnType.REINFORCEMENT, (SpawnGroupData)null);
                         serverlevel.addFreshEntityWithPassengers(zombie);
-                        this.getAttribute(Attributes.SPAWN_REINFORCEMENTS_CHANCE).addPermanentModifier(new AttributeModifier("Zombie reinforcement caller charge", (double)-0.05F, AttributeModifier.Operation.ADDITION));
-                        zombie.getAttribute(Attributes.SPAWN_REINFORCEMENTS_CHANCE).addPermanentModifier(new AttributeModifier("Zombie reinforcement callee charge", (double)-0.05F, AttributeModifier.Operation.ADDITION));
+                        this.getAttribute(Attributes.SPAWN_REINFORCEMENTS_CHANCE).addPermanentModifier(new AttributeModifier(ResourceLocation.fromNamespaceAndPath(com.iwaliner.urushi.ModCoreUrushi.ModID, "zombie_reinforcement_caller_charge"), (double)-0.05F, AttributeModifier.Operation.ADD_VALUE));
+                        zombie.getAttribute(Attributes.SPAWN_REINFORCEMENTS_CHANCE).addPermanentModifier(new AttributeModifier(ResourceLocation.fromNamespaceAndPath(com.iwaliner.urushi.ModCoreUrushi.ModID, "zombie_reinforcement_callee_charge"), (double)-0.05F, AttributeModifier.Operation.ADD_VALUE));
                         break;
                     }
                 }
@@ -176,7 +177,7 @@ public class GhostEntity extends Zombie {
     }
 
     public void killed(ServerLevel p_34281_, LivingEntity p_34282_) {
-       if ((p_34281_.getDifficulty() == Difficulty.NORMAL || p_34281_.getDifficulty() == Difficulty.HARD) && p_34282_ instanceof Villager && net.minecraftforge.event.ForgeEventFactory.canLivingConvert(p_34282_, EntityType.ZOMBIE_VILLAGER, (timer) -> {})) {
+       if ((p_34281_.getDifficulty() == Difficulty.NORMAL || p_34281_.getDifficulty() == Difficulty.HARD) && p_34282_ instanceof Villager && net.neoforged.neoforge.event.EventHooks.canLivingConvert(p_34282_, EntityType.ZOMBIE_VILLAGER, (timer) -> {})) {
             if (p_34281_.getDifficulty() != Difficulty.HARD && this.random.nextBoolean()) {
                 return;
             }

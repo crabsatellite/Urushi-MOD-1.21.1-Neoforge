@@ -2,18 +2,13 @@ package com.iwaliner.urushi.blockentity;
 
 
 
-import com.iwaliner.urushi.BlockEntityRegister;
-import com.iwaliner.urushi.ItemAndBlockRegister;
-import com.iwaliner.urushi.ParticleRegister;
-import com.iwaliner.urushi.block.DirtFurnaceBlock;
-import com.iwaliner.urushi.block.RiceCauldronBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
- 
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.WorldlyContainer;
@@ -29,6 +24,11 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import com.iwaliner.urushi.BlockEntityRegister;
+import com.iwaliner.urushi.ItemAndBlockRegister;
+import com.iwaliner.urushi.ParticleRegister;
+import com.iwaliner.urushi.block.DirtFurnaceBlock;
+import com.iwaliner.urushi.block.RiceCauldronBlock;
 
 import javax.annotation.Nullable;
 
@@ -41,19 +41,19 @@ public  class SanboBlockEntity extends BaseContainerBlockEntity implements World
     public SanboBlockEntity(BlockPos p_155052_, BlockState p_155053_) {
         super(BlockEntityRegister.Sanbo.get(), p_155052_, p_155053_);
     }
-    public void load(CompoundTag p_155025_) {
-        super.load(p_155025_);
+    public void loadAdditional(CompoundTag p_155025_, HolderLookup.Provider registries) {
+        super.loadAdditional(p_155025_, registries);
         this.items.clear();
-        ContainerHelper.loadAllItems(p_155025_, this.items);
+        ContainerHelper.loadAllItems(p_155025_, this.items, registries);
     }
 
-    protected void saveAdditional(CompoundTag p_187452_) {
-        super.saveAdditional(p_187452_);
-       ContainerHelper.saveAllItems(p_187452_, this.items,true);
+    protected void saveAdditional(CompoundTag p_187452_, HolderLookup.Provider registries) {
+        super.saveAdditional(p_187452_, registries);
+       ContainerHelper.saveAllItems(p_187452_, this.items,true, registries);
     }
-    public CompoundTag getUpdateTag() {
+    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
         CompoundTag compoundtag = new CompoundTag();
-        ContainerHelper.saveAllItems(compoundtag, this.items, true);
+        ContainerHelper.saveAllItems(compoundtag, this.items, true, registries);
         return compoundtag;
     }
     public ClientboundBlockEntityDataPacket getUpdatePacket() {
@@ -133,7 +133,7 @@ public  class SanboBlockEntity extends BaseContainerBlockEntity implements World
     public void setItem(int slot, ItemStack stack) {
         this.markUpdated();
         ItemStack itemstack = this.items.get(slot);
-        boolean flag = !stack.isEmpty() && ItemStack.isSameItemSameTags(stack, itemstack);
+        boolean flag = !stack.isEmpty() && ItemStack.isSameItemSameComponents(stack, itemstack);
         this.items.set(slot, stack);
         if (stack.getCount() > this.getMaxStackSize()) {
             stack.setCount(this.getMaxStackSize());
@@ -207,17 +207,17 @@ public  class SanboBlockEntity extends BaseContainerBlockEntity implements World
             return SLOTS_FOR_UP;
 
     }
-    net.minecraftforge.common.util.LazyOptional<? extends net.minecraftforge.items.IItemHandler>[] handlers =
-            net.minecraftforge.items.wrapper.SidedInvWrapper.create(this, Direction.UP, Direction.DOWN, Direction.NORTH,Direction.SOUTH,Direction.EAST,Direction.WEST);
-    @Override
-    public <T> net.minecraftforge.common.util.LazyOptional<T> getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, @Nullable Direction facing) {
-        if (!this.remove && facing != null && capability == net.minecraftforge.common.capabilities.ForgeCapabilities.ITEM_HANDLER) {
-            this.markUpdated();
-            return handlers[0].cast();
+    // net.neoforged.neoforge.items.wrapper.SidedInvWrapper.create(this, Direction.UP, Direction.DOWN, Direction.NORTH,Direction.SOUTH,Direction.EAST,Direction.WEST);
+    //   Register via: event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, YOUR_BE_TYPE, (be, side) -> your_handler);
+    //   Original capability logic (preserve side-specific routing):
+    //     @Override
+    //         if (!this.remove && facing != null && capability == net.neoforged.neoforge.capabilities.Capabilities.ItemHandler.BLOCK) {
+    //             this.markUpdated();
+    //
+    //         }
+    //         return super.getCapability(capability, facing);
+    //     }
 
-        }
-        return super.getCapability(capability, facing);
-    }
 
     @Override
     public void clearContent() {
@@ -231,4 +231,9 @@ public  class SanboBlockEntity extends BaseContainerBlockEntity implements World
         }
     }
 
+
+    @Override
+    protected NonNullList<ItemStack> getItems() {
+        return this.items;
+    }
 }

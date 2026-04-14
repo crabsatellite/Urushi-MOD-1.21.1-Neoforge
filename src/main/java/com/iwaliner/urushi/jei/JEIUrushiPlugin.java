@@ -1,5 +1,13 @@
 package com.iwaliner.urushi.jei;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.CampfireCookingRecipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeManager;
 import com.iwaliner.urushi.ItemAndBlockRegister;
 import com.iwaliner.urushi.ModCoreUrushi;
 import com.iwaliner.urushi.RecipeTypeRegister;
@@ -11,12 +19,6 @@ import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
-import net.minecraft.client.Minecraft;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.CampfireCookingRecipe;
-import net.minecraft.world.item.crafting.RecipeManager;
 
 import java.util.List;
 import java.util.Objects;
@@ -51,7 +53,7 @@ public class JEIUrushiPlugin implements IModPlugin {
 
     @Override
     public ResourceLocation getPluginUid() {
-        return new ResourceLocation(ModCoreUrushi.ModID,"jei_plugin");
+        return ResourceLocation.fromNamespaceAndPath(ModCoreUrushi.ModID, "jei_plugin");
     }
 
 
@@ -84,52 +86,52 @@ public class JEIUrushiPlugin implements IModPlugin {
     public void registerRecipes(IRecipeRegistration registration) {
         RecipeManager recipeManager= Objects.requireNonNull(Minecraft.getInstance().level).getRecipeManager();
 
-        List<FryingRecipe> FryingRecipes=recipeManager.getAllRecipesFor(RecipeTypeRegister.FryingRecipe);
-        registration.addRecipes(new RecipeType<>(FryingRecipeCategory.location,FryingRecipe.class),FryingRecipes);
+        List<RecipeHolder<FryingRecipe>> FryingRecipes = recipeManager.getAllRecipesFor(RecipeTypeRegister.FryingRecipe);
+        registration.addRecipes(new RecipeType<>(FryingRecipeCategory.location,FryingRecipe.class),FryingRecipes.stream().map(RecipeHolder::value).toList());
 
-        List<HammeringRecipe> HammeringRecipes=recipeManager.getAllRecipesFor(RecipeTypeRegister.HammeringRecipe);
-        registration.addRecipes(new RecipeType<>(HammeringRecipeCategory.location,HammeringRecipe.class),HammeringRecipes);
+        List<RecipeHolder<HammeringRecipe>> HammeringRecipes = recipeManager.getAllRecipesFor(RecipeTypeRegister.HammeringRecipe);
+        registration.addRecipes(new RecipeType<>(HammeringRecipeCategory.location,HammeringRecipe.class),HammeringRecipes.stream().map(RecipeHolder::value).toList());
 
-        List<OilExtractingRecipe> OilExtractingRecipes=recipeManager.getAllRecipesFor(RecipeTypeRegister.OilExtractingRecipe);
-        registration.addRecipes(new RecipeType<>(OilExtractingRecipeCategory.location,OilExtractingRecipe.class),OilExtractingRecipes);
+        List<RecipeHolder<OilExtractingRecipe>> OilExtractingRecipes = recipeManager.getAllRecipesFor(RecipeTypeRegister.OilExtractingRecipe);
+        registration.addRecipes(new RecipeType<>(OilExtractingRecipeCategory.location,OilExtractingRecipe.class),OilExtractingRecipes.stream().map(RecipeHolder::value).toList());
 
-        List<ThrowingInRecipe> ThrowingInRecipes=recipeManager.getAllRecipesFor(RecipeTypeRegister.ThrowingInRecipe);
-        registration.addRecipes(new RecipeType<>(ThrowingInRecipeCategory.location,ThrowingInRecipe.class),ThrowingInRecipes);
-        List<SenbakokiRecipe> SenbakokiRecipes=recipeManager.getAllRecipesFor(RecipeTypeRegister.SenbakokiRecipe);
-        registration.addRecipes(new RecipeType<>(SenbakokiRecipeCategory.location,SenbakokiRecipe.class),SenbakokiRecipes);
-        List<FoxEatingRecipe> FoxEatingRecipes=recipeManager.getAllRecipesFor(RecipeTypeRegister.FoxEatingRecipe);
-        registration.addRecipes(new RecipeType<>(FoxEatingRecipeCategory.location,FoxEatingRecipe.class),FoxEatingRecipes);
-        List<SandpaperPolishingRecipe> SandpaperPolishingRecipes=recipeManager.getAllRecipesFor(RecipeTypeRegister.SandpaperPolishingRecipe);
-        registration.addRecipes(new RecipeType<>(SandpaperPolishingRecipeCategory.location,SandpaperPolishingRecipe.class),SandpaperPolishingRecipes);
-        List<ChiseledLacquerLogRecipe> ChiseledLacquerLogRecipes=recipeManager.getAllRecipesFor(RecipeTypeRegister.ChiseledLacquerLogRecipe);
-        registration.addRecipes(new RecipeType<>(ChiseledLacquerLogRecipeCategory.location,ChiseledLacquerLogRecipe.class),ChiseledLacquerLogRecipes);
-        List<WoodElementTier1CraftingRecipe> WoodElementTier1CraftingRecipes=recipeManager.getAllRecipesFor(RecipeTypeRegister.WoodElementTier1CraftingRecipe);
-        registration.addRecipes(new RecipeType<>(WoodElementTier1CraftingRecipeCategory.location,WoodElementTier1CraftingRecipe.class),WoodElementTier1CraftingRecipes);
-        List<FireElementTier1CraftingRecipe> FireElementTier1CraftingRecipes=recipeManager.getAllRecipesFor(RecipeTypeRegister.FireElementTier1CraftingRecipe);
-        registration.addRecipes(new RecipeType<>(FireElementTier1CraftingRecipeCategory.location,FireElementTier1CraftingRecipe.class),FireElementTier1CraftingRecipes);
-        List<EarthElementTier1CraftingRecipe> EarthElementTier1CraftingRecipes=recipeManager.getAllRecipesFor(RecipeTypeRegister.EarthElementTier1CraftingRecipe);
-        registration.addRecipes(new RecipeType<>(EarthElementTier1CraftingRecipeCategory.location,EarthElementTier1CraftingRecipe.class),EarthElementTier1CraftingRecipes);
-        List<MetalElementTier1CraftingRecipe> MetalElementTier1CraftingRecipes=recipeManager.getAllRecipesFor(RecipeTypeRegister.MetalElementTier1CraftingRecipe);
-        registration.addRecipes(new RecipeType<>(MetalElementTier1CraftingRecipeCategory.location,MetalElementTier1CraftingRecipe.class),MetalElementTier1CraftingRecipes);
-        List<WaterElementTier1CraftingRecipe> WaterElementTier1CraftingRecipes=recipeManager.getAllRecipesFor(RecipeTypeRegister.WaterElementTier1CraftingRecipe);
-        registration.addRecipes(new RecipeType<>(WaterElementTier1CraftingRecipeCategory.location,WaterElementTier1CraftingRecipe.class),WaterElementTier1CraftingRecipes);
+        List<RecipeHolder<ThrowingInRecipe>> ThrowingInRecipes = recipeManager.getAllRecipesFor(RecipeTypeRegister.ThrowingInRecipe);
+        registration.addRecipes(new RecipeType<>(ThrowingInRecipeCategory.location,ThrowingInRecipe.class),ThrowingInRecipes.stream().map(RecipeHolder::value).toList());
+        List<RecipeHolder<SenbakokiRecipe>> SenbakokiRecipes = recipeManager.getAllRecipesFor(RecipeTypeRegister.SenbakokiRecipe);
+        registration.addRecipes(new RecipeType<>(SenbakokiRecipeCategory.location,SenbakokiRecipe.class),SenbakokiRecipes.stream().map(RecipeHolder::value).toList());
+        List<RecipeHolder<FoxEatingRecipe>> FoxEatingRecipes = recipeManager.getAllRecipesFor(RecipeTypeRegister.FoxEatingRecipe);
+        registration.addRecipes(new RecipeType<>(FoxEatingRecipeCategory.location,FoxEatingRecipe.class),FoxEatingRecipes.stream().map(RecipeHolder::value).toList());
+        List<RecipeHolder<SandpaperPolishingRecipe>> SandpaperPolishingRecipes = recipeManager.getAllRecipesFor(RecipeTypeRegister.SandpaperPolishingRecipe);
+        registration.addRecipes(new RecipeType<>(SandpaperPolishingRecipeCategory.location,SandpaperPolishingRecipe.class),SandpaperPolishingRecipes.stream().map(RecipeHolder::value).toList());
+        List<RecipeHolder<ChiseledLacquerLogRecipe>> ChiseledLacquerLogRecipes = recipeManager.getAllRecipesFor(RecipeTypeRegister.ChiseledLacquerLogRecipe);
+        registration.addRecipes(new RecipeType<>(ChiseledLacquerLogRecipeCategory.location,ChiseledLacquerLogRecipe.class),ChiseledLacquerLogRecipes.stream().map(RecipeHolder::value).toList());
+        List<RecipeHolder<WoodElementTier1CraftingRecipe>> WoodElementTier1CraftingRecipes = recipeManager.getAllRecipesFor(RecipeTypeRegister.WoodElementTier1CraftingRecipe);
+        registration.addRecipes(new RecipeType<>(WoodElementTier1CraftingRecipeCategory.location,WoodElementTier1CraftingRecipe.class),WoodElementTier1CraftingRecipes.stream().map(RecipeHolder::value).toList());
+        List<RecipeHolder<FireElementTier1CraftingRecipe>> FireElementTier1CraftingRecipes = recipeManager.getAllRecipesFor(RecipeTypeRegister.FireElementTier1CraftingRecipe);
+        registration.addRecipes(new RecipeType<>(FireElementTier1CraftingRecipeCategory.location,FireElementTier1CraftingRecipe.class),FireElementTier1CraftingRecipes.stream().map(RecipeHolder::value).toList());
+        List<RecipeHolder<EarthElementTier1CraftingRecipe>> EarthElementTier1CraftingRecipes = recipeManager.getAllRecipesFor(RecipeTypeRegister.EarthElementTier1CraftingRecipe);
+        registration.addRecipes(new RecipeType<>(EarthElementTier1CraftingRecipeCategory.location,EarthElementTier1CraftingRecipe.class),EarthElementTier1CraftingRecipes.stream().map(RecipeHolder::value).toList());
+        List<RecipeHolder<MetalElementTier1CraftingRecipe>> MetalElementTier1CraftingRecipes = recipeManager.getAllRecipesFor(RecipeTypeRegister.MetalElementTier1CraftingRecipe);
+        registration.addRecipes(new RecipeType<>(MetalElementTier1CraftingRecipeCategory.location,MetalElementTier1CraftingRecipe.class),MetalElementTier1CraftingRecipes.stream().map(RecipeHolder::value).toList());
+        List<RecipeHolder<WaterElementTier1CraftingRecipe>> WaterElementTier1CraftingRecipes = recipeManager.getAllRecipesFor(RecipeTypeRegister.WaterElementTier1CraftingRecipe);
+        registration.addRecipes(new RecipeType<>(WaterElementTier1CraftingRecipeCategory.location,WaterElementTier1CraftingRecipe.class),WaterElementTier1CraftingRecipes.stream().map(RecipeHolder::value).toList());
 
-        List<WoodElementTier2CraftingRecipe> WoodElementTier2CraftingRecipes=recipeManager.getAllRecipesFor(RecipeTypeRegister.WoodElementTier2CraftingRecipe);
-        registration.addRecipes(new RecipeType<>(WoodElementTier2CraftingRecipeCategory.location,WoodElementTier2CraftingRecipe.class),WoodElementTier2CraftingRecipes);
-        List<FireElementTier2CraftingRecipe> FireElementTier2CraftingRecipes=recipeManager.getAllRecipesFor(RecipeTypeRegister.FireElementTier2CraftingRecipe);
-        registration.addRecipes(new RecipeType<>(FireElementTier2CraftingRecipeCategory.location,FireElementTier2CraftingRecipe.class),FireElementTier2CraftingRecipes);
-        List<EarthElementTier2CraftingRecipe> EarthElementTier2CraftingRecipes=recipeManager.getAllRecipesFor(RecipeTypeRegister.EarthElementTier2CraftingRecipe);
-        registration.addRecipes(new RecipeType<>(EarthElementTier2CraftingRecipeCategory.location,EarthElementTier2CraftingRecipe.class),EarthElementTier2CraftingRecipes);
-        List<MetalElementTier2CraftingRecipe> MetalElementTier2CraftingRecipes=recipeManager.getAllRecipesFor(RecipeTypeRegister.MetalElementTier2CraftingRecipe);
-        registration.addRecipes(new RecipeType<>(MetalElementTier2CraftingRecipeCategory.location,MetalElementTier2CraftingRecipe.class),MetalElementTier2CraftingRecipes);
-        List<WaterElementTier2CraftingRecipe> WaterElementTier2CraftingRecipes=recipeManager.getAllRecipesFor(RecipeTypeRegister.WaterElementTier2CraftingRecipe);
-        registration.addRecipes(new RecipeType<>(WaterElementTier2CraftingRecipeCategory.location,WaterElementTier2CraftingRecipe.class),WaterElementTier2CraftingRecipes);
-        List<SilkFarmRecipe> SilkFarmRecipes=recipeManager.getAllRecipesFor(RecipeTypeRegister.SilkwormFarmRecipe);
-        registration.addRecipes(new RecipeType<>(SilkwormFarmRecipeCategory.location,SilkFarmRecipe.class),SilkFarmRecipes);
-        List<KettleRecipe> KettleRecipes=recipeManager.getAllRecipesFor(RecipeTypeRegister.KettleRecipe);
-        registration.addRecipes(new RecipeType<>(KettleRecipeCategory.location,KettleRecipe.class),KettleRecipes);
-        List<RainwaterTankRecipe> RainwaterTankRecipes=recipeManager.getAllRecipesFor(RecipeTypeRegister.RainwaterTankRecipe);
-        registration.addRecipes(new RecipeType<>(RainwaterTankRecipeCategory.location,RainwaterTankRecipe.class),RainwaterTankRecipes);
+        List<RecipeHolder<WoodElementTier2CraftingRecipe>> WoodElementTier2CraftingRecipes = recipeManager.getAllRecipesFor(RecipeTypeRegister.WoodElementTier2CraftingRecipe);
+        registration.addRecipes(new RecipeType<>(WoodElementTier2CraftingRecipeCategory.location,WoodElementTier2CraftingRecipe.class),WoodElementTier2CraftingRecipes.stream().map(RecipeHolder::value).toList());
+        List<RecipeHolder<FireElementTier2CraftingRecipe>> FireElementTier2CraftingRecipes = recipeManager.getAllRecipesFor(RecipeTypeRegister.FireElementTier2CraftingRecipe);
+        registration.addRecipes(new RecipeType<>(FireElementTier2CraftingRecipeCategory.location,FireElementTier2CraftingRecipe.class),FireElementTier2CraftingRecipes.stream().map(RecipeHolder::value).toList());
+        List<RecipeHolder<EarthElementTier2CraftingRecipe>> EarthElementTier2CraftingRecipes = recipeManager.getAllRecipesFor(RecipeTypeRegister.EarthElementTier2CraftingRecipe);
+        registration.addRecipes(new RecipeType<>(EarthElementTier2CraftingRecipeCategory.location,EarthElementTier2CraftingRecipe.class),EarthElementTier2CraftingRecipes.stream().map(RecipeHolder::value).toList());
+        List<RecipeHolder<MetalElementTier2CraftingRecipe>> MetalElementTier2CraftingRecipes = recipeManager.getAllRecipesFor(RecipeTypeRegister.MetalElementTier2CraftingRecipe);
+        registration.addRecipes(new RecipeType<>(MetalElementTier2CraftingRecipeCategory.location,MetalElementTier2CraftingRecipe.class),MetalElementTier2CraftingRecipes.stream().map(RecipeHolder::value).toList());
+        List<RecipeHolder<WaterElementTier2CraftingRecipe>> WaterElementTier2CraftingRecipes = recipeManager.getAllRecipesFor(RecipeTypeRegister.WaterElementTier2CraftingRecipe);
+        registration.addRecipes(new RecipeType<>(WaterElementTier2CraftingRecipeCategory.location,WaterElementTier2CraftingRecipe.class),WaterElementTier2CraftingRecipes.stream().map(RecipeHolder::value).toList());
+        List<RecipeHolder<SilkFarmRecipe>> SilkFarmRecipes = recipeManager.getAllRecipesFor(RecipeTypeRegister.SilkwormFarmRecipe);
+        registration.addRecipes(new RecipeType<>(SilkwormFarmRecipeCategory.location,SilkFarmRecipe.class),SilkFarmRecipes.stream().map(RecipeHolder::value).toList());
+        List<RecipeHolder<KettleRecipe>> KettleRecipes = recipeManager.getAllRecipesFor(RecipeTypeRegister.KettleRecipe);
+        registration.addRecipes(new RecipeType<>(KettleRecipeCategory.location,KettleRecipe.class),KettleRecipes.stream().map(RecipeHolder::value).toList());
+        List<RecipeHolder<RainwaterTankRecipe>> RainwaterTankRecipes = recipeManager.getAllRecipesFor(RecipeTypeRegister.RainwaterTankRecipe);
+        registration.addRecipes(new RecipeType<>(RainwaterTankRecipeCategory.location,RainwaterTankRecipe.class),RainwaterTankRecipes.stream().map(RecipeHolder::value).toList());
     }
 
     @Override

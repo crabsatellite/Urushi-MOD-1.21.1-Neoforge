@@ -7,10 +7,10 @@
   ],
   "key": {
     "D": {
-     "item": "urushi:red_urushi_ball"
+      "item": "urushi:red_urushi_ball"
     },
     "B": {
-    "tag": "forge:fence_gates/wooden"
+      "tag": "c:fence_gates/wooden"
     }
   },
   "result": {

@@ -7,10 +7,10 @@
   ],
   "key": {
     "d": {
-     "item": "minecraft:dirt"
+      "item": "minecraft:dirt"
     },
     "s": {
-    "tag": "forge:rods/wooden"
+      "tag": "c:rods/wooden"
     }
   },
   "result": {

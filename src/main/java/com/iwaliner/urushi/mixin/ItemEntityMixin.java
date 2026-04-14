@@ -1,20 +1,24 @@
 package com.iwaliner.urushi.mixin;
 
-import com.iwaliner.urushi.RecipeTypeRegister;
-import com.iwaliner.urushi.block.SlideDoorBlock;
-import com.iwaliner.urushi.recipe.SenbakokiRecipe;
-import com.iwaliner.urushi.recipe.ThrowingInRecipe;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeInput;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.IronBarsBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
+import com.iwaliner.urushi.RecipeTypeRegister;
+import com.iwaliner.urushi.block.SlideDoorBlock;
+import com.iwaliner.urushi.recipe.SenbakokiRecipe;
+import com.iwaliner.urushi.recipe.ThrowingInRecipe;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -39,10 +43,10 @@ public abstract class ItemEntityMixin {
         Level level=this.copy().level();
         BlockPos pos=this.copy().blockPosition();
         if(level.getFluidState(pos).is(Fluids.WATER)||level.getFluidState(pos).is(Fluids.FLOWING_WATER)) {
-            Optional<ThrowingInRecipe> recipe = Optional.of(level.getRecipeManager())
-                    .flatMap(manager -> manager.getRecipeFor(RecipeTypeRegister.ThrowingInRecipe, new SimpleContainer(stack), level));
+            Optional<RecipeHolder<ThrowingInRecipe>> recipe = Optional.of(level.getRecipeManager())
+                    .flatMap(manager -> manager.getRecipeFor(RecipeTypeRegister.ThrowingInRecipe, new SingleRecipeInput(stack), level));
             if (recipe.isPresent()) {
-                ItemStack result=recipe.get().getResultItem();
+                ItemStack result=recipe.get().value().getResultItem();
                 result.setCount(stack.getCount());
                 this.setItem(result);
                 level.playSound((Player) null, pos, SoundEvents.FIRE_EXTINGUISH, SoundSource.NEUTRAL, 1F, 1F);

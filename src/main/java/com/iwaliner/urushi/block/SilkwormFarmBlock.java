@@ -1,17 +1,10 @@
 package com.iwaliner.urushi.block;
 
 
-import com.iwaliner.urushi.BlockEntityRegister;
-import com.iwaliner.urushi.ItemAndBlockRegister;
-import com.iwaliner.urushi.RecipeTypeRegister;
-import com.iwaliner.urushi.TagUrushi;
-import com.iwaliner.urushi.blockentity.SilkwormFarmBlockEntity;
-import com.iwaliner.urushi.recipe.SenbakokiRecipe;
-import com.iwaliner.urushi.recipe.SilkFarmRecipe;
-import com.iwaliner.urushi.util.UrushiUtils;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -19,6 +12,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.*;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -47,13 +41,30 @@ import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import com.iwaliner.urushi.BlockEntityRegister;
+import com.iwaliner.urushi.ItemAndBlockRegister;
+import com.iwaliner.urushi.RecipeTypeRegister;
+import com.iwaliner.urushi.TagUrushi;
+import com.iwaliner.urushi.blockentity.SilkwormFarmBlockEntity;
+import com.iwaliner.urushi.recipe.SenbakokiRecipe;
+import com.iwaliner.urushi.recipe.SilkFarmRecipe;
+import com.iwaliner.urushi.util.UrushiUtils;
+import com.mojang.serialization.MapCodec;
 
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import javax.annotation.Nullable;
 
 public class SilkwormFarmBlock extends BaseEntityBlock {
+    public static final MapCodec<SilkwormFarmBlock> CODEC = simpleCodec(SilkwormFarmBlock::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
     public static final BooleanProperty SILKWORM = BooleanProperty.create("silkworm");
     public static final BooleanProperty LEAVES = BooleanProperty.create("leaves");
@@ -84,7 +95,8 @@ public class SilkwormFarmBlock extends BaseEntityBlock {
         return level.isClientSide ? null : createTickerHelper(p_152162_, BlockEntityRegister.SilkwormFarm.get(), SilkwormFarmBlockEntity::serverTick);
     }
 
-    public InteractionResult use(BlockState p_48706_, Level p_48707_, BlockPos p_48708_, Player p_48709_, InteractionHand p_48710_, BlockHitResult p_48711_) {
+    protected InteractionResult useWithoutItem(BlockState p_48706_, Level p_48707_, BlockPos p_48708_, Player p_48709_, BlockHitResult p_48711_) {
+        InteractionHand hand = InteractionHand.MAIN_HAND;
         if (p_48707_.isClientSide) {
             return InteractionResult.SUCCESS;
         } else {
@@ -106,10 +118,11 @@ public class SilkwormFarmBlock extends BaseEntityBlock {
     }
 
     public void setPlacedBy(Level p_48694_, BlockPos p_48695_, BlockState p_48696_, LivingEntity p_48697_, ItemStack p_48698_) {
-        if (p_48698_.hasCustomHoverName()) {
+        if (p_48698_.has(DataComponents.CUSTOM_NAME)) {
             BlockEntity blockentity = p_48694_.getBlockEntity(p_48695_);
             if (blockentity instanceof SilkwormFarmBlockEntity) {
-                ((SilkwormFarmBlockEntity)blockentity).setCustomName(p_48698_.getHoverName());
+
+                // Original: ((SilkwormFarmBlockEntity)blockentity).setCustomName(p_48698_.getHoverName());
             }
         }
 
@@ -152,7 +165,7 @@ public class SilkwormFarmBlock extends BaseEntityBlock {
         p_48725_.add(FACING, SILKWORM,LEAVES,COCOON);
     }
     @Override
-    public void appendHoverText(ItemStack stack, @org.jetbrains.annotations.Nullable BlockGetter getter, List<Component> list, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, Item.TooltipContext getter, List<Component> list, TooltipFlag flag) {
             UrushiUtils.setInfo(list, "silkworm_farm1");
             UrushiUtils.setInfo(list, "silkworm_farm2");
     }

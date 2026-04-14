@@ -8,10 +8,19 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import com.mojang.serialization.MapCodec;
 
 public class ConnectableGlassBlock extends FramedBlock{
+    public static final MapCodec<ConnectableGlassBlock> CODEC = simpleCodec(ConnectableGlassBlock::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
     public ConnectableGlassBlock(Properties p_i48440_1_) {
         super(p_i48440_1_);
     }

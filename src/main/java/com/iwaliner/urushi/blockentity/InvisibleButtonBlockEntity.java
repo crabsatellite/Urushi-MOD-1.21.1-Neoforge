@@ -1,15 +1,15 @@
 package com.iwaliner.urushi.blockentity;
 
-import com.iwaliner.urushi.BlockEntityRegister;
-import com.iwaliner.urushi.ItemAndBlockRegister;
-import com.iwaliner.urushi.block.HiddenInvisibleButtonBlock;
-import com.iwaliner.urushi.block.InvisibleButtonBlock;
-import com.iwaliner.urushi.block.RiceCauldronBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import com.iwaliner.urushi.BlockEntityRegister;
+import com.iwaliner.urushi.ItemAndBlockRegister;
+import com.iwaliner.urushi.block.HiddenInvisibleButtonBlock;
+import com.iwaliner.urushi.block.InvisibleButtonBlock;
+import com.iwaliner.urushi.block.RiceCauldronBlock;
 
 public class InvisibleButtonBlockEntity extends AbstractInvisibleBlockEntity {
 

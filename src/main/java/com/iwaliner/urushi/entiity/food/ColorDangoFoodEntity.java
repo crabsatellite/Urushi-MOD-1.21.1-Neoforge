@@ -1,10 +1,10 @@
 package com.iwaliner.urushi.entiity.food;
 
 
-import com.iwaliner.urushi.EntityRegister;
-import com.iwaliner.urushi.ItemAndBlockRegister;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
+import com.iwaliner.urushi.EntityRegister;
+import com.iwaliner.urushi.ItemAndBlockRegister;
 
 public class ColorDangoFoodEntity extends FoodEntity {
 

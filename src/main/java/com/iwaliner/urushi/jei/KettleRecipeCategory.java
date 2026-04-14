@@ -3,6 +3,12 @@ package com.iwaliner.urushi.jei;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import com.iwaliner.urushi.ItemAndBlockRegister;
 import com.iwaliner.urushi.ModCoreUrushi;
 import com.iwaliner.urushi.recipe.KettleRecipe;
@@ -17,19 +23,12 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
-
 import static mezz.jei.api.recipe.RecipeIngredientRole.INPUT;
 import static mezz.jei.api.recipe.RecipeIngredientRole.OUTPUT;
 
 public class KettleRecipeCategory implements IRecipeCategory<KettleRecipe> {
-    public static final ResourceLocation location=new ResourceLocation(ModCoreUrushi.ModID,"kettle");
-    public static final ResourceLocation tex=new ResourceLocation(ModCoreUrushi.ModID,"textures/gui/silkworm_farm.png");
+    public static final ResourceLocation location=ResourceLocation.fromNamespaceAndPath(ModCoreUrushi.ModID, "kettle");
+    public static final ResourceLocation tex=ResourceLocation.fromNamespaceAndPath(ModCoreUrushi.ModID, "textures/gui/silkworm_farm.png");
     private final IDrawable background;
     private final IDrawable icon;
     protected final IDrawableStatic staticFlame;

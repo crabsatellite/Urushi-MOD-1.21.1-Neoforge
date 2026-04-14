@@ -1,15 +1,14 @@
 {
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
-   
-   {
-       "tag": "minecraft:sand"
-    },
-     {
-      "tag": "forge:gravel"
+    {
+      "tag": "minecraft:sand"
     },
     {
-     "item": "minecraft:paper"
+      "tag": "c:gravel"
+    },
+    {
+      "item": "minecraft:paper"
     }
   ],
   "result": {

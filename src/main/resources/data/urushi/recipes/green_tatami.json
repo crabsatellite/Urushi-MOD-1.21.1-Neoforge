@@ -2,16 +2,16 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-   "tag": "minecraft:straw"
+      "tag": "minecraft:straw"
     },
     {
-    "tag": "minecraft:straw"
+      "tag": "minecraft:straw"
     },
     {
-  "tag": "minecraft:straw"
+      "tag": "minecraft:straw"
     },
     {
-     "tag": "forge:string"
+      "tag": "c:string"
     }
   ],
   "result": {

@@ -1,9 +1,6 @@
 package com.iwaliner.urushi.block;
 
 
-import com.iwaliner.urushi.ItemAndBlockRegister;
-import com.iwaliner.urushi.TagUrushi;
-import com.iwaliner.urushi.util.UrushiUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -23,14 +20,27 @@ import net.minecraft.world.level.block.FireBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import com.iwaliner.urushi.ItemAndBlockRegister;
+import com.iwaliner.urushi.TagUrushi;
+import com.iwaliner.urushi.util.UrushiUtils;
+import com.mojang.serialization.MapCodec;
 
 import java.util.List;
 
 public class DirtFurnaceBlock extends HorizonalRotateBlock {
+    public static final MapCodec<DirtFurnaceBlock> CODEC = simpleCodec(DirtFurnaceBlock::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
     public static final BooleanProperty LIT = BooleanProperty.create("lit");
     private static final VoxelShape Shape1 = Block.box(0D, 0.0D, 0D, 4D, 16D, 16D);
     private static final VoxelShape Shape2 = Block.box(12D, 0.0D, 0D, 16D, 16D, 16D);
@@ -41,7 +51,6 @@ public class DirtFurnaceBlock extends HorizonalRotateBlock {
 
     public DirtFurnaceBlock(Properties p_i48440_1_) {
         super(p_i48440_1_);
-        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(LIT, Boolean.valueOf(false)));
     }
 
     @Override
@@ -55,8 +64,13 @@ public class DirtFurnaceBlock extends HorizonalRotateBlock {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
-            if(player.getItemInHand(hand).is(TagUrushi.IGNITER)){
+    public int getLightEmission(BlockState state, BlockGetter level, BlockPos pos) {
+        return state.getValue(LIT) ? 10 : 0;
+    }
+
+    @Override
+    protected InteractionResult useWithoutItem(BlockState state, Level world, BlockPos pos, Player player, BlockHitResult result) {
+            if(player.getMainHandItem().is(TagUrushi.IGNITER)){
                 world.playSound((Player) null, pos, SoundEvents.FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1.0F, world.random.nextFloat() * 0.4F + 0.8F);
                 world.setBlockAndUpdate(pos,state.setValue(LIT,Boolean.valueOf(true)));
                 return InteractionResult.SUCCESS;
@@ -79,7 +93,7 @@ public class DirtFurnaceBlock extends HorizonalRotateBlock {
 
     }
     @Override
-    public void appendHoverText(ItemStack p_49816_, @org.jetbrains.annotations.Nullable BlockGetter p_49817_, List<Component> list, TooltipFlag p_49819_) {
+    public void appendHoverText(ItemStack p_49816_, Item.TooltipContext p_49817_, List<Component> list, TooltipFlag p_49819_) {
         UrushiUtils.setInfo(list,"dirtfurnace");
          }
 

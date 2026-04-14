@@ -1,9 +1,6 @@
 package com.iwaliner.urushi.entiity.model;
 
 import com.google.common.collect.ImmutableList;
-import com.iwaliner.urushi.entiity.KakuriyoVillagerEntity;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.AnimationUtils;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
@@ -12,6 +9,9 @@ import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.PathfinderMob;
+import com.iwaliner.urushi.entiity.KakuriyoVillagerEntity;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 
 import java.util.function.Function;
 
@@ -67,10 +67,10 @@ public class OniModel<T extends PathfinderMob> extends HumanoidModel<T> {
         return LayerDefinition.create(meshdefinition, 64, 64);
     }
     @Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-        super.renderToBuffer(poseStack,vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-        oniHorn1.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-        oniHorn2.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int color) {
+        super.renderToBuffer(poseStack, vertexConsumer, packedLight, packedOverlay, color);
+        oniHorn1.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
+        oniHorn2.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
     }
     public void setAllVisible(boolean p_103419_) {
         super.setAllVisible(p_103419_);

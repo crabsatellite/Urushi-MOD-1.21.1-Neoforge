@@ -17,7 +17,7 @@ public class AutoCraftingTableIngredientsSlot extends ItemStackHandlerSlot {
 
     @Override
     public boolean mayPlace(ItemStack stack) {
-        if (ItemStack.isSameItemSameTags(stack, container.getItem(this.index))) {
+        if (ItemStack.isSameItemSameComponents(stack, container.getItem(this.index))) {
             return true;
         }
         return false;

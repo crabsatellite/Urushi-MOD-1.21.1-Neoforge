@@ -1,11 +1,6 @@
 package com.iwaliner.urushi.entiity.food.renderer;
 
 
-import com.iwaliner.urushi.entiity.food.FoodEntity;
-import com.iwaliner.urushi.entiity.food.model.RiceFoodModel;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Axis;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.MinecartModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -18,8 +13,13 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import com.iwaliner.urushi.entiity.food.FoodEntity;
+import com.iwaliner.urushi.entiity.food.model.RiceFoodModel;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
 
 @OnlyIn(Dist.CLIENT)
 public abstract class AbstractFoodRenderer<T extends FoodEntity> extends EntityRenderer<T> {
@@ -38,7 +38,7 @@ public abstract class AbstractFoodRenderer<T extends FoodEntity> extends EntityR
         p_115421_.mulPose(Axis.YN.rotationDegrees(180.0F - p_115419_));
         p_115421_.scale(1F, 1F, 1F);
         VertexConsumer vertexconsumer = p_115422_.getBuffer(this.model.renderType(this.getTextureLocation(p_115418_)));
-        this.model.renderToBuffer(p_115421_, vertexconsumer, p_115423_, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        this.model.renderToBuffer(p_115421_, vertexconsumer, p_115423_, OverlayTexture.NO_OVERLAY, -1);
         p_115421_.popPose();
         super.render(p_115418_, p_115419_, p_115420_, p_115421_, p_115422_, p_115423_);}
 

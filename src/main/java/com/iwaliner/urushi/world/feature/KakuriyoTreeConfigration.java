@@ -1,7 +1,6 @@
 package com.iwaliner.urushi.world.feature;
 
 import com.google.common.collect.ImmutableList;
-import com.iwaliner.urushi.ItemAndBlockRegister;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
 import net.minecraft.world.level.levelgen.feature.featuresize.FeatureSize;
@@ -10,6 +9,7 @@ import net.minecraft.world.level.levelgen.feature.rootplacers.RootPlacer;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecorator;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacer;
+import com.iwaliner.urushi.ItemAndBlockRegister;
 
 import java.util.List;
 import java.util.Optional;

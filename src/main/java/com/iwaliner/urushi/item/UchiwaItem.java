@@ -1,16 +1,13 @@
 package com.iwaliner.urushi.item;
 
-import com.iwaliner.urushi.block.FallenLeavesBlock;
-import com.iwaliner.urushi.util.ElementType;
-import com.iwaliner.urushi.util.ElementUtils;
-import com.iwaliner.urushi.util.UrushiUtils;
-import com.iwaliner.urushi.util.interfaces.ElementItem;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -21,6 +18,11 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.LeavesBlock;
+import com.iwaliner.urushi.block.FallenLeavesBlock;
+import com.iwaliner.urushi.util.ElementType;
+import com.iwaliner.urushi.util.ElementUtils;
+import com.iwaliner.urushi.util.UrushiUtils;
+import com.iwaliner.urushi.util.interfaces.ElementItem;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -91,9 +93,7 @@ public class UchiwaItem extends Item implements ElementItem {
                             block instanceof FallenLeavesBlock) {
                         level.destroyBlock(blockPos, true);
                         ++cnt;
-                        uchiwa.hurtAndBreak(1, player, (x) -> {
-                            x.broadcastBreakEvent(hand);
-                        });
+                        uchiwa.hurtAndBreak(1, player, EquipmentSlot.MAINHAND);
                     }
                 }
             }
@@ -102,7 +102,7 @@ public class UchiwaItem extends Item implements ElementItem {
     }
 
     @Override
-    public void appendHoverText(@NotNull ItemStack p_41421_, @Nullable Level p_41422_, @NotNull List<Component> list, @NotNull TooltipFlag p_41424_) {
+    public void appendHoverText(ItemStack p_41421_, Item.TooltipContext p_41422_, List<Component> list, TooltipFlag p_41424_) {
         UrushiUtils.setInfo(list,"uchiwa");
         UrushiUtils.setInfo(list,"uchiwa2");
         UrushiUtils.setInfo(list,"uchiwa3");

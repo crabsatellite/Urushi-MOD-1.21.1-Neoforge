@@ -1,7 +1,7 @@
 {
   "required": true,
   "package": "com.iwaliner.urushi.mixin",
-  "compatibilityLevel": "JAVA_17",
+  "compatibilityLevel": "JAVA_21",
   "refmap": "urushi.refmap.json",
   "mixins": [
     "BlockDisplayMixin",
@@ -12,9 +12,7 @@
     "PlayerMixin",
     "WeatherCommandMixin"
   ],
-  "client": [
-    "LevelRendererMixin"
-  ],
+  "client": [],
   "injectors": {
     "defaultRequire": 1
   },

@@ -1,9 +1,5 @@
 package com.iwaliner.urushi.block;
 
-import com.iwaliner.urushi.ConfigUrushi;
-import com.iwaliner.urushi.ItemAndBlockRegister;
-import com.iwaliner.urushi.ParticleRegister;
-import com.iwaliner.urushi.util.UrushiUtils;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -12,6 +8,7 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.ParticleUtils;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -19,9 +16,12 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.Vec3;
+import com.iwaliner.urushi.ConfigUrushi;
+import com.iwaliner.urushi.ItemAndBlockRegister;
+import com.iwaliner.urushi.ParticleRegister;
+import com.iwaliner.urushi.util.UrushiUtils;
+import com.mojang.serialization.MapCodec;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
@@ -29,7 +29,10 @@ import java.util.OptionalInt;
 import java.util.Random;
 
 public class CutoutLeavesBlock extends LeavesBlock {
+    public static final MapCodec<CutoutLeavesBlock> CODEC = simpleCodec(__p -> new CutoutLeavesBlock(__p));
 
+    @Override
+    public MapCodec<? extends CutoutLeavesBlock> codec() { return CODEC; }
     public CutoutLeavesBlock(BlockBehaviour.Properties p_54422_) {
         super(p_54422_);
    }

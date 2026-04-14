@@ -1,9 +1,6 @@
 package com.iwaliner.urushi.blockentity.menu;
 
-import com.iwaliner.urushi.MenuRegister;
-import com.iwaliner.urushi.ModCoreUrushi;
-import com.iwaliner.urushi.blockentity.AutoCraftingTableBlockEntity;
-import com.iwaliner.urushi.blockentity.slot.*;
+import net.minecraft.core.Holder;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
@@ -12,9 +9,16 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.StackedContents;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeInput;
+import com.iwaliner.urushi.MenuRegister;
+import com.iwaliner.urushi.ModCoreUrushi;
+import com.iwaliner.urushi.blockentity.AutoCraftingTableBlockEntity;
+import com.iwaliner.urushi.blockentity.slot.*;
 
-public class AutoCraftingTableMenu extends RecipeBookMenu<Container> {
+public class AutoCraftingTableMenu extends RecipeBookMenu<RecipeInput, Recipe<RecipeInput>> {
 
     private final Container container;
     private final Player player;
@@ -66,12 +70,12 @@ public class AutoCraftingTableMenu extends RecipeBookMenu<Container> {
         this.container.clearContent();
     }
 
-    public boolean recipeMatches(Recipe<? super Container> recipe) {
+    public boolean recipeMatches(RecipeHolder<Recipe<RecipeInput>> recipe) {
         CraftingContainer craftingcontainer = new TransientCraftingContainer(this,3,3);
         for (int i = 0; i < 9; i++) {
             craftingcontainer.setItem(i, container.getItem(i+1));
         }
-        return recipe.matches(craftingcontainer, this.player.level());
+        return recipe.value().matches(CraftingInput.of(3, 3, craftingcontainer.getItems()), this.player.level());
     }
 
     public int getResultSlotIndex() {

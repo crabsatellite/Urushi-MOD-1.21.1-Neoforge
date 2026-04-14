@@ -2,20 +2,15 @@ package com.iwaliner.urushi.item;
 
 
 
-import com.iwaliner.urushi.ItemAndBlockRegister;
-import com.iwaliner.urushi.block.AbstractFramedBlock;
-import com.iwaliner.urushi.block.FramedPaneBlock;
-import com.iwaliner.urushi.block.HotIronIngotBlock;
-import com.iwaliner.urushi.util.UrushiUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
- 
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -23,6 +18,11 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import com.iwaliner.urushi.ItemAndBlockRegister;
+import com.iwaliner.urushi.block.AbstractFramedBlock;
+import com.iwaliner.urushi.block.FramedPaneBlock;
+import com.iwaliner.urushi.block.HotIronIngotBlock;
+import com.iwaliner.urushi.util.UrushiUtils;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -75,9 +75,7 @@ public class HammerItem extends Item {
         }else if(context.getLevel().getBlockState(context.getClickedPos()).getBlock() instanceof FramedPaneBlock ||context.getLevel().getBlockState(context.getClickedPos()).getBlock() instanceof AbstractFramedBlock){
             BlockState state=context.getLevel().getBlockState(context.getClickedPos());
             context.getLevel().setBlockAndUpdate(context.getClickedPos(), state.setValue(AbstractFramedBlock.VARIANT, !state.getValue(AbstractFramedBlock.VARIANT)));
-            itemstack.hurtAndBreak(1, playerentity, (x) -> {
-                x.broadcastBreakEvent(context.getHand());
-            });
+            itemstack.hurtAndBreak(1, playerentity, EquipmentSlot.MAINHAND);
             context.getLevel().playSound((Player) null, context.getClickedPos().getX(), context.getClickedPos().getY(), context.getClickedPos().getZ(), SoundEvents.STONE_PLACE, SoundSource.BLOCKS, 1F, 1F);
             playerentity.getCooldowns().removeCooldown(this);
             return InteractionResult.SUCCESS;
@@ -91,16 +89,12 @@ public class HammerItem extends Item {
                 level.setBlockAndUpdate(pos, resultState);
                 //  context.getLevel().addParticle(ParticleTypes.FLAME,  d0,d1, d2, 0.0D, 0D, 0.0D);
                 level.playSound((Player) null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ANVIL_USE, SoundSource.BLOCKS, 0.3F, 0.4F / (random.nextFloat() * 0.4F + 0.8F));
-                hammer.hurtAndBreak(1, player, (x) -> {
-                    x.broadcastBreakEvent(hand);
-                });
+                hammer.hurtAndBreak(1, player, EquipmentSlot.MAINHAND);
                 return InteractionResult.SUCCESS;
             } else {
                 //   context.getLevel().addParticle(ParticleTypes.FLAME,  d0,d1, d2, 0.0D, 0D, 0.0D);
                 level.playSound((Player) null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ANVIL_PLACE, SoundSource.BLOCKS, 0.3F, 0.4F / (random.nextFloat() * 0.4F + 0.8F));
-                hammer.hurtAndBreak(1, player, (x) -> {
-                    x.broadcastBreakEvent(hand);
-                });
+                hammer.hurtAndBreak(1, player, EquipmentSlot.MAINHAND);
                 return InteractionResult.SUCCESS;
             }
         }else{
@@ -108,7 +102,7 @@ public class HammerItem extends Item {
         }
     }
     @Override
-    public void appendHoverText(ItemStack p_41421_, @Nullable Level p_41422_, List<Component> list, TooltipFlag p_41424_) {
+    public void appendHoverText(ItemStack p_41421_, Item.TooltipContext p_41422_, List<Component> list, TooltipFlag p_41424_) {
         UrushiUtils.setInfo(list,"hammer");
     }
 

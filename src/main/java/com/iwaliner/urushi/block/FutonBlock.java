@@ -12,9 +12,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BedPart;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import com.mojang.serialization.MapCodec;
 
-public class FutonBlock extends BedBlock {
-    protected static final VoxelShape BOX = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 2D, 16.0D);
+public class FutonBlock extends BedBlock {    protected static final VoxelShape BOX = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 2D, 16.0D);
     protected static final VoxelShape HEAD_BASE = Block.box(1D, 0.0D, 1D, 15.0D, 2D, 15.0D);
     public FutonBlock(DyeColor p_i48442_1_, Properties p_i48442_2_) {
         super(p_i48442_1_, p_i48442_2_);

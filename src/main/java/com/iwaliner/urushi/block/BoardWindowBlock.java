@@ -17,8 +17,17 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import com.mojang.serialization.MapCodec;
 
 public class BoardWindowBlock extends HorizonalRotateBlock{
+    public static final MapCodec<BoardWindowBlock> CODEC = simpleCodec(BoardWindowBlock::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
     public static final BooleanProperty OPEN = BlockStateProperties.OPEN;
     protected static final VoxelShape SHAPEAA = Block.box(6.0D, 0.0D, 0D, 10.0D, 16.0D, 16.0D);
     protected static final VoxelShape SHAPEBB = Block.box(0D, 0.0D, 6D, 16D, 16.0D, 10.0D);
@@ -43,7 +52,7 @@ public class BoardWindowBlock extends HorizonalRotateBlock{
 
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult p_60508_) {
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult p_60508_) {
         if(state.getValue(OPEN)){
             level.setBlockAndUpdate(pos,state.setValue(OPEN,Boolean.valueOf(false)));
             level.playSound((Player) null,pos, SoundEvents.BARREL_CLOSE, SoundSource.BLOCKS,1F,1F);

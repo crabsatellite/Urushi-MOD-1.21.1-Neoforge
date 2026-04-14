@@ -1,12 +1,12 @@
 package com.iwaliner.urushi.mixin;
 
-import com.iwaliner.urushi.DimensionRegister;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.commands.WeatherCommand;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.level.Level;
+import com.iwaliner.urushi.DimensionRegister;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

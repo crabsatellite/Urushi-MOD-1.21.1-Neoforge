@@ -5,10 +5,19 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import com.mojang.serialization.MapCodec;
 
 public class ConnectableGlassPaneBlock extends FramedPaneBlock{
+    public static final MapCodec<ConnectableGlassPaneBlock> CODEC = simpleCodec(ConnectableGlassPaneBlock::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
     public ConnectableGlassPaneBlock(Properties p_i48355_2_) {
         super(p_i48355_2_);
     }

@@ -1,6 +1,5 @@
 package com.iwaliner.urushi.block;
 
-import com.iwaliner.urushi.ItemAndBlockRegister;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
@@ -14,8 +13,18 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.PushReaction;
+import com.iwaliner.urushi.ItemAndBlockRegister;
+import com.mojang.serialization.MapCodec;
 
 public class KakuriyoPortalCoreBlock extends HorizonalRotateBlock {
+    public static final MapCodec<KakuriyoPortalCoreBlock> CODEC = simpleCodec(KakuriyoPortalCoreBlock::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
     public KakuriyoPortalCoreBlock(Properties p_49795_) {
         super(p_49795_);
         this.registerDefaultState(this.defaultBlockState().setValue(FACING, Direction.NORTH));

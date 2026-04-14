@@ -1,11 +1,6 @@
 package com.iwaliner.urushi.blockentity.screen;
 
 
-import com.iwaliner.urushi.ItemAndBlockRegister;
-import com.iwaliner.urushi.blockentity.menu.DoubledWoodenCabinetryMenu;
-import com.iwaliner.urushi.util.UrushiUtils;
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -21,8 +16,13 @@ import net.minecraft.world.inventory.ShulkerBoxMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import com.iwaliner.urushi.ItemAndBlockRegister;
+import com.iwaliner.urushi.blockentity.menu.DoubledWoodenCabinetryMenu;
+import com.iwaliner.urushi.util.UrushiUtils;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 @OnlyIn(Dist.CLIENT)
 public class DoubledWoodenCabinetryScreen  extends AbstractContainerScreen<DoubledWoodenCabinetryMenu>
@@ -30,7 +30,7 @@ public class DoubledWoodenCabinetryScreen  extends AbstractContainerScreen<Doubl
 {
 
 
-    private final ResourceLocation CONTAINER_BACKGROUND = new ResourceLocation("urushi:textures/gui/doubled_wooden_cabinetry.png");
+    private final ResourceLocation CONTAINER_BACKGROUND = ResourceLocation.parse("urushi:textures/gui/doubled_wooden_cabinetry.png");
 
     public DoubledWoodenCabinetryScreen(DoubledWoodenCabinetryMenu p_i51104_1_, Inventory p_i51104_3_, Component p_i51104_4_) {
         super(p_i51104_1_, p_i51104_3_, p_i51104_4_);
@@ -53,7 +53,7 @@ public class DoubledWoodenCabinetryScreen  extends AbstractContainerScreen<Doubl
     }
 
     public void render(GuiGraphics p_99249_, int p_99250_, int p_99251_, float p_99252_) {
-        this.renderBackground(p_99249_);
+        this.renderBackground(p_99249_, p_99250_, p_99251_, p_99252_);
         super.render(p_99249_, p_99250_, p_99251_, p_99252_);
         this.renderTooltip(p_99249_, p_99250_, p_99251_);
        }

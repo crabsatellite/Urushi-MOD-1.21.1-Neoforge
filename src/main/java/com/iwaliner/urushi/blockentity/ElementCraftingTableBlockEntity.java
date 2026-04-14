@@ -1,24 +1,13 @@
 package com.iwaliner.urushi.blockentity;
 
-import com.iwaliner.urushi.*;
-import com.iwaliner.urushi.block.ElementCraftingTableBlock;
-import com.iwaliner.urushi.block.SanboBlock;
-import com.iwaliner.urushi.recipe.AbstractElementCraftingRecipe;
-import com.iwaliner.urushi.recipe.FryingRecipe;
-import com.iwaliner.urushi.recipe.IElementCraftingRecipe;
-import com.iwaliner.urushi.recipe.WoodElementTier1CraftingRecipe;
-import com.iwaliner.urushi.util.ElementType;
-import com.iwaliner.urushi.util.ElementUtils;
-import com.iwaliner.urushi.util.interfaces.ReiryokuExportable;
-import com.iwaliner.urushi.util.interfaces.ReiryokuImportable;
-import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
- 
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
@@ -31,19 +20,34 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.StackedContents;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.RecipeHolder;
+import net.minecraft.world.inventory.RecipeCraftingHolder;
 import net.minecraft.world.inventory.StackedContentsCompatible;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.CampfireCookingRecipe;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import com.iwaliner.urushi.*;
+import com.iwaliner.urushi.block.ElementCraftingTableBlock;
+import com.iwaliner.urushi.block.SanboBlock;
+import com.iwaliner.urushi.recipe.AbstractElementCraftingRecipe;
+import com.iwaliner.urushi.recipe.FryingRecipe;
+import com.iwaliner.urushi.recipe.IElementCraftingRecipe;
+import com.iwaliner.urushi.recipe.WoodElementTier1CraftingRecipe;
+import com.iwaliner.urushi.util.ElementType;
+import com.iwaliner.urushi.util.ElementUtils;
+import com.iwaliner.urushi.util.interfaces.ReiryokuExportable;
+import com.iwaliner.urushi.util.interfaces.ReiryokuImportable;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import org.jetbrains.annotations.Nullable;
 
-public class ElementCraftingTableBlockEntity extends AbstractReiryokuStorableBlockEntity implements ReiryokuImportable, RecipeHolder {
+public class ElementCraftingTableBlockEntity extends AbstractReiryokuStorableBlockEntity implements ReiryokuImportable, RecipeCraftingHolder {
     private final Object2IntOpenHashMap<ResourceLocation> recipesUsed = new Object2IntOpenHashMap<>();
     public int coolTime;
 
@@ -52,21 +56,21 @@ public class ElementCraftingTableBlockEntity extends AbstractReiryokuStorableBlo
     }
 
     @Override
-    public void load(CompoundTag tag) {
-        super.load(tag);
+    public void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.loadAdditional(tag, registries);
         this.coolTime = tag.getInt("coolTime");
 
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag) {
-        super.saveAdditional(tag);
+    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.saveAdditional(tag, registries);
         tag.putInt("coolTime", this.coolTime);
 
     }
 
     @Override
-    public CompoundTag getUpdateTag() {
+    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
         CompoundTag compoundtag = new CompoundTag();
         compoundtag.putInt("coolTime", this.coolTime);
         this.putBaseTag(compoundtag);
@@ -149,11 +153,11 @@ public class ElementCraftingTableBlockEntity extends AbstractReiryokuStorableBlo
 
 
              SimpleContainer container = new SimpleContainer(northStack, eastStack, southStack, westStack);
-             Recipe<?> recipe = level.getRecipeManager().getRecipeFor((RecipeType<AbstractElementCraftingRecipe>) elementCraftingTable.getRecipeType(), container, level).orElse(null);
+             RecipeHolder<?> recipe = level.getRecipeManager().getRecipeFor((RecipeType<AbstractElementCraftingRecipe>) elementCraftingTable.getRecipeType(), new SingleRecipeInput(container.getItem(0)), level).orElse(null);
              if (recipe != null
                  //&& northSanboTier == elementCraftingTableTier && eastSanboTier == elementCraftingTableTier && southSanboTier == elementCraftingTableTier && westSanboTier == elementCraftingTableTier
              ) {
-                 IElementCraftingRecipe iElementCraftingRecipe = (IElementCraftingRecipe) recipe;
+                 IElementCraftingRecipe iElementCraftingRecipe = (IElementCraftingRecipe) recipe.value();
                  int consumeReiryoku = iElementCraftingRecipe.getReiryoku();
                  if (elementCraftingTable.canDecreaseReiryoku(consumeReiryoku)) {
                      if (elementCraftingTable.getCoolTime() == 0) {
@@ -162,7 +166,7 @@ public class ElementCraftingTableBlockEntity extends AbstractReiryokuStorableBlo
                      } else if (elementCraftingTable.getCoolTime() == 1) {
 
 
-                         ItemStack resultStack = recipe.getResultItem(level.registryAccess());
+                         ItemStack resultStack = recipe.value().getResultItem(level.registryAccess());
                          ItemEntity itemEntity = new ItemEntity(level, pos.getX() + 0.5D, pos.getY() + 1D, pos.getZ() + 0.5D, resultStack.copy());
                          level.addFreshEntity(itemEntity);
                          if(northStack.hasCraftingRemainingItem()){
@@ -234,18 +238,17 @@ public class ElementCraftingTableBlockEntity extends AbstractReiryokuStorableBlo
     }
 
     @Override
-    public void setRecipeUsed(@org.jetbrains.annotations.Nullable Recipe<?> recipe) {
+    public void setRecipeUsed(@Nullable RecipeHolder<?> recipe) {
         if (recipe != null) {
-            ResourceLocation resourcelocation = recipe.getId();
+            ResourceLocation resourcelocation = recipe.id();
             this.recipesUsed.addTo(resourcelocation, 1);
         }
     }
 
     @org.jetbrains.annotations.Nullable
     @Override
-    public Recipe<?> getRecipeUsed() {
-        ElementCraftingTableBlock elementCraftingTableBlock= (ElementCraftingTableBlock) this.getBlockState().getBlock();
-        return (Recipe<?>)elementCraftingTableBlock.getRecipeType();
+    public RecipeHolder<?> getRecipeUsed() {
+        return null;
     }
     private int getMaxCooltime(){
         return 65;

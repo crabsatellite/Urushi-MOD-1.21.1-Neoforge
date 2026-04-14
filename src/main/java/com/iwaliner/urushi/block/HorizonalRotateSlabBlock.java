@@ -1,12 +1,10 @@
 package com.iwaliner.urushi.block;
 
 
-import com.iwaliner.urushi.ItemAndBlockRegister;
-import com.iwaliner.urushi.util.UrushiUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.FluidTags;
-
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -22,13 +20,25 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.pathfinder.PathComputationType;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import com.iwaliner.urushi.ItemAndBlockRegister;
+import com.iwaliner.urushi.util.UrushiUtils;
+import com.mojang.serialization.MapCodec;
 
 import javax.annotation.Nullable;
 
 public class HorizonalRotateSlabBlock extends HorizontalDirectionalBlock implements SimpleWaterloggedBlock {
+    public static final MapCodec<HorizonalRotateSlabBlock> CODEC = simpleCodec(HorizonalRotateSlabBlock::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
   //  public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
     public static final EnumProperty<SlabType> TYPE = BlockStateProperties.SLAB_TYPE;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
@@ -94,8 +104,8 @@ public class HorizonalRotateSlabBlock extends HorizontalDirectionalBlock impleme
     }
 
     @Override
-    public boolean canPlaceLiquid(BlockGetter p_56301_, BlockPos p_56302_, BlockState p_56303_, Fluid p_56304_) {
-        return p_56303_.getValue(TYPE) != SlabType.DOUBLE ? SimpleWaterloggedBlock.super.canPlaceLiquid(p_56301_, p_56302_, p_56303_, p_56304_) : false;
+    public boolean canPlaceLiquid(@Nullable Player player, BlockGetter p_56301_, BlockPos p_56302_, BlockState p_56303_, Fluid p_56304_) {
+        return p_56303_.getValue(TYPE) != SlabType.DOUBLE ? SimpleWaterloggedBlock.super.canPlaceLiquid(player, p_56301_, p_56302_, p_56303_, p_56304_) : false;
     }
 
     @Override
@@ -108,17 +118,13 @@ public class HorizonalRotateSlabBlock extends HorizontalDirectionalBlock impleme
     }
 
     @Override
-    public boolean isPathfindable(BlockState p_60475_, BlockGetter p_60476_, BlockPos p_60477_, PathComputationType p_60478_) {
-        switch(p_60478_) {
-            case LAND:
-                return false;
-            case WATER:
-                return p_60476_.getFluidState(p_60477_).is(FluidTags.WATER);
-            case AIR:
-                return false;
-            default:
-                return false;
-        } }
+    protected boolean isPathfindable(BlockState state, PathComputationType pathComputationType) {
+        return switch(pathComputationType) {
+            case LAND -> false;
+            case WATER -> state.getValue(WATERLOGGED);
+            case AIR -> false;
+        };
+    }
 
 
 }

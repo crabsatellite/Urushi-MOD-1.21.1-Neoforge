@@ -17,8 +17,17 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import com.mojang.serialization.MapCodec;
 
 public class SimpleWallBlock extends CrossCollisionBlock {
+    public static final MapCodec<SimpleWallBlock> CODEC = simpleCodec(SimpleWallBlock::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
 
     public SimpleWallBlock(Properties properties) {
         super(4.0F, 4.0F, 16.0F, 16.0F, 16.0F, properties);
@@ -28,7 +37,7 @@ public class SimpleWallBlock extends CrossCollisionBlock {
         return this.getShape(p_53311_, p_53312_, p_53313_, p_53314_);
     }
 
-    public boolean isPathfindable(BlockState p_53306_, BlockGetter p_53307_, BlockPos p_53308_, PathComputationType p_53309_) {
+    public boolean isPathfindable(BlockState p_53306_, PathComputationType p_53309_) {
         return false;
     }
 

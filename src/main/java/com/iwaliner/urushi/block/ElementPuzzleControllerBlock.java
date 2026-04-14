@@ -1,7 +1,5 @@
 package com.iwaliner.urushi.block;
 
-import com.iwaliner.urushi.ItemAndBlockRegister;
-import com.iwaliner.urushi.util.ElementType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -22,11 +20,22 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import com.iwaliner.urushi.ItemAndBlockRegister;
+import com.iwaliner.urushi.util.ElementType;
+import com.mojang.serialization.MapCodec;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ElementPuzzleControllerBlock extends HorizonalRotateBlock {
+    public static final MapCodec<ElementPuzzleControllerBlock> CODEC = simpleCodec(ElementPuzzleControllerBlock::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
     protected static final VoxelShape SHAPEA = Block.box(0D, 0.0D, 5D, 16D, 0.1D, 11D);
     protected static final VoxelShape SHAPEB = Block.box(5D, 0.0D, 0D, 11D, 0.1D, 16D);
 
@@ -42,7 +51,7 @@ public class ElementPuzzleControllerBlock extends HorizonalRotateBlock {
         }
     }
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult result) {
       BlockPos rootPos=pos;
       outer:  for(int i=-5;i<6;i++){
                 for(int j=-5;j<6;j++){

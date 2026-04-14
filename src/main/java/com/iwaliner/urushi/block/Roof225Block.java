@@ -2,7 +2,6 @@ package com.iwaliner.urushi.block;
 
 
 
-import com.iwaliner.urushi.util.UrushiUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -20,10 +19,20 @@ import net.minecraft.world.level.block.state.properties.SlabType;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import com.iwaliner.urushi.util.UrushiUtils;
+import com.mojang.serialization.MapCodec;
 
 import java.util.List;
 
 public class Roof225Block extends HorizonalRotateSlabBlock {
+    public static final MapCodec<Roof225Block> CODEC = simpleCodec(Roof225Block::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
     private static final VoxelShape UNDER = Block.box(0D, 0D, 0D, 16D, 8D, 16D);
     private static final VoxelShape UPPER = Block.box(0D, -8D, 0D, 16D, 0D, 16D);
     private static final VoxelShape EXTEND_UPPER = Block.box(0D, -8D, 0D, 16D, 8D, 16D);

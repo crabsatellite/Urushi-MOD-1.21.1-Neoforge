@@ -7,16 +7,16 @@
   ],
   "key": {
     "g": {
-     "item": "minecraft:glowstone_dust"
+      "item": "minecraft:glowstone_dust"
     },
     "p": {
-     "item": "minecraft:paper"
+      "item": "minecraft:paper"
     },
     "w": {
-     "tag": "minecraft:planks"
+      "tag": "minecraft:planks"
     },
     "s": {
-     "tag": "forge:string"
+      "tag": "c:string"
     }
   },
   "result": {

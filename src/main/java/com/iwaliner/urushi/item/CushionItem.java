@@ -1,11 +1,8 @@
 package com.iwaliner.urushi.item;
 
-import com.iwaliner.urushi.EntityRegister;
-import com.iwaliner.urushi.entiity.CushionEntity;
-import com.iwaliner.urushi.entiity.food.FoodEntity;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.BlockSource;
 import net.minecraft.core.Direction;
+import net.minecraft.core.dispenser.BlockSource;
 import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
 import net.minecraft.core.dispenser.DispenseItemBehavior;
 import net.minecraft.server.level.ServerLevel;
@@ -24,6 +21,9 @@ import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import com.iwaliner.urushi.EntityRegister;
+import com.iwaliner.urushi.entiity.CushionEntity;
+import com.iwaliner.urushi.entiity.food.FoodEntity;
 
 public class CushionItem extends Item {
     private DyeColor color;
@@ -35,9 +35,9 @@ public class CushionItem extends Item {
     public static final DispenseItemBehavior DISPENSE_ITEM_BEHAVIOR = new DefaultDispenseItemBehavior() {
         protected ItemStack execute(BlockSource source, ItemStack stack) {
             if(stack.getItem() instanceof CushionItem){
-                Level level = source.getLevel();
-                Direction direction = source.getBlockState().getValue(DispenserBlock.FACING);
-                BlockPos blockpos = source.getPos().relative(direction);
+                Level level = source.level();
+                Direction direction = source.state().getValue(DispenserBlock.FACING);
+                BlockPos blockpos = source.pos().relative(direction);
                 BlockState blockstate = level.getBlockState(blockpos);
                 CushionItem cushionItem= (CushionItem) stack.getItem();
                 CushionEntity entity = new CushionEntity(level, blockpos.getX()+0.5D, blockpos.getY()+0.01D,  blockpos.getZ()+0.5D);

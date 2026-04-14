@@ -1,10 +1,11 @@
 package com.iwaliner.urushi;
 
-import com.google.common.collect.ImmutableList;
 
+import com.google.common.collect.ImmutableList;
 import net.minecraft.core.*;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.data.worldgen.placement.VegetationPlacements;
 import net.minecraft.resources.ResourceKey;
@@ -17,10 +18,10 @@ import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.level.levelgen.placement.*;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import com.iwaliner.urushi.ModCoreUrushi;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -66,7 +67,7 @@ public class PlacedFeatureRegister {
   public static final ResourceKey<PlacedFeature> KAKURIYO_DISK_MUD_KEY = registerKey("kakuriyo_disk_mud");
 
 
-  public static void bootstrap(BootstapContext<PlacedFeature> context) {
+  public static void bootstrap(BootstrapContext<PlacedFeature> context) {
     HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
 /*
 
@@ -162,10 +163,10 @@ public class PlacedFeatureRegister {
         PlacedFeatures.register(eventBus);
     }
   private static ResourceKey<PlacedFeature> registerKey(String name) {
-    return ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation(ModCoreUrushi.ModID, name));
+    return ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(ModCoreUrushi.ModID, name));
   }
 
-  private static void register(BootstapContext<PlacedFeature> context, ResourceKey<PlacedFeature> key, Holder<ConfiguredFeature<?, ?>> configuration,
+  private static void register(BootstrapContext<PlacedFeature> context, ResourceKey<PlacedFeature> key, Holder<ConfiguredFeature<?, ?>> configuration,
                                List<PlacementModifier> modifiers) {
     context.register(key, new PlacedFeature(configuration, List.copyOf(modifiers)));
   }

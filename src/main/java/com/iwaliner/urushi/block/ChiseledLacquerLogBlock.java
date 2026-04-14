@@ -1,12 +1,9 @@
 package com.iwaliner.urushi.block;
 
 
-import com.iwaliner.urushi.FluidRegister;
-import com.iwaliner.urushi.ItemAndBlockRegister;
-import com.iwaliner.urushi.util.ElementType;
-import com.iwaliner.urushi.util.ElementUtils;
-import com.iwaliner.urushi.util.UrushiUtils;
 import net.minecraft.core.*;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
 import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
 import net.minecraft.core.dispenser.DispenseItemBehavior;
 import net.minecraft.core.dispenser.OptionalDispenseItemBehavior;
@@ -17,6 +14,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -44,15 +42,27 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.ticks.TickPriority;
-
-import java.util.List;
-import net.minecraft.util.RandomSource;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import com.iwaliner.urushi.FluidRegister;
+import com.iwaliner.urushi.ItemAndBlockRegister;
+import com.iwaliner.urushi.util.ElementType;
+import com.iwaliner.urushi.util.ElementUtils;
+import com.iwaliner.urushi.util.UrushiUtils;
+import com.mojang.serialization.MapCodec;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.Set;
 
 public class ChiseledLacquerLogBlock extends HorizonalRotateBlock{
+    public static final MapCodec<ChiseledLacquerLogBlock> CODEC = simpleCodec(ChiseledLacquerLogBlock::new);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MapCodec codec() {
+        return CODEC;
+    }
+
     public static final BooleanProperty FILLED = BooleanProperty.create("filled");
 
 
@@ -104,7 +114,7 @@ public class ChiseledLacquerLogBlock extends HorizonalRotateBlock{
                }
 
                if(element!=null){
-                   RegistryObject<Block> spawnBlock;
+                   DeferredHolder<Block, Block> spawnBlock;
                    switch (element){
                        case WoodElement ->{
                             spawnBlock = ItemAndBlockRegister.petrified_log_with_wood_amber;
@@ -136,13 +146,13 @@ public class ChiseledLacquerLogBlock extends HorizonalRotateBlock{
         return level.getBlockState(pos.above()).getBlock()==ItemAndBlockRegister.yomi_stone.get()||level.getBlockState(pos.above()).getBlock()==ItemAndBlockRegister.cobbled_yomi_stone.get();
     }
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult result) {
        if(state.getBlock() instanceof ChiseledLacquerLogBlock&& state.getValue(FILLED)){
-           ItemStack stack=player.getItemInHand(hand);
+           ItemStack stack=player.getMainHandItem();
            if(stack.getItem()== Items.BOWL){
                stack.shrink(1);
             /*   if (stack.isEmpty()) {
-                   player.setItemInHand(hand, new ItemStack(ItemAndBlockRegister.raw_urushi_ball.get()));
+                   player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(ItemAndBlockRegister.raw_urushi_ball.get()));
                } else */
                    if (!player.getInventory().add(new ItemStack(ItemAndBlockRegister.raw_urushi_ball.get()))) {
                    player.drop(new ItemStack(ItemAndBlockRegister.raw_urushi_ball.get()), false);
@@ -177,7 +187,7 @@ public class ChiseledLacquerLogBlock extends HorizonalRotateBlock{
         }
     }
     @Override
-    public void appendHoverText(ItemStack p_49816_, @org.jetbrains.annotations.Nullable BlockGetter p_49817_, List<Component> list, TooltipFlag p_49819_) {
+    public void appendHoverText(ItemStack p_49816_, Item.TooltipContext p_49817_, List<Component> list, TooltipFlag p_49819_) {
         UrushiUtils.setInfo(list,"chiseled_lacquer_log");
      }
 
