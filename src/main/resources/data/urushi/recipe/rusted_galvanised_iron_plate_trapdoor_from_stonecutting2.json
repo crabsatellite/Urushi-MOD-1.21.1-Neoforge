@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "urushi:rusted_galvanised_iron_plate_block"
+  },
+  "result": {
+    "id": "urushi:rusted_galvanised_iron_plate_trapdoor",
+    "count": 4
+  }
+}

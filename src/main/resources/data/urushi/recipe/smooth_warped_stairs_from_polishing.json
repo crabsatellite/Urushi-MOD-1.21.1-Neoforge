@@ -1,0 +1,11 @@
+{
+  "type": "urushi:polishing",
+  "ingredients": [
+    {
+      "item": "minecraft:warped_stairs"
+    }
+  ],
+  "result": {
+    "id": "urushi:smooth_warped_stairs"
+  }
+}

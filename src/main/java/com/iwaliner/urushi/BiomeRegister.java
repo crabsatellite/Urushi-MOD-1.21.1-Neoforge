@@ -43,10 +43,10 @@ public class BiomeRegister {
 
     static {
         BIOMES = DeferredRegister.create(Registries.BIOME, ModCoreUrushi.ModID);
-        SakuraForest = ResourceKey.create(Registries.BIOME, ResourceLocation.withDefaultNamespace("sakura_forest"));
-        EulaliaPlains =ResourceKey.create(Registries.BIOME, ResourceLocation.withDefaultNamespace("eulalia_plains"));
-        AutumnForest =ResourceKey.create(Registries.BIOME, ResourceLocation.withDefaultNamespace("autumn_forest"));
-        CedarForest =ResourceKey.create(Registries.BIOME, ResourceLocation.withDefaultNamespace("cedar_forest"));
+        SakuraForest = ResourceKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath(ModCoreUrushi.ModID, "sakura_forest"));
+        EulaliaPlains = ResourceKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath(ModCoreUrushi.ModID, "eulalia_plains"));
+        AutumnForest = ResourceKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath(ModCoreUrushi.ModID, "autumn_forest"));
+        CedarForest = ResourceKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath(ModCoreUrushi.ModID, "cedar_forest"));
 
 
 

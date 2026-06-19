@@ -1,0 +1,11 @@
+{
+  "type": "urushi:polishing",
+  "ingredients": [
+    {
+      "item": "urushi:japanese_cedar_wood"
+    }
+  ],
+  "result": {
+    "id": "urushi:stripped_japanese_cedar_wood"
+  }
+}

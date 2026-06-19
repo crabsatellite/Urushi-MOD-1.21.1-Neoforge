@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "W#W",
+    "W#W"
+  ],
+  "key": {
+    "#": {
+      "tag": "c:rods/wooden"
+    },
+    "W": {
+      "item": "urushi:smooth_cherry_slab"
+    }
+  },
+  "result": {
+    "id": "urushi:cherry_fushiranma",
+    "count": 3
+  }
+}

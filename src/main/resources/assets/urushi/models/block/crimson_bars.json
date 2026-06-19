@@ -1,7 +1,0 @@
-{
-    "parent": "urushi:block/bars",
-    "textures": {
-       "0": "urushi:block/planks_smooth_crimson",
-		"particle": "urushi:block/planks_smooth_crimson"
-    }
-}

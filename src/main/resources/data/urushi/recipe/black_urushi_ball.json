@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "urushi:raw_urushi_ball"
+    },
+    {
+      "item": "urushi:tiny_black_dye"
+    }
+  ],
+  "result": {
+    "id": "urushi:black_urushi_ball",
+    "count": 1
+  }
+}

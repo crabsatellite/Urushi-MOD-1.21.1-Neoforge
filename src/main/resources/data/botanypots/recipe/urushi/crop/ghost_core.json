@@ -1,4 +1,10 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "botanypots"
+    }
+  ],
   "type": "botanypots:crop",
   "seed": {
     "item": "urushi:ghost_core"
@@ -9,7 +15,6 @@
   "growthTicks": 916,
   "#comment": "916/0.44/20=104s=1:44",
   "lightLevel": 1,
-
   "display": {
     "block": "urushi:invisible_button",
     "offset": [
@@ -25,7 +30,7 @@
   },
   "drops": [
     {
-      "chance": 1.00,
+      "chance": 1.0,
       "output": {
         "item": "urushi:ghost_core"
       },

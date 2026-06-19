@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#",
+    "s"
+  ],
+  "key": {
+    "s": {
+      "tag": "c:rods/wooden"
+    },
+    "#": {
+      "item": "urushi:lantern_plant_fruit"
+    }
+  },
+  "result": {
+    "id": "urushi:lantern_plant_torch",
+    "count": 4
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "type": "urushi:water_element_tier1_crafting",
+  "ingredients": [
+    {
+      "item": "urushi:water_amber"
+    },
+    {
+      "item": "minecraft:amethyst_shard"
+    },
+    {
+      "tag": "c:nuggets/gold"
+    },
+    {
+      "item": "urushi:sandpaper_block"
+    }
+  ],
+  "result": {
+    "id": "urushi:water_element_magatama"
+  },
+  "reiryoku": 50
+}

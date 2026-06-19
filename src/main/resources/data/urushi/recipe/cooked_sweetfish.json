@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "urushi:sweetfish"
+  },
+  "result": {
+    "id": "urushi:cooked_sweetfish"
+  },
+  "experience": 0.35,
+  "cookingtime": 200
+}

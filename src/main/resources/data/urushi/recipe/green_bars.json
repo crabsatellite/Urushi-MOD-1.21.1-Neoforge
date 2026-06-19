@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "BBB",
+    "BDB",
+    "BBB"
+  ],
+  "key": {
+    "B": {
+      "tag": "urushi:wooden_bars"
+    },
+    "D": {
+      "tag": "c:dyes/green"
+    }
+  },
+  "result": {
+    "id": "urushi:green_bars",
+    "count": 8
+  }
+}

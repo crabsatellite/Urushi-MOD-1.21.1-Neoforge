@@ -7,7 +7,8 @@ issueTrackerURL="https://change.me.to.your.issue.tracker.example.invalid/"
 modId="${mod_id}"
 version="${mod_version}"
 displayName="${mod_name}"
-displayURL="https://change.me.to.your.mods.homepage.example.invalid/"
+displayURL="https://legacy.curseforge.com/minecraft/mc-mods/urushi-mod"
+updateJSONURL="https://raw.githubusercontent.com/iwaliner/Urushi-MOD-1.20.1/main/updates.json"
 logoFile="logo.png"
 
 authors="${mod_authors}"
@@ -31,4 +32,4 @@ config = "${mod_id}.mixins.json"
     side="BOTH"
 
 [modproperties.${mod_id}]
-    catalogueItemIcon="urushi:stone"
+    catalogueItemIcon="urushi:kasuga_lantern"

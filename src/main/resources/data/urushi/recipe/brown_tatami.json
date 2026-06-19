@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "urushi:green_tatami_mat"
+    }
+  ],
+  "result": {
+    "id": "urushi:brown_tatami_mat",
+    "count": 1
+  }
+}

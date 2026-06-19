@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "g",
+    "s",
+    "p"
+  ],
+  "key": {
+    "p": {
+      "item": "minecraft:paper"
+    },
+    "s": {
+      "tag": "c:strings"
+    },
+    "g": {
+      "tag": "c:glass_panes"
+    }
+  },
+  "result": {
+    "id": "urushi:wind_bell",
+    "count": 1
+  }
+}

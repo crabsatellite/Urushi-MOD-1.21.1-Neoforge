@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#",
+    "#"
+  ],
+  "key": {
+    "#": {
+      "item": "urushi:oak_bars"
+    }
+  },
+  "result": {
+    "id": "urushi:oak_lattice_door",
+    "count": 1
+  }
+}

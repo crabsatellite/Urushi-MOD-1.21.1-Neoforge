@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "urushi:copper_kawara_stairs"
+  },
+  "result": {
+    "id": "urushi:cupric_oxide_kawara_stairs",
+    "count": 1
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "urushi:red_urushi_shoji"
+    },
+    {
+      "tag": "c:glass_panes"
+    }
+  ],
+  "result": {
+    "id": "urushi:red_urushi_yukimi_shoji",
+    "count": 1
+  }
+}

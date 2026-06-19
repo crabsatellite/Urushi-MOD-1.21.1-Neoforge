@@ -1,0 +1,11 @@
+{
+  "type": "urushi:polishing",
+  "ingredients": [
+    {
+      "item": "minecraft:oak_slab"
+    }
+  ],
+  "result": {
+    "id": "urushi:smooth_oak_slab"
+  }
+}

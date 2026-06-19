@@ -1,0 +1,11 @@
+{
+  "type": "urushi:polishing",
+  "ingredients": [
+    {
+      "item": "minecraft:andesite_stairs"
+    }
+  ],
+  "result": {
+    "id": "minecraft:polished_andesite_stairs"
+  }
+}

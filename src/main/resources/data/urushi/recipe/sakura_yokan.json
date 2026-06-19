@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "urushi:kanten_powder"
+    },
+    {
+      "item": "minecraft:sugar"
+    },
+    {
+      "item": "urushi:sakura_leaves"
+    },
+    {
+      "tag": "c:crops/adzuki"
+    }
+  ],
+  "result": {
+    "id": "urushi:sakura_yokan",
+    "count": 1
+  }
+}

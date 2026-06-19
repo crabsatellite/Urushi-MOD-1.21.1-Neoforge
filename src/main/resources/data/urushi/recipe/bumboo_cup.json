@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "urushi:japanese_timber_bamboo"
+    }
+  ],
+  "result": {
+    "id": "urushi:bamboo_cup",
+    "count": 2
+  }
+}

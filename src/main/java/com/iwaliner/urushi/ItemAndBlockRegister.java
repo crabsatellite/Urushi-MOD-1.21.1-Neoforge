@@ -1566,7 +1566,7 @@ public class ItemAndBlockRegister {
                 }
             })
             .build());
-    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> URUSHI_FOOD_TAB = CREATIVE_TABS.register("urushi_dood", () -> CreativeModeTab.builder()
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> URUSHI_FOOD_TAB = CREATIVE_TABS.register("urushi_food", () -> CreativeModeTab.builder()
             .withTabsBefore(URUSHI_WOOD_TAB.getKey())
             .title(Component.translatable("itemGroup.urushi_food"))
             .icon(() -> new ItemStack(ItemAndBlockRegister.color_dango.get()))

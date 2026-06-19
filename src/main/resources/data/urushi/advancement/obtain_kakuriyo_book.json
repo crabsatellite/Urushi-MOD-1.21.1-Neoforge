@@ -1,10 +1,16 @@
 {
-"criteria": {
-"joken1": {
- "trigger": "minecraft:tick"
-}
-},
-    "rewards": {
-"loot": ["urushi:kakuriyo_book"]
-}
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "patchouli"
+    }
+  ],
+  "criteria": {
+    "joken1": {
+      "trigger": "minecraft:tick"
+    }
+  },
+  "rewards": {
+    "loot": ["urushi:kakuriyo_book"]
+  }
 }

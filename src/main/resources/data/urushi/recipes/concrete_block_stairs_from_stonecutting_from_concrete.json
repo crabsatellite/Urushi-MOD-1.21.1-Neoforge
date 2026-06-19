@@ -1,8 +1,0 @@
-{
-  "type": "minecraft:stonecutting",
-  "ingredient": {
-    "item": "urushi:concrete"
-  },
-  "result": "urushi:concrete_block_stairs",
-  "count": 1
-}

@@ -1,4 +1,10 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "botanypots"
+    }
+  ],
   "type": "botanypots:pot_interaction",
   "held_ingredient": {
     "item": "urushi:yomotsuhegui_fruit"
@@ -10,7 +16,6 @@
     {
       "item": "minecraft:coarse_dirt"
     },
-
     {
       "item": "minecraft:rooted_dirt"
     }

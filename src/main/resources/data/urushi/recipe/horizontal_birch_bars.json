@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "urushi:birch_bars"
+    }
+  ],
+  "result": {
+    "id": "urushi:horizontal_birch_bars",
+    "count": 1
+  }
+}

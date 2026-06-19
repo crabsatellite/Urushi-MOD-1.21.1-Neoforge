@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "urushi:horizontal_acacia_bars"
+    }
+  ],
+  "result": {
+    "id": "urushi:acacia_bars",
+    "count": 1
+  }
+}

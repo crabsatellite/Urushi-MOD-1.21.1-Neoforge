@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "urushi:eulalia"
+    },
+    {
+      "item": "urushi:eulalia"
+    },
+    {
+      "item": "urushi:eulalia"
+    },
+    {
+      "tag": "c:strings"
+    }
+  ],
+  "result": {
+    "id": "urushi:green_tatami_mat",
+    "count": 4
+  }
+}

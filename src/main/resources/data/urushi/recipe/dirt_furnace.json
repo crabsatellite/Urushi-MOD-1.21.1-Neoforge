@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ddd",
+    "d d",
+    "dsd"
+  ],
+  "key": {
+    "d": {
+      "item": "minecraft:dirt"
+    },
+    "s": {
+      "tag": "c:rods/wooden"
+    }
+  },
+  "result": {
+    "id": "urushi:dirt_furnace",
+    "count": 1
+  }
+}

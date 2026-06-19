@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "urushi:ibushi_kawara"
+    }
+  ],
+  "result": {
+    "id": "urushi:blue_kawara",
+    "count": 1
+  }
+}

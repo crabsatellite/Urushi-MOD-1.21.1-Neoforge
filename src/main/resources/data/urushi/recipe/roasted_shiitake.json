@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "urushi:shiitake"
+  },
+  "result": {
+    "id": "urushi:roasted_shiitake"
+  },
+  "experience": 0.1,
+  "cookingtime": 200
+}

@@ -1,8 +1,0 @@
-{
-  "type": "minecraft:stonecutting",
-  "ingredient": {
-    "tag": "c:nuggets/iron"
-  },
-  "result": "urushi:red_galvanised_iron_plate_stairs",
-  "count": 4
-}

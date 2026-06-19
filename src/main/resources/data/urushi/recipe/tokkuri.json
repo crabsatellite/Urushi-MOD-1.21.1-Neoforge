@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "urushi:sake"
+    }
+  ],
+  "result": {
+    "id": "urushi:tokkuri",
+    "count": 2
+  }
+}

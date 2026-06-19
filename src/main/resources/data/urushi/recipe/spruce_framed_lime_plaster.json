@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "urushi:lime_plaster"
+    },
+    {
+      "item": "urushi:spruce_wall_for_framed_blocks"
+    }
+  ],
+  "result": {
+    "id": "urushi:spruce_framed_lime_plaster",
+    "count": 2
+  }
+}

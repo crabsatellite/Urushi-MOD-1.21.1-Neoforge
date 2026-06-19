@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "X X",
+    " X "
+  ],
+  "key": {
+    "X": {
+      "tag": "c:bamboo"
+    }
+  },
+  "result": {
+    "id": "urushi:bamboo_basket",
+    "count": 1
+  }
+}

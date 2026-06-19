@@ -1,4 +1,10 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "botanypots"
+    }
+  ],
   "type": "botanypots:crop",
   "seed": {
     "item": "urushi:jadeite"
@@ -23,7 +29,7 @@
       "maxRolls": 2
     },
     {
-      "chance": 0.10,
+      "chance": 0.1,
       "output": {
         "item": "urushi:jadeite"
       },

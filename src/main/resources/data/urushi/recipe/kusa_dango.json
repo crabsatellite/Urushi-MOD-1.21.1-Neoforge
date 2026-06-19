@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " gm",
+    " m ",
+    "s  "
+  ],
+  "key": {
+    "g": {
+      "tag": "c:weed"
+    },
+    "m": {
+      "item": "urushi:rice_cake"
+    },
+    "s": {
+      "tag": "c:rods/wooden"
+    }
+  },
+  "result": {
+    "id": "urushi:kusa_dango",
+    "count": 1
+  }
+}

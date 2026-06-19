@@ -105,8 +105,8 @@ public class UrushiUtils {
                     list.add((Component.translatable("info.urushi." + string)).withStyle(color2));
                 }
             }
-        }catch (Exception ignored){
-
+        }catch (Exception e){
+            com.iwaliner.urushi.ModCoreUrushi.logger.debug("setBlinkingInfoWithColor suppressed", e);
         }
 
     }

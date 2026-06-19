@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "urushi:rice_cake"
+    },
+    {
+      "tag": "c:weed"
+    },
+    {
+      "tag": "c:crops/adzuki"
+    }
+  ],
+  "result": {
+    "id": "urushi:kusa_mochi",
+    "count": 1
+  }
+}

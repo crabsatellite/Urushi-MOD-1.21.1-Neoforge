@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#",
+    "#"
+  ],
+  "key": {
+    "#": {
+      "tag": "c:glass_panes"
+    }
+  },
+  "result": {
+    "id": "urushi:sliding_glass_door",
+    "count": 1
+  }
+}

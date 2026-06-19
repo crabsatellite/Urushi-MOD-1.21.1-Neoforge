@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "BBB",
+    "BDB",
+    "BBB"
+  ],
+  "key": {
+    "D": {
+      "tag": "c:dyes/light_gray"
+    },
+    "B": {
+      "tag": "urushi:smooth_planks"
+    }
+  },
+  "result": {
+    "id": "urushi:smooth_pale_oak_planks",
+    "count": 8
+  }
+}

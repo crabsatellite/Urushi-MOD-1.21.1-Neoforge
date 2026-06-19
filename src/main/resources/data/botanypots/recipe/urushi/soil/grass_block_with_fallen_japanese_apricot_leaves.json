@@ -1,4 +1,10 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "botanypots"
+    }
+  ],
   "type": "botanypots:soil",
   "input": {
     "item": "urushi:grass_block_with_fallen_japanese_apricot_leaves"

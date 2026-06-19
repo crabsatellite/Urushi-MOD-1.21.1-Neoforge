@@ -1,0 +1,11 @@
+{
+  "type": "urushi:polishing",
+  "ingredients": [
+    {
+      "item": "urushi:jadeite_slab"
+    }
+  ],
+  "result": {
+    "id": "urushi:smooth_jadeite_slab"
+  }
+}

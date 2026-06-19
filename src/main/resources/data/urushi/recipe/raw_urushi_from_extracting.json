@@ -1,0 +1,11 @@
+{
+  "type": "urushi:chiseled_lacquer_log",
+  "ingredients": [
+    {
+      "item": "minecraft:bowl"
+    }
+  ],
+  "result": {
+    "id": "urushi:raw_urushi_ball"
+  }
+}

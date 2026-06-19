@@ -1,6 +1,0 @@
-{
-  "type": "neoforge:add_features",
-  "biomes": "minecraft:forest",
-  "features": "urushi:forest_sakura",
-  "step": "vegetal_decoration"
-}

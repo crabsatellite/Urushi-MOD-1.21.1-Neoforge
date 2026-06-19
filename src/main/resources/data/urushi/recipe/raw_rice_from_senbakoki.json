@@ -1,0 +1,16 @@
+{
+  "type": "urushi:senbakoki",
+  "ingredients": [
+    {
+      "item": "urushi:rice_crop"
+    }
+  ],
+  "result": {
+    "id": "urushi:raw_rice"
+  },
+  "sub_results": [
+    {
+      "id": "urushi:straw"
+    }
+  ]
+}

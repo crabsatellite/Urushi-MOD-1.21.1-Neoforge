@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "##"
+  ],
+  "key": {
+    "#": {
+      "item": "urushi:brown_tatami_mat"
+    }
+  },
+  "result": {
+    "id": "urushi:brown_tatami_mat_carpet",
+    "count": 16
+  }
+}

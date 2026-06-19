@@ -1,0 +1,11 @@
+{
+  "type": "urushi:polishing",
+  "ingredients": [
+    {
+      "item": "minecraft:dark_oak_stairs"
+    }
+  ],
+  "result": {
+    "id": "urushi:smooth_dark_oak_stairs"
+  }
+}

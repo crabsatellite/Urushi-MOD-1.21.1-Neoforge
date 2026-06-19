@@ -1,6 +1,6 @@
 {
   "type": "neoforge:remove_features",
-  "biomes": "#forge:is_desert",
+  "biomes": "#c:is_desert",
   "features": "urushi:overworld_ore_ironsand",
   "step": "top_layer_modification"
 }

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "s",
+    "o"
+  ],
+  "key": {
+    "o": {
+      "item": "urushi:vegetable_oil"
+    },
+    "s": {
+      "tag": "c:strings"
+    }
+  },
+  "result": {
+    "id": "minecraft:candle",
+    "count": 4
+  }
+}

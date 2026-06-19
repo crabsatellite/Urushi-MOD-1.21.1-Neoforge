@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "urushi:kakuriyo_dirt"
+    }
+  ],
+  "result": {
+    "id": "urushi:unfired_shichirin",
+    "count": 1
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "urushi:horizontal_sakura_bars"
+    }
+  ],
+  "result": {
+    "id": "urushi:sakura_bars",
+    "count": 1
+  }
+}

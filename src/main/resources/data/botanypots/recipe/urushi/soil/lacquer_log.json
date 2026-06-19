@@ -1,15 +1,18 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "botanypots"
+    }
+  ],
   "type": "botanypots:soil",
   "input": [
     {
       "item": "urushi:lacquer_log"
-    },
-    {
-      "item": "urushi:lacquer_wood"
     }
   ],
   "display": {
-    "block": "urushi:lacquer_wood"
+    "block": "urushi:lacquer_log"
   },
   "categories": [
     "wood",

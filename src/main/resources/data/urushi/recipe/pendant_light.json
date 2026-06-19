@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "www",
+    "pgp",
+    " s "
+  ],
+  "key": {
+    "g": {
+      "item": "minecraft:glowstone_dust"
+    },
+    "p": {
+      "item": "minecraft:paper"
+    },
+    "w": {
+      "tag": "minecraft:planks"
+    },
+    "s": {
+      "tag": "c:strings"
+    }
+  },
+  "result": {
+    "id": "urushi:pendant_light",
+    "count": 1
+  }
+}

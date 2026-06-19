@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "urushi:abura_age"
+    },
+    {
+      "item": "urushi:syari"
+    }
+  ],
+  "result": {
+    "id": "urushi:inari",
+    "count": 1
+  }
+}

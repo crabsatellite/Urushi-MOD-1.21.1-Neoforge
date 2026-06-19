@@ -14,6 +14,6 @@
     "urushi:lantern_plant_block",
     "urushi:lantern_plant_torch",
     "urushi:wall_lantern_plant_torch",
-    "#c:netherrack"
+    "minecraft:netherrack"
   ]
 }

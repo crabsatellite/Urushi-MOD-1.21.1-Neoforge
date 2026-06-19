@@ -1,0 +1,11 @@
+{
+  "type": "urushi:polishing",
+  "ingredients": [
+    {
+      "item": "urushi:black_urushi_stairs"
+    }
+  ],
+  "result": {
+    "id": "urushi:smooth_black_urushi_stairs"
+  }
+}

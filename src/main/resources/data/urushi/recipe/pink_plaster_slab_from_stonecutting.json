@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "urushi:pink_plaster"
+  },
+  "result": {
+    "id": "urushi:pink_plaster_slab",
+    "count": 2
+  }
+}

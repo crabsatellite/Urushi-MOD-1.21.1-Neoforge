@@ -1,8 +1,0 @@
-{
-  "type": "minecraft:stonecutting",
-  "ingredient": {
-    "item": "urushi:ishigaki_block"
-  },
-  "result": "urushi:ishigaki_wall",
-  "count": 1
-}

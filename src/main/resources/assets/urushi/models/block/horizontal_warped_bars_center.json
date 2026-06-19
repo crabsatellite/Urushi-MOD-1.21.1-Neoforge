@@ -1,7 +1,0 @@
-{
-    "parent": "urushi:block/horizontal_bars_center_base",
-    "textures": {
-       "0": "urushi:block/planks_smooth_warped",
-		"particle": "urushi:block/planks_smooth_warped"
-    }
-}

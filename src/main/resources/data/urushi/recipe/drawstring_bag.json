@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SCS",
+    "CDC",
+    "CCC"
+  ],
+  "key": {
+    "D": {
+      "tag": "c:dyes/blue"
+    },
+    "S": {
+      "tag": "c:strings"
+    },
+    "C": {
+      "item": "urushi:silk"
+    }
+  },
+  "result": {
+    "id": "urushi:drawstring_bag",
+    "count": 1
+  }
+}

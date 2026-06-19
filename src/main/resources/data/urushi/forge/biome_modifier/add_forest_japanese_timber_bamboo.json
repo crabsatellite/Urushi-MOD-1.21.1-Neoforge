@@ -1,6 +1,0 @@
-{
-  "type": "neoforge:add_features",
-  "biomes": "minecraft:forest",
-  "features": "urushi:forest_japanese_timber_bamboo",
-  "step": "vegetal_decoration"
-}

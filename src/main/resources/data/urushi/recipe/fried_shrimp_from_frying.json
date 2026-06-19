@@ -1,0 +1,11 @@
+{
+  "type": "urushi:frying",
+  "ingredients": [
+    {
+      "item": "urushi:shrimp"
+    }
+  ],
+  "result": {
+    "id": "urushi:fried_shrimp"
+  }
+}

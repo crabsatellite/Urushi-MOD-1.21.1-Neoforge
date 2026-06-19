@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "urushi:climbing_rope"
+    }
+  ],
+  "result": {
+    "id": "urushi:rope",
+    "count": 16
+  }
+}

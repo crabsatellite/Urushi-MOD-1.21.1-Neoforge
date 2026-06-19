@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "WWW",
+    "# #",
+    "WWW"
+  ],
+  "key": {
+    "#": {
+      "tag": "c:rods/wooden"
+    },
+    "W": {
+      "item": "urushi:smooth_acacia_slab"
+    }
+  },
+  "result": {
+    "id": "urushi:acacia_board_window",
+    "count": 8
+  }
+}

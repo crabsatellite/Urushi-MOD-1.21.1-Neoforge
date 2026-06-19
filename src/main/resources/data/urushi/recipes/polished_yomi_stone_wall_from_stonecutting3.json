@@ -1,8 +1,0 @@
-{
-  "type": "minecraft:stonecutting",
-  "ingredient": {
-    "item": "urushi:polished_yomi_stone"
-  },
-  "result": "urushi:polished_yomi_stone_wall",
-  "count": 1
-}

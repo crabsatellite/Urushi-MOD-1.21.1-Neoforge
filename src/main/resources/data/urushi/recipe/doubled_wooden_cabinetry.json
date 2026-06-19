@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "urushi:wooden_cabinetry"
+    },
+    {
+      "item": "urushi:wooden_cabinetry"
+    }
+  ],
+  "result": {
+    "id": "urushi:doubled_wooden_cabinetry",
+    "count": 1
+  }
+}

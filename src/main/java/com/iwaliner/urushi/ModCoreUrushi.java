@@ -194,6 +194,7 @@ public class ModCoreUrushi {
 
         modEventBus.addListener(this::CreativeTabEvent);
         modEventBus.addListener(this::RegisterCapabilities);
+        modEventBus.addListener(com.iwaliner.urushi.network.NetworkAccess::register);
         NeoForge.EVENT_BUS.register(this);
 
     }
@@ -846,6 +847,16 @@ public class ModCoreUrushi {
            /* Component component = ComponentUtils.wrapInSquareBrackets(Component.translatable("info.urushi.max_memory_is_not_enough")).withStyle((p_214489_) -> {
                 return p_214489_.withColor(ChatFormatting.RED);
             });*/
+        }
+        if(UrushiUtils.isAprilFoolsDay()){
+            Player player = event.getEntity();
+            if(player.getItemBySlot(EquipmentSlot.HEAD).isEmpty()){
+                player.setItemSlot(EquipmentSlot.HEAD,new ItemStack(ItemAndBlockRegister.sakura_head.get()));
+            }else{
+                if (!player.getInventory().add(new ItemStack(ItemAndBlockRegister.sakura_head.get()))) {
+                    player.drop(new ItemStack(ItemAndBlockRegister.sakura_head.get()), false);
+                }
+            }
         }
         if(ConfigUrushi.noticeNewerVersion.get()) {
             VersionChecker.CheckResult checkResult = VersionChecker.getResult(ModList.get().getModFileById(ModCoreUrushi.ModID).getMods().get(0));

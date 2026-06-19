@@ -1,4 +1,10 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "botanypots"
+    }
+  ],
   "type": "botanypots:crop",
   "seed": {
     "item": "urushi:salmon_roe"
@@ -24,7 +30,7 @@
   },
   "drops": [
     {
-      "chance": 1.00,
+      "chance": 1.0,
       "output": {
         "item": "urushi:salmon_roe"
       },

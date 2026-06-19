@@ -1,0 +1,11 @@
+{
+  "type": "urushi:frying",
+  "ingredients": [
+    {
+      "tag": "c:tofu"
+    }
+  ],
+  "result": {
+    "id": "urushi:abura_age"
+  }
+}

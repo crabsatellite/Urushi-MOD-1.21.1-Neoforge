@@ -1,0 +1,11 @@
+{
+  "type": "urushi:polishing",
+  "ingredients": [
+    {
+      "item": "minecraft:cherry_wood"
+    }
+  ],
+  "result": {
+    "id": "minecraft:stripped_cherry_wood"
+  }
+}

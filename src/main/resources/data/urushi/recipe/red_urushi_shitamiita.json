@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "urushi:red_urushi_planks"
+    },
+    {
+      "item": "urushi:smooth_red_urushi_slab"
+    }
+  ],
+  "result": {
+    "id": "urushi:red_urushi_shitamiita",
+    "count": 2
+  }
+}

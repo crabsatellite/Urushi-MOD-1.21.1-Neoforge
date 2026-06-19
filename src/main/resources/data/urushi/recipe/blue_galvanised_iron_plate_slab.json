@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "urushi:blue_galvanised_iron_plate_block"
+    }
+  },
+  "result": {
+    "id": "urushi:blue_galvanised_iron_plate_slab",
+    "count": 6
+  }
+}

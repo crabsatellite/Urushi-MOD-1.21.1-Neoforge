@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "urushi:smooth_japanese_cedar_planks"
+    }
+  ],
+  "result": {
+    "id": "urushi:japanese_cedar_planks",
+    "count": 1
+  }
+}

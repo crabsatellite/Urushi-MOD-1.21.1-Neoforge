@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "tag": "minecraft:straw"
+    },
+    {
+      "tag": "minecraft:straw"
+    },
+    {
+      "tag": "minecraft:straw"
+    },
+    {
+      "tag": "c:strings"
+    }
+  ],
+  "result": {
+    "id": "urushi:green_tatami_mat",
+    "count": 4
+  }
+}

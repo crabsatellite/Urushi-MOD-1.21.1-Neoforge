@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " n ",
+    "ili",
+    "iii"
+  ],
+  "key": {
+    "l": {
+      "item": "urushi:tea_leaf"
+    },
+    "i": {
+      "tag": "c:ingots/iron"
+    },
+    "n": {
+      "tag": "c:nuggets/iron"
+    }
+  },
+  "result": {
+    "id": "urushi:kettle",
+    "count": 1
+  }
+}

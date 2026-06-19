@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ggg",
+    "gig",
+    "ggg"
+  ],
+  "key": {
+    "g": {
+      "tag": "c:glass_blocks"
+    },
+    "i": {
+      "tag": "c:nuggets/iron"
+    }
+  },
+  "result": {
+    "id": "urushi:metal_framed_glass",
+    "count": 8
+  }
+}

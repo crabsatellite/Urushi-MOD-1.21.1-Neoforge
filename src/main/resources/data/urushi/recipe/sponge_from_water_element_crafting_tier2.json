@@ -1,0 +1,21 @@
+{
+  "type": "urushi:water_element_tier2_crafting",
+  "ingredients": [
+    {
+      "item": "minecraft:yellow_wool"
+    },
+    {
+      "item": "minecraft:yellow_wool"
+    },
+    {
+      "item": "minecraft:yellow_wool"
+    },
+    {
+      "item": "minecraft:yellow_wool"
+    }
+  ],
+  "result": {
+    "id": "minecraft:sponge"
+  },
+  "reiryoku": 200
+}

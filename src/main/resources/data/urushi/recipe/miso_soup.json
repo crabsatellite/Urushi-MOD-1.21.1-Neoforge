@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "urushi:water_bamboo_cup"
+    },
+    {
+      "item": "urushi:miso"
+    },
+    {
+      "item": "urushi:green_onion_crop"
+    },
+    {
+      "tag": "c:tofu"
+    }
+  ],
+  "result": {
+    "id": "urushi:miso_soup",
+    "count": 1
+  }
+}

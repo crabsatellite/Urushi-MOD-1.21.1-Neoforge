@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "urushi:cocoon"
+    }
+  ],
+  "result": {
+    "id": "urushi:silk_thread",
+    "count": 1
+  }
+}

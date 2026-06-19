@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "minecraft:glass_pane"
+  },
+  "result": {
+    "id": "urushi:connectable_glass_pane",
+    "count": 1
+  }
+}

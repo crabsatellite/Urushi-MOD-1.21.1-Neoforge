@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "urushi:mandarin_slice"
+    }
+  ],
+  "result": {
+    "id": "minecraft:orange_dye",
+    "count": 1
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "type": "urushi:polishing",
+  "ingredients": [
+    {
+      "item": "minecraft:warped_hyphae"
+    }
+  ],
+  "result": {
+    "id": "minecraft:stripped_warped_hyphae"
+  }
+}

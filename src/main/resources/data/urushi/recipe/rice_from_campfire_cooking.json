@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:campfire_cooking",
+  "ingredient": {
+    "tag": "c:crops/rice"
+  },
+  "result": {
+    "id": "urushi:rice"
+  },
+  "experience": 0.35,
+  "cookingtime": 600
+}

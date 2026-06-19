@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "urushi:salmon_roe"
+    },
+    {
+      "item": "urushi:syari"
+    }
+  ],
+  "result": {
+    "id": "urushi:salmon_roe_sushi",
+    "count": 1
+  }
+}

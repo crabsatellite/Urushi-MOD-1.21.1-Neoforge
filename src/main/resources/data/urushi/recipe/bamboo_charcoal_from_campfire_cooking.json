@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:campfire_cooking",
+  "ingredient": {
+    "item": "urushi:japanese_timber_bamboo"
+  },
+  "result": {
+    "id": "urushi:bamboo_charcoal"
+  },
+  "experience": 0.35,
+  "cookingtime": 120
+}

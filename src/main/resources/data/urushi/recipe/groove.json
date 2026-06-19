@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "urushi:lidless_groove"
+    },
+    {
+      "item": "urushi:concrete_slab"
+    }
+  ],
+  "result": {
+    "id": "urushi:groove",
+    "count": 1
+  }
+}

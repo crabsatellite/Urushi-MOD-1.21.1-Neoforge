@@ -1,11 +1,17 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "botanypots"
+    }
+  ],
   "type": "botanypots:pot_interaction",
   "held_ingredient": {
     "item": "urushi:kitsunebi"
   },
   "soil_ingredient": [
     {
-      "item": "urushi:kakuriyo_grass"
+      "item": "urushi:kakuriyo_grass_block"
     }
   ],
   "soil_output": {

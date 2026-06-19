@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "tag": "c:crops/soybean"
+    },
+    {
+      "item": "minecraft:wheat"
+    },
+    {
+      "tag": "c:salt"
+    },
+    {
+      "item": "urushi:water_bamboo_cup"
+    },
+    {
+      "item": "urushi:bamboo_cup"
+    }
+  ],
+  "result": {
+    "id": "urushi:soy_source_bamboo_cup",
+    "count": 1
+  }
+}

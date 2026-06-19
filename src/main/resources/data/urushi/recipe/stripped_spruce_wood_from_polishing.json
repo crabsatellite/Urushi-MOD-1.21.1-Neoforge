@@ -1,0 +1,11 @@
+{
+  "type": "urushi:polishing",
+  "ingredients": [
+    {
+      "item": "minecraft:spruce_wood"
+    }
+  ],
+  "result": {
+    "id": "minecraft:stripped_spruce_wood"
+  }
+}

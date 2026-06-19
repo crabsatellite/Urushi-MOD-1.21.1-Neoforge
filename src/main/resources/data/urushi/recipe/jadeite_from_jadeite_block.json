@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "urushi:jadeite_block"
+    }
+  ],
+  "result": {
+    "id": "urushi:jadeite",
+    "count": 4
+  }
+}

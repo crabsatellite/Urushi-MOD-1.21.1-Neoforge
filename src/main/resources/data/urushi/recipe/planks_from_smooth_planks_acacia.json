@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "urushi:smooth_acacia_planks"
+    }
+  ],
+  "result": {
+    "id": "minecraft:acacia_planks",
+    "count": 1
+  }
+}

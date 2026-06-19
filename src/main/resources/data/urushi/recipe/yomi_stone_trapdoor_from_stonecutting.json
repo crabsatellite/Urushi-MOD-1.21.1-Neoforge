@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "urushi:yomi_stone"
+  },
+  "result": {
+    "id": "urushi:yomi_stone_trapdoor",
+    "count": 1
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "s",
+    "p",
+    "r"
+  ],
+  "key": {
+    "p": {
+      "item": "minecraft:paper"
+    },
+    "s": {
+      "tag": "c:strings"
+    },
+    "r": {
+      "tag": "c:bamboo"
+    }
+  },
+  "result": {
+    "id": "urushi:kakejiku_15",
+    "count": 4
+  }
+}

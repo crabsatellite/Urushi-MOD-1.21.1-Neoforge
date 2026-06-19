@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "urushi:concrete"
+  },
+  "result": {
+    "id": "urushi:concrete_slab",
+    "count": 2
+  }
+}

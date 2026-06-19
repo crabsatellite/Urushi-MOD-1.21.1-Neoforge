@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "urushi:ishigaki_block"
+  },
+  "result": {
+    "id": "urushi:ishigaki_stairs",
+    "count": 1
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "urushi:cyan_plaster"
+  },
+  "result": {
+    "id": "urushi:vertical_cyan_plaster_slab",
+    "count": 2
+  }
+}

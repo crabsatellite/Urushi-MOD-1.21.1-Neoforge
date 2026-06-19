@@ -1,0 +1,11 @@
+{
+  "type": "urushi:polishing",
+  "ingredients": [
+    {
+      "item": "urushi:cobbled_yomi_stone"
+    }
+  ],
+  "result": {
+    "id": "urushi:yomi_stone"
+  }
+}

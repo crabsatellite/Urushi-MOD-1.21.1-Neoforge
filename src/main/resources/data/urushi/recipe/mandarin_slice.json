@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "urushi:mandarin"
+    }
+  ],
+  "result": {
+    "id": "urushi:mandarin_slice",
+    "count": 4
+  }
+}

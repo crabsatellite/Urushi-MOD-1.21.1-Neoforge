@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "urushi:green_plaster"
+  },
+  "result": {
+    "id": "urushi:green_plaster_bars",
+    "count": 4
+  }
+}

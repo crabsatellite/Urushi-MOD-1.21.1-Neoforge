@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "urushi:blue_kawara_block"
+  },
+  "result": {
+    "id": "urushi:blue_kawara_stairs",
+    "count": 1
+  }
+}

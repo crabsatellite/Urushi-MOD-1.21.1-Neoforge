@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "W#W",
+    "W#W"
+  ],
+  "key": {
+    "#": {
+      "tag": "c:rods/wooden"
+    },
+    "W": {
+      "item": "urushi:smooth_pale_oak_slab"
+    }
+  },
+  "result": {
+    "id": "urushi:pale_oak_fushiranma",
+    "count": 3
+  }
+}

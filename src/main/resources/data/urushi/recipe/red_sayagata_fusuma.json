@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "urushi:blank_fusuma"
+    },
+    {
+      "item": "minecraft:string"
+    },
+    {
+      "tag": "c:dyes/red"
+    }
+  ],
+  "result": {
+    "id": "urushi:red_sayagata_fusuma",
+    "count": 1
+  }
+}

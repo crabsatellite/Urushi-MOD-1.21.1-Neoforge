@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "BBB",
+    "BDB",
+    "BBB"
+  ],
+  "key": {
+    "D": {
+      "tag": "c:dyes/blue"
+    },
+    "B": {
+      "tag": "urushi:plaster"
+    }
+  },
+  "result": {
+    "id": "urushi:blue_plaster",
+    "count": 8
+  }
+}

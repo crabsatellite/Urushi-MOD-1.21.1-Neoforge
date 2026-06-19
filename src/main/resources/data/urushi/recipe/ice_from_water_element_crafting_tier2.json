@@ -1,0 +1,21 @@
+{
+  "type": "urushi:water_element_tier2_crafting",
+  "ingredients": [
+    {
+      "item": "minecraft:snowball"
+    },
+    {
+      "item": "minecraft:snowball"
+    },
+    {
+      "item": "minecraft:snowball"
+    },
+    {
+      "item": "minecraft:snowball"
+    }
+  ],
+  "result": {
+    "id": "minecraft:ice"
+  },
+  "reiryoku": 10
+}

@@ -1,8 +1,0 @@
-{
-  "type": "minecraft:stonecutting",
-  "ingredient": {
-    "tag": "c:nuggets/iron"
-  },
-  "result": "urushi:vertical_rusted_galvanised_iron_plate_slab",
-  "count": 8
-}

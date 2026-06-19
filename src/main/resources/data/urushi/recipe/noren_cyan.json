@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "XX",
+    "##"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:cyan_wool"
+    },
+    "X": {
+      "tag": "c:bamboo"
+    }
+  },
+  "result": {
+    "id": "urushi:cyan_noren",
+    "count": 8
+  }
+}

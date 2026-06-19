@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "urushi:tsuna_sashimi"
+    },
+    {
+      "item": "urushi:green_onion_crop"
+    },
+    {
+      "item": "urushi:rice"
+    }
+  ],
+  "result": {
+    "id": "urushi:minced_tuna_bowl",
+    "count": 1
+  }
+}

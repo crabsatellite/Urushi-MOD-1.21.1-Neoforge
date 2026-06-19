@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "urushi:jungle_bars"
+    }
+  ],
+  "result": {
+    "id": "urushi:horizontal_jungle_bars",
+    "count": 1
+  }
+}

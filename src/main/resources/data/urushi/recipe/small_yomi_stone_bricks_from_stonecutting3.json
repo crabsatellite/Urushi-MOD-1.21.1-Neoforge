@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "urushi:polished_yomi_stone"
+  },
+  "result": {
+    "id": "urushi:small_yomi_stone_bricks",
+    "count": 1
+  }
+}

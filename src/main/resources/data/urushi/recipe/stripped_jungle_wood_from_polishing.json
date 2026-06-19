@@ -1,0 +1,11 @@
+{
+  "type": "urushi:polishing",
+  "ingredients": [
+    {
+      "item": "minecraft:jungle_wood"
+    }
+  ],
+  "result": {
+    "id": "minecraft:stripped_jungle_wood"
+  }
+}

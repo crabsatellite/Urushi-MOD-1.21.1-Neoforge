@@ -1,0 +1,11 @@
+{
+  "type": "urushi:polishing",
+  "ingredients": [
+    {
+      "item": "minecraft:cherry_log"
+    }
+  ],
+  "result": {
+    "id": "minecraft:stripped_cherry_log"
+  }
+}

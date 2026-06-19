@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "W#W",
+    "W#W"
+  ],
+  "key": {
+    "#": {
+      "tag": "c:rods/wooden"
+    },
+    "W": {
+      "item": "urushi:smooth_acacia_slab"
+    }
+  },
+  "result": {
+    "id": "urushi:acacia_fushiranma",
+    "count": 3
+  }
+}

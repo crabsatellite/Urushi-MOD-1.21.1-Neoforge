@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "urushi:green_bars"
+    }
+  ],
+  "result": {
+    "id": "urushi:horizontal_green_bars",
+    "count": 1
+  }
+}

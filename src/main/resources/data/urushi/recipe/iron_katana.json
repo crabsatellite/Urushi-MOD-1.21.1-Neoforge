@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "urushi:quenched_iron_blade"
+    },
+    {
+      "item": "urushi:smooth_black_urushi_planks"
+    },
+    {
+      "item": "minecraft:leather"
+    }
+  ],
+  "result": {
+    "id": "urushi:iron_katana",
+    "count": 1
+  }
+}

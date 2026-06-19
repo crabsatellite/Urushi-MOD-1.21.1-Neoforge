@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "urushi:jadeite_block"
+    },
+    {
+      "tag": "c:ingots/iron"
+    },
+    {
+      "tag": "c:nuggets/gold"
+    }
+  ],
+  "result": {
+    "id": "urushi:mirror_tier2",
+    "count": 1
+  }
+}
