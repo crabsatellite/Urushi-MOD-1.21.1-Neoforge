@@ -12,7 +12,6 @@ $ProjectRoot = (Resolve-Path -LiteralPath (Join-Path $PSScriptRoot '..')).Path
 $receiptPath = Join-Path $ProjectRoot 'build\minecraft-mod-testing\urushi-client-interaction-receipt.json'
 $runtimeDirectory = Join-Path $ProjectRoot 'build\minecraft-mod-testing\client-interaction'
 $invokeSession = Join-Path $ProjectRoot '.agents\skills\minecraft-mod-testing\scripts\invoke_single_session.ps1'
-$localBuild = Join-Path $ProjectRoot 'mod-build.ps1'
 
 Remove-Item -LiteralPath $receiptPath -Force -ErrorAction SilentlyContinue
 
@@ -29,21 +28,15 @@ try {
     $env:URUSHI_QUICK_PLAY_WORLD = $WorldName
     $env:URUSHI_CLIENT_TEST_RECEIPT = $receiptPath
 
-    if ((Test-Path -LiteralPath $invokeSession -PathType Leaf) -and
-        (Test-Path -LiteralPath $localBuild -PathType Leaf)) {
+    if (Test-Path -LiteralPath $invokeSession -PathType Leaf) {
         $gradleArguments = @(
-            '-NoProfile',
-            '-File',
-            $localBuild,
-            'gradle',
             "-PminecraftModTestingRuntimeDirectory=$runtimeDirectory",
             'runClient',
             '--no-daemon'
         )
-        & (Get-Command pwsh -CommandType Application -ErrorAction Stop).Source `
-            -NoProfile -File $invokeSession `
+        & $invokeSession `
             -ProjectRoot $ProjectRoot `
-            -Executable 'pwsh' `
+            -Executable (Join-Path $ProjectRoot 'gradlew.bat') `
             -ArgumentList $gradleArguments `
             -RuntimeKind client `
             -HarnessReceiptPath 'build/minecraft-mod-testing/urushi-client-interaction-receipt.json' `

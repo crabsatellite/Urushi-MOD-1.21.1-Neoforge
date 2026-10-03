@@ -93,6 +93,8 @@ public final class UrushiClientInteractionTest {
                 case WAIT_FOR_CLIENT_SYNC -> waitForClientSync(minecraft);
                 case USE_SENBAKOKI -> useSenbakoki(minecraft);
                 case WAIT_FOR_SENBAKOKI -> waitForSenbakoki(minecraft);
+                case OPEN_RICE_CAULDRON -> openRiceCauldron(minecraft);
+                case WAIT_FOR_RICE_CAULDRON_OPEN -> waitForRiceCauldronOpen(minecraft);
                 case USE_RICE_CAULDRON -> useRiceCauldron(minecraft);
                 case WAIT_FOR_COOKING -> waitForCooking(minecraft);
                 case VERIFY -> verifyResult(minecraft);
@@ -226,12 +228,33 @@ public final class UrushiClientInteractionTest {
                 && countItem(minecraft.player, ItemAndBlockRegister.raw_rice.get()) >= 1
                 && countItem(minecraft.player, ItemAndBlockRegister.straw.get()) >= 1) {
             OBSERVED_SCENARIOS.add("client_senbakoki_rice_ear_interaction");
-            stage = Stage.USE_RICE_CAULDRON;
+            stage = Stage.OPEN_RICE_CAULDRON;
             stageTicks = 0;
             return;
         }
         if (stageTicks > 60) {
             fail(minecraft, "client senbakoki interaction did not produce raw rice and straw");
+        }
+    }
+
+    private static void openRiceCauldron(Minecraft minecraft) {
+        selectEmptyHotbarSlot(minecraft.player);
+        useBlock(minecraft, riceCauldronPos);
+        stage = Stage.WAIT_FOR_RICE_CAULDRON_OPEN;
+        stageTicks = 0;
+    }
+
+    private static void waitForRiceCauldronOpen(Minecraft minecraft) {
+        stageTicks++;
+        if (minecraft.level != null
+                && minecraft.level.getBlockState(riceCauldronPos)
+                .getValue(RiceCauldronBlock.VARIANT) == 1) {
+            stage = Stage.USE_RICE_CAULDRON;
+            stageTicks = 0;
+            return;
+        }
+        if (stageTicks > 60) {
+            fail(minecraft, "client could not open the empty rice cauldron");
         }
     }
 
@@ -303,6 +326,16 @@ public final class UrushiClientInteractionTest {
             }
         }
         throw new IllegalStateException("client inventory is missing " + item);
+    }
+
+    private static void selectEmptyHotbarSlot(LocalPlayer player) {
+        for (int slot = 0; slot < 9; slot++) {
+            if (player.getInventory().getItem(slot).isEmpty()) {
+                player.getInventory().selected = slot;
+                return;
+            }
+        }
+        throw new IllegalStateException("client hotbar has no empty slot for cauldron opening");
     }
 
     private static int countItem(LocalPlayer player, Item item) {
@@ -407,6 +440,8 @@ public final class UrushiClientInteractionTest {
         WAIT_FOR_CLIENT_SYNC,
         USE_SENBAKOKI,
         WAIT_FOR_SENBAKOKI,
+        OPEN_RICE_CAULDRON,
+        WAIT_FOR_RICE_CAULDRON_OPEN,
         USE_RICE_CAULDRON,
         WAIT_FOR_COOKING,
         VERIFY,
