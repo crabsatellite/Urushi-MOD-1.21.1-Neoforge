@@ -9,6 +9,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -118,6 +119,23 @@ public class RiceCauldronBlock extends BaseEntityBlock {
 
         }
         return InteractionResult.FAIL;
+    }
+
+    @Override
+    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level world, BlockPos pos, Player player,
+                                               InteractionHand hand, BlockHitResult result) {
+        if (state.getValue(VARIANT) == 1
+                && stack.is(TagUrushi.RICE)
+                && world.getBlockEntity(pos) instanceof RiceCauldronBlockEntity tileEntity
+                && tileEntity.canPlaceItem(0, stack)) {
+            if (!world.isClientSide) {
+                tileEntity.setItem(0, new ItemStack(ItemAndBlockRegister.rice.get(), stack.getCount()));
+                stack.setCount(0);
+                world.playSound(null, pos, SoundEvents.ITEM_PICKUP, SoundSource.BLOCKS, 1F, 1F);
+            }
+            return ItemInteractionResult.sidedSuccess(world.isClientSide);
+        }
+        return super.useItemOn(stack, state, world, pos, player, hand, result);
     }
 
     @Override

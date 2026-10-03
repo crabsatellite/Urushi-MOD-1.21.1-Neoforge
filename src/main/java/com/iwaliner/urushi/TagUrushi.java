@@ -40,5 +40,5 @@ public class TagUrushi {
     public static final TagKey<Item> WATER_ELEMENT_ITEM =TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(ModCoreUrushi.ModID, "water_element"));
     public static final TagKey<Item> SHICHIRIN_FUEL =TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(ModCoreUrushi.ModID, "shichirin_fuel"));
     public static final TagKey<Item> IGNITER =TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(ModCoreUrushi.ModID, "igniter"));
-    public static final TagKey<Item> RICE =TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("forge", "crops/rice"));
+    public static final TagKey<Item> RICE =TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "crops/rice"));
 }

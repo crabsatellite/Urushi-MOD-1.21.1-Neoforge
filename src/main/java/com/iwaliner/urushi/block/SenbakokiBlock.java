@@ -11,6 +11,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Player;
@@ -60,12 +61,17 @@ public class SenbakokiBlock extends HorizonalRotateBlock{
 
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult result) {
-        ItemStack stack = player.getMainHandItem();
+        return InteractionResult.PASS;
+    }
 
+    @Override
+    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player,
+                                              InteractionHand hand, BlockHitResult result) {
         Optional<RecipeHolder<SenbakokiRecipe>> recipe = Optional.ofNullable(level.getRecipeManager())
                 .flatMap(manager -> manager.getRecipeFor(RecipeTypeRegister.SenbakokiRecipe, new SingleRecipeInput(stack), level));
         if (recipe.isPresent()) {
-             stack.shrink(1);
+            if (!level.isClientSide) {
+                stack.shrink(1);
                 if (!player.getInventory().add(recipe.get().value().getResultItem().copy())) {
                     player.drop(recipe.get().value().getResultItem().copy(), false);
                 }
@@ -74,11 +80,12 @@ public class SenbakokiBlock extends HorizonalRotateBlock{
                         player.drop(recipe.get().value().getSubResultItems().get(i).copy(), false);
                     }
                 }
-
-            level.playSound((Player) null, (double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D, (double) pos.getZ() + 0.5D, SoundEvents.WOOD_PLACE, SoundSource.BLOCKS, 1.5F, 1F);
-            return InteractionResult.SUCCESS;
+                level.playSound(null, (double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D,
+                        (double) pos.getZ() + 0.5D, SoundEvents.WOOD_PLACE, SoundSource.BLOCKS, 1.5F, 1F);
+            }
+            return ItemInteractionResult.sidedSuccess(level.isClientSide);
         }
-        return InteractionResult.FAIL;
+        return super.useItemOn(stack, state, level, pos, player, hand, result);
     }
     @Override
     public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {

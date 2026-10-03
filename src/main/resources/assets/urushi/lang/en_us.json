@@ -1840,6 +1840,8 @@
   "info.urushi.filler_mode_11_description": "Clears the liquid in the area",
   "advancements.urushi.rice.title": "Eat Rice!",
   "advancements.urushi.rice.description": "Obtain Rice",
+  "advancements.urushi.rice_ears.title": "First Harvest",
+  "advancements.urushi.rice_ears.description": "Obtain Rice Ears and receive a Senbakoki",
   "advancements.urushi.sushi.title": "3, 2, 1, HEY RASSHAI！",
   "advancements.urushi.sushi.description": "Get any Sushi\n\n(Based on SCP-1134-JP - 爆転ニギリ スシブレード\n by bamboon\nhttp://scp-jp.wikidot.com/scp-1134-jp\nCC BY-SA 3.0)",
   "block.urushi.smooth_stone_brick": "Smooth Stone Brick",

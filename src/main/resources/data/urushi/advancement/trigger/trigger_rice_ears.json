@@ -1,4 +1,20 @@
 {
+  "parent": "urushi:root",
+  "display": {
+    "icon": {
+      "id": "urushi:rice_crop"
+    },
+    "title": {
+      "translate": "advancements.urushi.rice_ears.title"
+    },
+    "description": {
+      "translate": "advancements.urushi.rice_ears.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
   "criteria": {
     "on_paddy_field": {
       "trigger": "minecraft:enter_block",
@@ -24,12 +40,25 @@
           }
         ]
       }
+    },
+    "rice_ear": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "urushi:rice_crop"
+            ]
+          }
+        ]
+      }
     }
   },
   "requirements": [
     [
       "on_paddy_field",
-      "stacked_item"
+      "stacked_item",
+      "rice_ear"
     ]
   ],
   "rewards": {
