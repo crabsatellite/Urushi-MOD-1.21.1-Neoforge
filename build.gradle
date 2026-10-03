@@ -42,6 +42,16 @@ neoForge {
         client {
             client()
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+            def quickPlayWorld = providers.environmentVariable('URUSHI_QUICK_PLAY_WORLD').getOrNull()
+            if (quickPlayWorld) {
+                programArgument '--quickPlaySingleplayer'
+                programArgument quickPlayWorld
+            }
+            def interactionGate = providers.environmentVariable('URUSHI_CLIENT_INTERACTION_GATE').getOrNull()
+            if ('true'.equalsIgnoreCase(interactionGate)) {
+                systemProperty 'urushi.tests.clientInteraction', 'true'
+                systemProperty 'urushi.tests.unattended', 'true'
+            }
         }
 
         server {

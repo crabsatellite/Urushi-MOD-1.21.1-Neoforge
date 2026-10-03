@@ -12,6 +12,16 @@ Status
 - Current port version: 1.21.1-6.6.3
 - Local verification: `gradlew.bat build --no-daemon`
 
+Client interaction acceptance
+-----------------------------
+
+- `scripts/runclient_interaction_gate.ps1` launches an unattended quick-play
+  client and exercises the rice-ear to raw-rice, rice-cauldron cooking, and
+  rice-ears advancement paths through real client block-use packets.
+- The project-owned test code and launcher are tracked here. The local
+  `minecraft-mod-testing` runtime, leases, and process guard remain machine
+  local and are intentionally not part of this repository.
+
 Links
 -----
 

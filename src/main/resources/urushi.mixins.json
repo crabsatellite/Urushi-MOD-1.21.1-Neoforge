@@ -11,7 +11,11 @@
     "ItemEntityMixin",
     "WeatherCommandMixin"
   ],
-  "client": [],
+  "client": [
+    "UrushiUnattendedWindowMixin",
+    "UrushiUnattendedInputMixin",
+    "UrushiUnattendedAudioMixin"
+  ],
   "injectors": {
     "defaultRequire": 1
   },
