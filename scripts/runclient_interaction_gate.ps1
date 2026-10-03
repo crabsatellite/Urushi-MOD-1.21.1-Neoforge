@@ -40,7 +40,7 @@ try {
             -ArgumentList $gradleArguments `
             -RuntimeKind client `
             -HarnessReceiptPath 'build/minecraft-mod-testing/urushi-client-interaction-receipt.json' `
-            -ExpectedScenarioCount 3 `
+            -ExpectedScenarioCount 4 `
             -ExpectedProcessStartCount 1 `
             -ExpectedWorldLoadCount 1 `
             -RuntimeDirectory $runtimeDirectory

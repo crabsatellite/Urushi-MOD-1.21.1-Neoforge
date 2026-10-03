@@ -1,6 +1,9 @@
 package com.iwaliner.urushi.test;
 
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.iwaliner.urushi.ItemAndBlockRegister;
 import com.iwaliner.urushi.ModCoreUrushi;
 import com.iwaliner.urushi.block.DirtFurnaceBlock;
@@ -24,12 +27,16 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
+import net.neoforged.neoforge.client.event.sound.PlaySoundEvent;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.charset.StandardCharsets;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -53,8 +60,17 @@ public final class UrushiClientInteractionTest {
     private static final String RECEIPT_ENV = "URUSHI_CLIENT_TEST_RECEIPT";
     private static final ResourceLocation RICE_EARS_ADVANCEMENT =
             ResourceLocation.fromNamespaceAndPath(ModCoreUrushi.ModID, "trigger/trigger_rice_ears");
+    private static final ResourceLocation ADVANCEMENT_SOUND =
+            ResourceLocation.fromNamespaceAndPath(ModCoreUrushi.ModID, "urushi_advancements");
+    private static final List<String> REQUESTED_SCENARIOS = List.of(
+            "client_recipe_registry",
+            "client_senbakoki_rice_ear_interaction",
+            "client_rice_cauldron_cooking",
+            "client_rice_ears_advancement");
 
     private static final Set<String> OBSERVED_SCENARIOS = new LinkedHashSet<>();
+    private static final Map<String, Integer> SCENARIO_START_TICKS = new LinkedHashMap<>();
+    private static final Map<String, Integer> SCENARIO_END_TICKS = new LinkedHashMap<>();
     private static Stage stage = Stage.WAIT_FOR_WORLD;
     private static int ticks;
     private static int stageTicks;
@@ -65,12 +81,21 @@ public final class UrushiClientInteractionTest {
     private static volatile boolean serverVerificationReady;
     private static volatile boolean serverCookedRice;
     private static volatile boolean serverAdvancementDone;
+    private static volatile boolean serverAdvancementReward;
+    private static volatile boolean advancementSoundObserved;
     private static boolean finished;
     private static String failure;
     private static BlockPos senbakokiPos;
     private static BlockPos riceCauldronPos;
 
     private UrushiClientInteractionTest() {}
+
+    @SubscribeEvent
+    public static void onPlaySound(PlaySoundEvent event) {
+        if (ENABLED && event.getOriginalSound().getLocation().equals(ADVANCEMENT_SOUND)) {
+            advancementSoundObserved = true;
+        }
+    }
 
     @SubscribeEvent
     public static void onClientTick(ClientTickEvent.Post event) {
@@ -122,6 +147,7 @@ public final class UrushiClientInteractionTest {
             return;
         }
         setupQueued = true;
+        startScenario("client_rice_ears_advancement");
 
         MinecraftServer server = minecraft.getSingleplayerServer();
         LocalPlayer clientPlayer = minecraft.player;
@@ -211,11 +237,84 @@ public final class UrushiClientInteractionTest {
         if (stageTicks < 10) {
             return;
         }
+        verifyRecipeRegistry(minecraft);
         stage = Stage.USE_SENBAKOKI;
         stageTicks = 0;
     }
 
+    private static void verifyRecipeRegistry(Minecraft minecraft) {
+        startScenario("client_recipe_registry");
+        int expected = expectedLoadedRecipeCount();
+        int actual = (int) minecraft.level.getRecipeManager().getRecipes().stream()
+                .filter(holder -> ModCoreUrushi.ModID.equals(holder.id().getNamespace()))
+                .count();
+        if (expected < 0 || actual != expected) {
+            fail(minecraft, "client recipe registry count mismatch: expected " + expected + ", actual " + actual);
+            return;
+        }
+        for (String path : List.of("acacia_bars", "raw_rice_from_senbakoki", "baked_mochocho")) {
+            ResourceLocation id = ResourceLocation.fromNamespaceAndPath(ModCoreUrushi.ModID, path);
+            if (minecraft.level.getRecipeManager().byKey(id).isEmpty()) {
+                fail(minecraft, "client recipe registry is missing " + id);
+                return;
+            }
+        }
+        observeScenario("client_recipe_registry");
+    }
+
+    private static int expectedLoadedRecipeCount() {
+        URL rootUrl = UrushiClientInteractionTest.class.getResource("/data/urushi/recipe");
+        if (rootUrl == null) {
+            return -1;
+        }
+        try {
+            Path rootPath = Paths.get(rootUrl.toURI());
+            try (var walk = Files.walk(rootPath)) {
+                int count = 0;
+                for (Path path : (Iterable<Path>) walk::iterator) {
+                    if (!path.toString().endsWith(".json")) {
+                        continue;
+                    }
+                    JsonElement root;
+                    try (var reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
+                        root = JsonParser.parseReader(reader);
+                    }
+                    if (recipeConditionsAllow(root)) {
+                        count++;
+                    }
+                }
+                return count;
+            }
+        } catch (Exception exception) {
+            ModCoreUrushi.logger.error("[UrushiClientInteractionTest] Could not count recipe resources", exception);
+            return -1;
+        }
+    }
+
+    private static boolean recipeConditionsAllow(JsonElement root) {
+        if (!root.isJsonObject()) {
+            return false;
+        }
+        JsonObject object = root.getAsJsonObject();
+        JsonElement conditions = object.get("neoforge:conditions");
+        if (conditions == null || !conditions.isJsonArray()) {
+            return true;
+        }
+        for (JsonElement condition : conditions.getAsJsonArray()) {
+            if (!condition.isJsonObject()) {
+                continue;
+            }
+            JsonObject value = condition.getAsJsonObject();
+            if ("neoforge:mod_loaded".equals(value.get("type").getAsString())
+                    && !ModList.get().isLoaded(value.get("modid").getAsString())) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     private static void useSenbakoki(Minecraft minecraft) {
+        startScenario("client_senbakoki_rice_ear_interaction");
         selectItem(minecraft.player, ItemAndBlockRegister.rice_crop.get().asItem());
         useBlock(minecraft, senbakokiPos);
         stage = Stage.WAIT_FOR_SENBAKOKI;
@@ -227,7 +326,7 @@ public final class UrushiClientInteractionTest {
         if (countItem(minecraft.player, ItemAndBlockRegister.rice_crop.get().asItem()) == 0
                 && countItem(minecraft.player, ItemAndBlockRegister.raw_rice.get()) >= 1
                 && countItem(minecraft.player, ItemAndBlockRegister.straw.get()) >= 1) {
-            OBSERVED_SCENARIOS.add("client_senbakoki_rice_ear_interaction");
+            observeScenario("client_senbakoki_rice_ear_interaction");
             stage = Stage.OPEN_RICE_CAULDRON;
             stageTicks = 0;
             return;
@@ -259,6 +358,7 @@ public final class UrushiClientInteractionTest {
     }
 
     private static void useRiceCauldron(Minecraft minecraft) {
+        startScenario("client_rice_cauldron_cooking");
         selectItem(minecraft.player, ItemAndBlockRegister.raw_rice.get());
         useBlock(minecraft, riceCauldronPos);
         stage = Stage.WAIT_FOR_COOKING;
@@ -286,6 +386,8 @@ public final class UrushiClientInteractionTest {
                     && blockEntity.getItem(0).isEmpty()
                     && blockEntity.getItem(1).is(ItemAndBlockRegister.rice.get());
             serverAdvancementDone = player != null && advancementDone(server, player);
+            serverAdvancementReward = player != null
+                    && countServerItem(player, ItemAndBlockRegister.senbakoki.get().asItem()) >= 1;
             serverVerificationReady = true;
         });
         stage = Stage.VERIFY;
@@ -308,14 +410,43 @@ public final class UrushiClientInteractionTest {
             fail(minecraft, "rice ears advancement did not complete from the client fixture");
             return;
         }
-        OBSERVED_SCENARIOS.add("client_rice_cauldron_cooking");
-        OBSERVED_SCENARIOS.add("client_rice_ears_advancement");
+        if (!serverAdvancementReward) {
+            fail(minecraft, "rice ears advancement did not grant a Senbakoki");
+            return;
+        }
+        if (!advancementSoundObserved) {
+            fail(minecraft, "rice ears advancement did not play urushi_advancements");
+            return;
+        }
+        observeScenario("client_rice_cauldron_cooking");
+        observeScenario("client_rice_ears_advancement");
         stage = Stage.COMPLETE;
     }
 
     private static boolean advancementDone(MinecraftServer server, ServerPlayer player) {
         AdvancementHolder holder = server.getAdvancements().get(RICE_EARS_ADVANCEMENT);
         return holder != null && player.getAdvancements().getOrStartProgress(holder).isDone();
+    }
+
+    private static int countServerItem(ServerPlayer player, Item item) {
+        int count = 0;
+        for (int slot = 0; slot < player.getInventory().getContainerSize(); slot++) {
+            ItemStack stack = player.getInventory().getItem(slot);
+            if (stack.is(item)) {
+                count += stack.getCount();
+            }
+        }
+        return count;
+    }
+
+    private static void observeScenario(String id) {
+        startScenario(id);
+        OBSERVED_SCENARIOS.add(id);
+        SCENARIO_END_TICKS.put(id, ticks);
+    }
+
+    private static void startScenario(String id) {
+        SCENARIO_START_TICKS.putIfAbsent(id, ticks);
     }
 
     private static void selectItem(LocalPlayer player, Item item) {
@@ -402,22 +533,22 @@ public final class UrushiClientInteractionTest {
         receipt.put("sessionId", System.getenv().getOrDefault("MINECRAFT_MOD_TEST_SESSION_ID", ""));
         receipt.put("processStartCount", 1);
         receipt.put("worldLoadCount", worldLoadCount);
-        receipt.put("scenarioCount", 3);
+        receipt.put("scenarioCount", REQUESTED_SCENARIOS.size());
         receipt.put("failedCount", passed ? 0 : 1);
         receipt.put("cleanupFailureCount", 0);
         receipt.put("allScenariosPassed", passed);
-        receipt.put("requestedScenarios", List.of(
-                "client_senbakoki_rice_ear_interaction",
-                "client_rice_cauldron_cooking",
-                "client_rice_ears_advancement"));
+        receipt.put("requestedScenarios", REQUESTED_SCENARIOS);
         receipt.put("observedScenarios", new ArrayList<>(OBSERVED_SCENARIOS));
         List<Map<String, Object>> scenarios = new ArrayList<>();
-        for (String scenario : List.of(
-                "client_senbakoki_rice_ear_interaction",
-                "client_rice_cauldron_cooking",
-                "client_rice_ears_advancement")) {
-            scenarios.add(Map.of("id", scenario,
-                    "passed", passed && OBSERVED_SCENARIOS.contains(scenario)));
+        for (String scenario : REQUESTED_SCENARIOS) {
+            Map<String, Object> detail = new LinkedHashMap<>();
+            detail.put("id", scenario);
+            detail.put("passed", passed && OBSERVED_SCENARIOS.contains(scenario));
+            detail.put("cleanupPassed", passed && OBSERVED_SCENARIOS.contains(scenario));
+            detail.put("startedAtTick", SCENARIO_START_TICKS.getOrDefault(scenario, -1));
+            detail.put("finishedAtTick", SCENARIO_END_TICKS.getOrDefault(scenario, -1));
+            detail.put("artifacts", List.of());
+            scenarios.add(detail);
         }
         receipt.put("scenarios", scenarios);
         receipt.put("ticks", ticks);
